@@ -1,0 +1,346 @@
+/* ============================================
+   BARBEIRO RÔMULO - AGENDAMENTO
+   ============================================ */
+
+:root {
+    --cor-primaria: #f39c12;
+    --cor-escura: #1a1a2e;
+    --cor-escura2: #16213e;
+    --cor-sucesso: #27ae60;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    padding-top: 60px;
+}
+
+/* ---------- NAVBAR ---------- */
+#mainNav {
+    background: var(--cor-escura);
+    padding: 12px 0;
+}
+
+.navbar-brand {
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+.nav-link {
+    font-weight: 500;
+}
+
+.nav-link:hover {
+    color: var(--cor-primaria) !important;
+}
+
+/* ---------- HERO ---------- */
+.hero {
+    background: linear-gradient(135deg, var(--cor-escura) 0%, var(--cor-escura2) 100%);
+    min-height: 70vh;
+    padding: 80px 0 60px;
+    display: flex;
+    align-items: center;
+}
+
+.hero h1 {
+    font-size: 2.8rem;
+    font-weight: 800;
+}
+
+.hero-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: var(--cor-primaria);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    font-size: 5rem;
+    color: #fff;
+    border: 5px solid #fff;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* ---------- SERVIÇOS ---------- */
+.servico-card {
+    background: #fff;
+    border-radius: 15px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    transition: all 0.3s;
+    cursor: pointer;
+    border: 3px solid transparent;
+    height: 100%;
+}
+
+.servico-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+}
+
+.servico-icone {
+    font-size: 2.5rem;
+    color: var(--cor-primaria);
+    margin-bottom: 15px;
+}
+
+.servico-nome {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.servico-duracao {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.servico-preco {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--cor-primaria);
+}
+
+/* ---------- AGENDAMENTO ---------- */
+.agendamento-container {
+    background: #fff;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.passo {
+    margin-bottom: 30px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #eee;
+}
+
+.passo:last-of-type {
+    border-bottom: none;
+}
+
+.passo-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.passo-numero {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--cor-primaria);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.passo-header h4 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+/* Opções */
+.opcao-servico {
+    background: #f8f9fa;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+    height: 100%;
+}
+
+.opcao-servico:hover {
+    border-color: var(--cor-primaria);
+    background: #fffbf0;
+}
+
+.opcao-servico.selecionado {
+    border-color: var(--cor-primaria);
+    background: var(--cor-primaria);
+    color: #fff;
+}
+
+.opcao-servico.selecionado .opcao-preco {
+    color: #fff !important;
+}
+
+.opcao-nome {
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+
+.opcao-info {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.opcao-preco {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--cor-primaria);
+    margin-top: 8px;
+}
+
+/* Datas */
+.data-btn {
+    background: #f8f9fa;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 15px 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+    width: 100%;
+}
+
+.data-btn:hover {
+    border-color: var(--cor-primaria);
+}
+
+.data-btn.selecionado {
+    border-color: var(--cor-primaria);
+    background: var(--cor-primaria);
+    color: #fff;
+}
+
+.data-dia-semana {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    opacity: 0.7;
+}
+
+.data-dia {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.data-mes {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    opacity: 0.7;
+}
+
+/* Horários */
+.horario-btn {
+    background: #f8f9fa;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+    width: 100%;
+    font-weight: 600;
+}
+
+.horario-btn:hover:not(.indisponivel) {
+    border-color: var(--cor-primaria);
+    background: #fffbf0;
+}
+
+.horario-btn.selecionado {
+    border-color: var(--cor-primaria);
+    background: var(--cor-primaria);
+    color: #fff;
+}
+
+.horario-btn.indisponivel {
+    background: #f0f0f0;
+    color: #ccc;
+    cursor: not-allowed;
+    text-decoration: line-through;
+}
+
+/* Resumo */
+.resumo-agendamento {
+    background: #f0f9f4;
+    border: 2px solid var(--cor-sucesso);
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.resumo-agendamento h5 {
+    color: var(--cor-sucesso);
+    margin-bottom: 15px;
+}
+
+.resumo-linha {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px dashed #ddd;
+}
+
+.resumo-linha:last-child {
+    border-bottom: none;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--cor-sucesso);
+    padding-top: 12px;
+}
+
+/* Botões */
+.botoes-agendamento {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.botoes-agendamento .btn {
+    border-radius: 12px;
+    font-weight: 600;
+    padding: 12px 25px;
+}
+
+/* ---------- RESPONSIVO ---------- */
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .hero-avatar {
+        width: 100px;
+        height: 100px;
+        font-size: 3rem;
+        margin-top: 30px;
+    }
+
+    .agendamento-container {
+        padding: 20px;
+    }
+
+    .passo-header h4 {
+        font-size: 1rem;
+    }
+
+    .botoes-agendamento {
+        flex-direction: column;
+    }
+
+    .botoes-agendamento .btn {
+        width: 100%;
+    }
+}
