@@ -1,9 +1,9 @@
 // ============================================
-// BARBEIRO RÔMULO - AGENDAMENTO
+// SEU JORGE - AGENDAMENTO
 // ============================================
 
 const CONFIG = {
-    nome: "Barbeiro Rômulo",
+    nome: "Seu Jorge",
     whatsapp: "5515998183052",
     horarioAbertura: 9,
     horarioFechamento: 20,
@@ -12,12 +12,12 @@ const CONFIG = {
 };
 
 const servicos = [
-    { id: 1, nome: "Corte Masculino", duracao: 30, preco: 35.00, icone: "bi-scissors" },
-    { id: 2, nome: "Barba", duracao: 20, preco: 25.00, icone: "bi-brush" },
-    { id: 3, nome: "Corte + Barba", duracao: 50, preco: 55.00, icone: "bi-star" },
-    { id: 4, nome: "Sobrancelha", duracao: 10, preco: 15.00, icone: "bi-eye" },
-    { id: 5, nome: "Pigmentação", duracao: 30, preco: 40.00, icone: "bi-droplet" },
-    { id: 6, nome: "Combo Completo", duracao: 60, preco: 75.00, icone: "bi-trophy" }
+    { id: 1, nome: "CORTE CLÁSSICO", duracao: 30, preco: 35.00, icone: "bi-scissors" },
+    { id: 2, nome: "BARBA NA NAVALHA", duracao: 20, preco: 25.00, icone: "bi-brush" },
+    { id: 3, nome: "CORTE + BARBA", duracao: 50, preco: 55.00, icone: "bi-star" },
+    { id: 4, nome: "SOBRANCELHA", duracao: 10, preco: 15.00, icone: "bi-eye" },
+    { id: 5, nome: "PIGMENTAÇÃO", duracao: 30, preco: 40.00, icone: "bi-droplet" },
+    { id: 6, nome: "COMBO COMPLETO", duracao: 60, preco: 75.00, icone: "bi-trophy" }
 ];
 
 let agendamento = {
@@ -50,7 +50,7 @@ function renderizarServicos() {
 }
 
 // ============================================
-// SELECIONAR SERVIÇO RÁPIDO (VAI PRO AGENDAMENTO)
+// SELECIONAR SERVIÇO RÁPIDO
 // ============================================
 function selecionarServicoRapido(id) {
     agendamento.servico = servicos.find(s => s.id === id);
@@ -64,7 +64,6 @@ function selecionarServicoRapido(id) {
 // RENDERIZAR AGENDAMENTO
 // ============================================
 function renderizarAgendamento() {
-    // Passo 1: Serviços
     const servicosContainer = document.getElementById('servicos-agendamento');
     let htmlServicos = '';
     servicos.forEach(s => {
@@ -81,7 +80,6 @@ function renderizarAgendamento() {
     });
     servicosContainer.innerHTML = htmlServicos;
 
-    // Passo 2: Datas
     if (agendamento.servico) {
         document.getElementById('passo-2').style.display = 'block';
         renderizarDatas();
@@ -94,7 +92,6 @@ function renderizarAgendamento() {
         document.getElementById('btn-voltar').style.display = 'none';
     }
 
-    // Passo 3: Horários
     if (agendamento.data) {
         document.getElementById('passo-3').style.display = 'block';
         renderizarHorarios();
@@ -102,7 +99,6 @@ function renderizarAgendamento() {
         document.getElementById('passo-3').style.display = 'none';
     }
 
-    // Passo 4: Dados
     if (agendamento.horario) {
         document.getElementById('passo-4').style.display = 'block';
         renderizarResumo();
@@ -205,10 +201,7 @@ function gerarSlotsHorarios(dataStr) {
     for (let h = CONFIG.horarioAbertura; h < CONFIG.horarioFechamento; h++) {
         for (let m = 0; m < 60; m += CONFIG.intervaloMinutos) {
             const hora = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
-            
-            // Simulação: horários aleatórios indisponíveis
             const disponivel = Math.random() > 0.4;
-
             slots.push({ hora, disponivel });
         }
     }
