@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Teste</title></head>
+<body style="background:#222;color:#fff;font-family:sans-serif;text-align:center;padding:50px;">
+    <h1>Teste de JavaScript</h1>
+    <button onclick="testar()" style="padding:15px 30px;font-size:20px;cursor:pointer;">
+        CLICA AQUI
+    </button>
+    <p id="resultado" style="margin-top:30px;font-size:18px;">Aguardando clique...</p>
+
+    <script>
+        console.log('SCRIPT CARREGOU');
+        function testar() {
+            console.log('BOTAO CLICADO');
+            document.getElementById('resultado').textContent = 'JS FUNCIONOU';
+            alert('JS funcionou');
+        }
+    </script>
+</body>
+</html>

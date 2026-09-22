@@ -151,6 +151,10 @@ h1, h2, h3, .navbar-brand {
     border-color: var(--cor-primaria);
 }
 
+.servico-card:active {
+    transform: scale(0.98);
+}
+
 .servico-icone {
     font-size: 2.5rem;
     color: var(--cor-primaria);
@@ -177,6 +181,25 @@ h1, h2, h3, .navbar-brand {
     color: var(--cor-primaria);
     font-family: 'Bebas Neue', sans-serif;
     letter-spacing: 1px;
+}
+
+.servico-botao {
+    background: linear-gradient(135deg, var(--cor-primaria), var(--cor-primaria-escura));
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 15px;
+    display: inline-block;
+    transition: all 0.3s;
+}
+
+.servico-card:hover .servico-botao {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
 }
 
 /* ---------- AGENDAMENTO ---------- */
@@ -227,7 +250,7 @@ h1, h2, h3, .navbar-brand {
     letter-spacing: 1px;
 }
 
-/* Opções */
+/* Opções de serviço */
 .opcao-servico {
     background: #f8f9fa;
     border: 2px solid #e0e0e0;
@@ -237,6 +260,7 @@ h1, h2, h3, .navbar-brand {
     transition: all 0.3s;
     text-align: center;
     height: 100%;
+    position: relative;
 }
 
 .opcao-servico:hover {
@@ -253,6 +277,31 @@ h1, h2, h3, .navbar-brand {
 
 .opcao-servico.selecionado .opcao-preco {
     color: #fff !important;
+}
+
+.opcao-servico.selecionado .opcao-info {
+    color: #fff !important;
+}
+
+.opcao-servico::after {
+    content: '✓';
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--cor-sucesso);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.opcao-servico.selecionado::after {
+    opacity: 1;
+    color: #fff;
+}
+
+.opcao-servico:active {
+    transform: scale(0.97);
 }
 
 .opcao-nome {
@@ -277,52 +326,135 @@ h1, h2, h3, .navbar-brand {
     letter-spacing: 1px;
 }
 
-/* Datas */
-.data-btn {
-    background: #f8f9fa;
+/* ---------- CALENDÁRIO VISUAL ---------- */
+.calendario-wrapper {
+    background: #fff;
+    border-radius: 15px;
+    padding: 20px;
     border: 2px solid #e0e0e0;
-    border-radius: 12px;
-    padding: 15px 10px;
-    cursor: pointer;
-    transition: all 0.3s;
-    text-align: center;
-    width: 100%;
 }
 
-.data-btn:hover {
+.calendario-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.calendario-titulo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--cor-escura);
+    text-transform: uppercase;
+}
+
+.calendario-nav {
+    background: var(--cor-primaria);
+    color: #fff;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 1.2rem;
+}
+
+.calendario-nav:hover:not(:disabled) {
+    background: var(--cor-primaria-escura);
+    transform: scale(1.1);
+}
+
+.calendario-nav:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.calendario-dias-semana {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.calendario-dias-semana span {
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 8px 0;
+}
+
+.calendario-grade {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.dia-calendario {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    background: #f8f9fa;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+    color: #333;
+    font-family: 'Poppins', sans-serif;
+    user-select: none;
+}
+
+.dia-calendario:hover:not(.vazio):not(.indisponivel):not(.passado) {
+    background: #fff5f5;
     border-color: var(--cor-primaria);
+    transform: scale(1.05);
+}
+
+.dia-calendario.selecionado {
+    background: var(--cor-primaria);
+    color: #fff;
+    border-color: var(--cor-primaria);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+}
+
+.dia-calendario.hoje {
+    border-color: var(--cor-dourada);
+    font-weight: 800;
+}
+
+.dia-calendario.hoje:not(.selecionado) {
+    color: var(--cor-primaria);
     background: #fff5f5;
 }
 
-.data-btn.selecionado {
-    border-color: var(--cor-primaria);
-    background: var(--cor-primaria);
-    color: #fff;
-    box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+.dia-calendario.indisponivel,
+.dia-calendario.passado {
+    background: #f0f0f0;
+    color: #ccc;
+    cursor: not-allowed;
+    text-decoration: line-through;
 }
 
-.data-dia-semana {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    font-weight: 600;
-    opacity: 0.7;
-    letter-spacing: 1px;
+.dia-calendario.vazio {
+    background: transparent;
+    cursor: default;
 }
 
-.data-dia {
-    font-size: 1.5rem;
-    font-weight: 800;
-    font-family: 'Bebas Neue', sans-serif;
-}
-
-.data-mes {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    opacity: 0.7;
-    letter-spacing: 1px;
-}
-
-/* Horários */
+/* ---------- HORÁRIOS ---------- */
 .horario-btn {
     background: #f8f9fa;
     border: 2px solid #e0e0e0;
@@ -357,7 +489,7 @@ h1, h2, h3, .navbar-brand {
     text-decoration: line-through;
 }
 
-/* Resumo */
+/* ---------- RESUMO ---------- */
 .resumo-agendamento {
     background: #f0f9f4;
     border: 2px solid var(--cor-sucesso);
@@ -391,7 +523,7 @@ h1, h2, h3, .navbar-brand {
     letter-spacing: 1px;
 }
 
-/* Botões */
+/* ---------- BOTÕES ---------- */
 .botoes-agendamento {
     display: flex;
     justify-content: space-between;
@@ -415,6 +547,16 @@ h1, h2, h3, .navbar-brand {
 .btn-danger:hover {
     background: linear-gradient(135deg, var(--cor-primaria-escura), var(--cor-primaria));
     transform: scale(1.02);
+}
+
+button, .btn, .servico-card, .opcao-servico, .horario-btn {
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+button:focus, .btn:focus {
+    outline: 3px solid rgba(220, 53, 69, 0.4);
+    outline-offset: 2px;
 }
 
 /* ---------- CONTATO ---------- */
@@ -455,5 +597,27 @@ h1, h2, h3, .navbar-brand {
 
     .botoes-agendamento .btn {
         width: 100%;
+    }
+
+    .calendario-wrapper {
+        padding: 15px;
+    }
+
+    .calendario-titulo {
+        font-size: 1.2rem;
+    }
+
+    .calendario-nav {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+
+    .dia-calendario {
+        font-size: 0.9rem;
+    }
+
+    .calendario-dias-semana span {
+        font-size: 0.65rem;
     }
 }
