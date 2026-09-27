@@ -12,7 +12,6 @@
 </head>
 <body>
 
-    <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
         <div class="container">
             <a class="navbar-brand fw-bold" href="#">
@@ -36,7 +35,15 @@
         </div>
     </nav>
 
-    <!-- HERO -->
+    <section class="py-3 bg-danger text-white" id="banner-notificacao" style="margin-top:60px;">
+        <div class="container text-center">
+            <p class="mb-2 small"><i class="bi bi-bell-fill"></i> <strong>Ative as notificações</strong> para receber lembretes do seu agendamento!</p>
+            <button class="btn btn-light btn-sm fw-bold" onclick="ativarNotificacoesCliente()">
+                <i class="bi bi-bell"></i> ATIVAR NOTIFICAÇÕES
+            </button>
+        </div>
+    </section>
+
     <section class="hero d-flex align-items-center">
         <div class="container">
             <div class="row align-items-center">
@@ -64,7 +71,6 @@
         </div>
     </section>
 
-    <!-- INFO RÁPIDA -->
     <section class="py-4 bg-black text-white">
         <div class="container">
             <div class="row text-center">
@@ -84,29 +90,21 @@
         </div>
     </section>
 
-    <!-- SERVIÇOS -->
     <section id="servicos" class="py-5">
         <div class="container">
             <h2 class="text-center fw-bold mb-2">SERVIÇOS</h2>
             <p class="text-center text-muted mb-5">Toque em um serviço para agendar</p>
-
-            <div class="row g-4" id="servicos-container">
-                <!-- Preenchido via JS -->
-            </div>
+            <div class="row g-4" id="servicos-container"></div>
         </div>
     </section>
 
-    <!-- AGENDAMENTO -->
     <section id="agendar" class="py-5 bg-light">
         <div class="container">
             <h2 class="text-center fw-bold mb-2">AGENDE SEU HORÁRIO</h2>
             <p class="text-center text-muted mb-5">Rápido, fácil e sem espera</p>
-
             <div class="row justify-content-center">
                 <div class="col-lg-8">
                     <div class="agendamento-container">
-
-                        <!-- Passo 1 -->
                         <div class="passo" id="passo-1">
                             <div class="passo-header">
                                 <span class="passo-numero">1</span>
@@ -115,13 +113,11 @@
                             <div class="row g-3" id="servicos-agendamento"></div>
                         </div>
 
-                        <!-- Passo 2 -->
                         <div class="passo" id="passo-2" style="display: none;">
                             <div class="passo-header">
                                 <span class="passo-numero">2</span>
                                 <h4>Escolha a data</h4>
                             </div>
-
                             <div class="calendario-wrapper">
                                 <div class="calendario-header">
                                     <button type="button" class="calendario-nav" onclick="mudarMes(-1)">
@@ -132,22 +128,13 @@
                                         <i class="bi bi-chevron-right"></i>
                                     </button>
                                 </div>
-
                                 <div class="calendario-dias-semana">
-                                    <span>Dom</span>
-                                    <span>Seg</span>
-                                    <span>Ter</span>
-                                    <span>Qua</span>
-                                    <span>Qui</span>
-                                    <span>Sex</span>
-                                    <span>Sáb</span>
+                                    <span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span>
                                 </div>
-
                                 <div class="calendario-grade" id="calendario-grade"></div>
                             </div>
                         </div>
 
-                        <!-- Passo 3 -->
                         <div class="passo" id="passo-3" style="display: none;">
                             <div class="passo-header">
                                 <span class="passo-numero">3</span>
@@ -156,7 +143,6 @@
                             <div class="row g-2" id="horarios-container"></div>
                         </div>
 
-                        <!-- Passo 4 -->
                         <div class="passo" id="passo-4" style="display: none;">
                             <div class="passo-header">
                                 <span class="passo-numero">4</span>
@@ -173,18 +159,16 @@
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">Observações (opcional)</label>
-                                    <textarea class="form-control" id="cliente-obs" rows="2" placeholder="Ex: Máquina 2 nas laterais, tesoura em cima..."></textarea>
+                                    <textarea class="form-control" id="cliente-obs" rows="2" placeholder="Ex: Máquina 2 nas laterais..."></textarea>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Resumo -->
                         <div class="resumo-agendamento" id="resumo-agendamento" style="display: none;">
                             <h5><i class="bi bi-check-circle text-success"></i> RESUMO DO AGENDAMENTO</h5>
                             <div id="resumo-conteudo"></div>
                         </div>
 
-                        <!-- Botões -->
                         <div class="botoes-agendamento">
                             <button class="btn btn-outline-secondary" id="btn-voltar" style="display: none;" onclick="voltarPasso()">
                                 <i class="bi bi-arrow-left"></i> Voltar
@@ -193,14 +177,12 @@
                                 <i class="bi bi-whatsapp"></i> CONFIRMAR NO WHATSAPP
                             </button>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- CONTATO -->
     <section id="contato" class="py-5 bg-black text-white">
         <div class="container">
             <div class="row g-4">
@@ -225,10 +207,28 @@
         </div>
     </section>
 
-    <!-- SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-messaging-compat.js"></script>
+    <script src="notifications.js"></script>
     <script src="script.js"></script>
+    <script>
+        async function ativarNotificacoesCliente() {
+            const sucesso = await Notificacoes.inicializarNotificacoes('cliente');
+            if (sucesso) {
+                alert('✅ Notificações ativadas! Você receberá lembretes do seu agendamento.');
+                document.getElementById('banner-notificacao').style.display = 'none';
+            } else {
+                alert('❌ Não foi possível ativar as notificações. Verifique as permissões do navegador.');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (Notificacoes.statusPermissao() === 'granted') {
+                document.getElementById('banner-notificacao').style.display = 'none';
+            }
+        });
+    </script>
 </body>
 </html>

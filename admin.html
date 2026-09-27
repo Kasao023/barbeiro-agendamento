@@ -27,7 +27,6 @@
 </head>
 <body>
 
-    <!-- LOGIN -->
     <div id="tela-login" class="d-flex align-items-center justify-content-center" style="min-height: 100vh;">
         <div class="card p-4 shadow-lg" style="width: 100%; max-width: 400px;">
             <div class="text-center mb-4">
@@ -44,7 +43,6 @@
         </div>
     </div>
 
-    <!-- PAINEL -->
     <div id="tela-painel" style="display: none;">
         <nav class="navbar navbar-dark bg-black border-bottom border-danger">
             <div class="container">
@@ -56,10 +54,11 @@
         </nav>
 
         <div class="container py-4">
-            <ul class="nav nav-pills mb-4">
+            <ul class="nav nav-pills mb-4 flex-wrap">
                 <li class="nav-item"><a class="nav-link active" data-bs-toggle="pill" href="#aba-agendamentos">📅 Agendamentos</a></li>
                 <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#aba-servicos">✂️ Serviços</a></li>
                 <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#aba-bloqueios">🚫 Bloqueios</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#aba-notificacoes">🔔 Notificações</a></li>
                 <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#aba-config">⚙️ Config</a></li>
             </ul>
 
@@ -98,6 +97,41 @@
                     <div id="lista-bloqueios" class="mt-4"></div>
                 </div>
 
+                <div class="tab-pane fade" id="aba-notificacoes">
+                    <h4 class="text-white mb-3">🔔 Notificações</h4>
+                    
+                    <div class="card p-3 mb-3">
+                        <h6>Status das Notificações</h6>
+                        <p id="status-notificacao" class="text-muted mb-2">Verificando...</p>
+                        <button class="btn btn-danger" onclick="ativarNotificacoesAdmin()">
+                            <i class="bi bi-bell"></i> Ativar Notificações
+                        </button>
+                        <button class="btn btn-outline-secondary mt-2" onclick="enviarNotificacaoTeste()">
+                            <i class="bi bi-send"></i> Enviar Notificação de Teste
+                        </button>
+                    </div>
+
+                    <div class="card p-3 mb-3">
+                        <h6>📢 Enviar Notificação para Clientes</h6>
+                        <p class="text-muted small">Envie uma mensagem para todos os clientes que ativaram as notificações.</p>
+                        <input type="text" id="notif-titulo" class="form-control mb-2" placeholder="Título da notificação">
+                        <textarea id="notif-corpo" class="form-control mb-2" rows="3" placeholder="Mensagem..."></textarea>
+                        <button class="btn btn-danger w-100" onclick="enviarNotificacaoClientes()">
+                            <i class="bi bi-send"></i> Enviar para Todos
+                        </button>
+                    </div>
+
+                    <div class="card p-3">
+                        <h6>📋 Instruções para o Barbeiro</h6>
+                        <ol class="small mb-0">
+                            <li>Clique em <strong>"Ativar Notificações"</strong> acima</li>
+                            <li>O navegador vai pedir permissão — clique em <strong>"Permitir"</strong></li>
+                            <li>Pronto! Você vai receber notificações quando um cliente agendar</li>
+                            <li>Mantenha esta aba ou o navegador aberto para receber os avisos</li>
+                        </ol>
+                    </div>
+                </div>
+
                 <div class="tab-pane fade" id="aba-config">
                     <h4 class="text-white mb-3">⚙️ Configurações</h4>
                     <div class="card p-3 mb-3">
@@ -110,7 +144,6 @@
         </div>
     </div>
 
-    <!-- MODAL SERVIÇO -->
     <div class="modal fade" id="modalServico" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -141,12 +174,12 @@
         </div>
     </div>
 
-    <!-- BOOTSTRAP + FIREBASE -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-messaging-compat.js"></script>
+    <script src="notifications.js"></script>
 
-    <!-- TUDO INLINE -->
     <script>
     (function() {
         'use strict';
@@ -169,27 +202,84 @@
             firebase.initializeApp(firebaseConfig);
             db = firebase.database();
         } catch (e) {
-            console.error('❌ Falha ao inicializar Firebase:', e);
+            console.error('❌ Firebase:', e);
         }
 
-        // ============ LOGIN ============
+        window.ativarNotificacoesAdmin = async function() {
+            const sucesso = await Notificacoes.inicializarNotificacoes('admin');
+            if (sucesso) {
+                document.getElementById('status-notificacao').textContent = '✅ Notificações ativadas!';
+                document.getElementById('status-notificacao').className = 'text-success';
+                alert('✅ Notificações ativadas com sucesso!');
+            } else {
+                document.getElementById('status-notificacao').textContent = '❌ Não foi possível ativar.';
+                document.getElementById('status-notificacao').className = 'text-danger';
+            }
+            atualizarStatusNotificacao();
+        };
+
+        function atualizarStatusNotificacao() {
+            const status = Notificacoes.statusPermissao();
+            const el = document.getElementById('status-notificacao');
+            if (!el) return;
+            
+            const textos = {
+                'granted': '✅ Notificações ativadas',
+                'denied': '❌ Notificações bloqueadas. Ative nas configurações do navegador.',
+                'default': '⚠️ Notificações não ativadas. Clique no botão abaixo.',
+                'nao_suportado': '⚠️ Notificações não suportadas neste navegador.'
+            };
+            const cores = {
+                'granted': 'text-success',
+                'denied': 'text-danger',
+                'default': 'text-warning',
+                'nao_suportado': 'text-muted'
+            };
+            el.textContent = textos[status] || 'Desconhecido';
+            el.className = cores[status] || '';
+        }
+
+        window.enviarNotificacaoTeste = function() {
+            Notificacoes.exibirNotificacaoLocal(
+                '🔔 Teste de Notificação',
+                'Se você está vendo isso, as notificações estão funcionando!',
+                'seujorge.png'
+            );
+        };
+
+        window.enviarNotificacaoClientes = async function() {
+            const titulo = document.getElementById('notif-titulo').value.trim();
+            const corpo = document.getElementById('notif-corpo').value.trim();
+            
+            if (!titulo || !corpo) {
+                alert('Preencha título e mensagem!');
+                return;
+            }
+            
+            await db.ref('notificacoes').push({
+                titulo: titulo,
+                corpo: corpo,
+                criadoEm: Date.now(),
+                tipo: 'admin'
+            });
+            
+            alert('✅ Notificação enviada para a fila!');
+            document.getElementById('notif-titulo').value = '';
+            document.getElementById('notif-corpo').value = '';
+        };
+
         window.fazerLogin = function() {
             const input = document.getElementById('senha-input');
             const erroEl = document.getElementById('login-erro');
             const senha = (input.value || '').trim();
-
             erroEl.textContent = '';
 
-            if (!db) {
-                erroEl.textContent = 'Erro: Firebase não carregou.';
-                return;
-            }
+            if (!db) { erroEl.textContent = 'Erro: Firebase não carregou.'; return; }
 
             db.ref('config/admin/senha').once('value')
                 .then(snap => {
                     const senhaBanco = snap.val();
                     const senhaCorreta = (senhaBanco || 'jorge2026').toString().trim();
-
                     if (senha === senhaCorreta) {
                         sessionStorage.setItem('logado', 'true');
                         window.abrirPainel();
@@ -198,7 +288,7 @@
                     }
                 })
                 .catch(err => {
-                    console.error('❌ Erro Firebase:', err);
+                    console.error('❌ Erro:', err);
                     erroEl.textContent = 'Erro de conexão.';
                 });
         };
@@ -211,54 +301,38 @@
         window.abrirPainel = function() {
             const elLogin = document.getElementById('tela-login');
             const elPainel = document.getElementById('tela-painel');
-
-            if (!elLogin || !elPainel) {
-                console.error('❌ Elementos não existem');
-                return;
-            }
-
+            if (!elLogin || !elPainel) return;
             elLogin.style.setProperty('display', 'none', 'important');
             elPainel.style.display = 'block';
-
             carregarTudo();
+            atualizarStatusNotificacao();
         };
 
-        // ============ CARREGAR ============
         function carregarTudo() {
             if (!db) return;
 
             db.ref('config/servicos').on('value', snap => {
-                try {
-                    servicos = [];
-                    snap.forEach(c => servicos.push({ id: c.key, ...c.val() }));
-                    renderizarServicos();
-                } catch (e) { console.error('❌ serviços:', e); }
+                servicos = [];
+                snap.forEach(c => servicos.push({ id: c.key, ...c.val() }));
+                renderizarServicos();
             });
 
             db.ref('agendamentos').on('value', snap => {
-                try {
-                    agendamentos = [];
-                    snap.forEach(c => {
-                        agendamentos.push({ id: c.key, ...c.val() });
-                    });
-                    renderizarAgendamentos();
-                } catch (e) { console.error('❌ agendamentos:', e); }
+                agendamentos = [];
+                snap.forEach(c => agendamentos.push({ id: c.key, ...c.val() }));
+                renderizarAgendamentos();
             });
 
             db.ref('bloqueios').on('value', snap => {
-                try {
-                    renderizarBloqueios(snap.val() || {});
-                } catch (e) { console.error('❌ bloqueios:', e); }
+                renderizarBloqueios(snap.val() || {});
             });
         }
 
-        // ============ AGENDAMENTOS ============
         function renderizarAgendamentos() {
             const container = document.getElementById('lista-agendamentos');
             if (!container) return;
 
             const hojeStr = new Date().toISOString().split('T')[0];
-
             const hoje = agendamentos.filter(a => a.data === hojeStr)
                 .sort((a, b) => (a.horario || '').localeCompare(b.horario || ''));
             const futuros = agendamentos.filter(a => a.data > hojeStr)
@@ -270,29 +344,15 @@
             }
 
             let html = '';
-            let erros = 0;
 
             if (hoje.length > 0) {
                 html += `<h5 class="text-warning mb-3 mt-2"><i class="bi bi-fire"></i> HOJE (${hoje.length})</h5>`;
-                hoje.forEach(ag => {
-                    try {
-                        html += montarCard(ag, true);
-                    } catch (e) {
-                        erros++;
-                        console.error('❌ Erro ao montar card HOJE:', ag, e);
-                    }
-                });
+                hoje.forEach(ag => { html += montarCard(ag, true); });
             }
+
             if (futuros.length > 0) {
                 html += `<h5 class="text-white mb-3 mt-4"><i class="bi bi-calendar-week"></i> PRÓXIMOS (${futuros.length})</h5>`;
-                futuros.forEach(ag => {
-                    try {
-                        html += montarCard(ag, false);
-                    } catch (e) {
-                        erros++;
-                        console.error('❌ Erro ao montar card FUTUROS:', ag, e);
-                    }
-                });
+                futuros.forEach(ag => { html += montarCard(ag, false); });
             }
 
             container.innerHTML = html;
@@ -338,14 +398,10 @@
             `;
         }
 
-        window.mudarStatus = function(id, status) {
-            db.ref('agendamentos/' + id + '/status').set(status);
-        };
+        window.mudarStatus = function(id, status) { db.ref('agendamentos/' + id + '/status').set(status); };
 
         window.excluirAgendamento = function(id) {
-            if (confirm('Excluir este agendamento?')) {
-                db.ref('agendamentos/' + id).remove();
-            }
+            if (confirm('Excluir este agendamento?')) db.ref('agendamentos/' + id).remove();
         };
 
         window.lembrarCliente = function(id) {
@@ -359,7 +415,6 @@
             window.open(`https://wa.me/55${tel}?text=${encodeURIComponent(msg)}`, '_blank');
         };
 
-        // ============ SERVIÇOS ============
         function renderizarServicos() {
             const container = document.getElementById('lista-servicos');
             if (!container) return;
@@ -421,7 +476,6 @@
             if (confirm('Excluir este serviço?')) db.ref('config/servicos/' + id).remove();
         };
 
-        // ============ BLOQUEIOS ============
         window.bloquearHorario = function() {
             const data = document.getElementById('bloqueio-data').value;
             const hora = document.getElementById('bloqueio-hora').value;
@@ -459,7 +513,6 @@
             db.ref('bloqueios/' + data + '/' + hora).remove();
         };
 
-        // ============ SENHA ============
         window.alterarSenha = function() {
             const nova = document.getElementById('nova-senha').value;
             if (!nova || nova.length < 4) {
@@ -472,7 +525,6 @@
             });
         };
 
-        // ============ INICIALIZAÇÃO ============
         if (sessionStorage.getItem('logado') === 'true') {
             window.abrirPainel();
         }

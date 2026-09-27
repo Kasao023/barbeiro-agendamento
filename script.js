@@ -72,9 +72,6 @@ function renderizarServicos() {
     container.innerHTML = html;
 }
 
-// ============================================
-// SELECIONAR SERVIÇO RÁPIDO
-// ============================================
 function selecionarServicoRapido(id) {
     agendamento.servico = servicos.find(s => s.id === id);
     agendamento.data = null;
@@ -86,9 +83,6 @@ function selecionarServicoRapido(id) {
     renderizarAgendamento();
 }
 
-// ============================================
-// RENDERIZAR AGENDAMENTO
-// ============================================
 function renderizarAgendamento() {
     const servicosContainer = document.getElementById('servicos-agendamento');
     if (!servicosContainer) return;
@@ -147,9 +141,6 @@ function selecionarServico(id) {
     renderizarAgendamento();
 }
 
-// ============================================
-// CALENDÁRIO
-// ============================================
 function mudarMes(delta) {
     const novoMes = new Date(mesAtual);
     novoMes.setMonth(novoMes.getMonth() + delta);
@@ -246,9 +237,6 @@ function selecionarData(dataStr) {
     renderizarAgendamento();
 }
 
-// ============================================
-// CARREGAR HORÁRIOS OCUPADOS DO FIREBASE
-// ============================================
 function carregarHorariosOcupados() {
     const dataStr = agendamento.data;
     if (!dataStr) return;
@@ -280,9 +268,6 @@ function carregarHorariosOcupados() {
         });
 }
 
-// ============================================
-// RENDERIZAR HORÁRIOS
-// ============================================
 function renderizarHorarios() {
     const container = document.getElementById('horarios-container');
     if (!container) return;
@@ -324,9 +309,6 @@ function selecionarHorario(hora) {
     renderizarAgendamento();
 }
 
-// ============================================
-// RESUMO
-// ============================================
 function renderizarResumo() {
     const resumo = document.getElementById('resumo-conteudo');
     if (!resumo) return;
@@ -353,7 +335,7 @@ function voltarPasso() {
 }
 
 // ============================================
-// CONFIRMAR AGENDAMENTO (SALVA NO FIREBASE + WHATSAPP)
+// CONFIRMAR AGENDAMENTO
 // ============================================
 function confirmarAgendamento() {
     const nome = document.getElementById('cliente-nome').value.trim();
@@ -365,7 +347,6 @@ function confirmarAgendamento() {
         return;
     }
 
-    // Verifica se o horário ainda está livre antes de salvar
     db.ref('agendamentos').orderByChild('data').equalTo(agendamento.data).once('value')
         .then(snapshot => {
             let ocupado = false;
@@ -383,7 +364,6 @@ function confirmarAgendamento() {
                 return null;
             }
 
-            // Salva no Firebase
             const novoAgendamento = {
                 clienteNome: nome,
                 clienteTelefone: telefone,
@@ -405,7 +385,6 @@ function confirmarAgendamento() {
             const agendamentoId = resultado.key;
             localStorage.setItem('ultimoAgendamento', agendamentoId);
 
-            // Envia para WhatsApp
             const data = new Date(agendamento.data + 'T00:00:00');
             const dataFormatada = data.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 
@@ -431,13 +410,29 @@ function confirmarAgendamento() {
 
             window.open(`https://wa.me/${CONFIG.whatsapp}?text=${mensagem}`, '_blank');
 
-            // Reset
+            // NOTIFICAÇÃO LOCAL PARA O CLIENTE
+            if (typeof Notificacoes !== 'undefined' && Notificacoes.statusPermissao() === 'granted') {
+                const dataNotif = new Date(agendamento.data + 'T00:00:00').toLocaleDateString('pt-BR');
+                Notificacoes.exibirNotificacaoLocal(
+                    '✅ Agendamento Confirmado!',
+                    `Seu horário: ${dataNotif} às ${agendamento.horario}. Mantenha as notificações ativas para receber lembretes!`,
+                    'seujorge.png'
+                );
+            } else if (typeof Notificacoes !== 'undefined') {
+                setTimeout(() => {
+                    if (confirm('🔔 Ative as notificações para receber lembretes do seu agendamento. Deseja ativar agora?')) {
+                        if (typeof ativarNotificacoesCliente === 'function') {
+                            ativarNotificacoesCliente();
+                        }
+                    }
+                }, 2000);
+            }
+
             agendamento = { servico: null, data: null, horario: null };
             document.getElementById('cliente-nome').value = '';
             document.getElementById('cliente-telefone').value = '';
             document.getElementById('cliente-obs').value = '';
 
-            // Redireciona para a tela "Meu Agendamento"
             window.location.href = `meu-agendamento.html?id=${agendamentoId}`;
         })
         .catch(error => {
@@ -446,9 +441,6 @@ function confirmarAgendamento() {
         });
 }
 
-// ============================================
-// MÁSCARA DE TELEFONE
-// ============================================
 document.addEventListener('input', function(e) {
     if (e.target.id === 'cliente-telefone') {
         let value = e.target.value.replace(/\D/g, '');
@@ -461,9 +453,6 @@ document.addEventListener('input', function(e) {
     }
 });
 
-// ============================================
-// INICIALIZAÇÃO
-// ============================================
 document.addEventListener('DOMContentLoaded', () => {
     renderizarServicos();
     renderizarAgendamento();
