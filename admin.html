@@ -18,12 +18,45 @@
         }
         .agendamento-card.concluido { border-left-color: var(--cor-sucesso); opacity: 0.7; }
         .agendamento-card.cancelado { border-left-color: #6c757d; opacity: 0.5; text-decoration: line-through; }
-        .servico-admin-card {
-            background: #fff; color: #333; border-radius: 10px; padding: 15px;
-            margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;
-        }
         .card { color: #333; }
-        
+
+        .servico-admin-card {
+            background: #fff;
+            color: #333;
+            border-radius: 12px;
+            padding: 15px 18px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--cor-primaria);
+            transition: all 0.2s;
+            gap: 10px;
+        }
+        .servico-admin-card:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,.15);
+        }
+        .servico-admin-card.servico-vazio {
+            border-left-color: #ffc107;
+            background: #fffbf0;
+        }
+        .servico-icone-admin {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--cor-primaria), var(--cor-primaria-escura));
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+        .servico-admin-card.servico-vazio .servico-icone-admin {
+            background: linear-gradient(135deg, #ffc107, #e0a800);
+        }
+
         .bloqueio-section {
             background: #1a1a1a; border-radius: 12px; padding: 20px;
             margin-bottom: 20px; border-left: 4px solid var(--cor-primaria);
@@ -62,7 +95,6 @@
             border-color: var(--cor-primaria);
         }
 
-        /* Lista de espera - admin */
         .espera-dia-bloco {
             background: #1a1a1a; border-radius: 12px; padding: 20px;
             margin-bottom: 20px; border-left: 4px solid #ffc107;
@@ -70,10 +102,9 @@
         .espera-dia-titulo {
             display: flex; justify-content: space-between; align-items: center;
             margin-bottom: 15px; padding-bottom: 10px;
-            border-bottom: 2px solid #333;
+            border-bottom: 2px solid #333; flex-wrap: wrap; gap: 8px;
         }
         .espera-dia-titulo h6 { margin: 0; color: #fff; font-size: 1.1rem; }
-        .espera-dia-titulo .badge { font-size: 0.85rem; }
         .espera-item {
             background: #fff; color: #333; border-radius: 10px; padding: 12px 15px;
             margin-bottom: 8px; display: flex; justify-content: space-between;
@@ -81,7 +112,7 @@
             border-left: 3px solid #ffc107;
         }
         .espera-item-info { flex: 1; min-width: 200px; }
-        .espera-item-info strong { display: block; font-size: 1rem; }
+        .espera-item-info strong { display: block; font-size: 1rem; color: #333; }
         .espera-item-info small { color: #666; font-size: 0.85rem; }
         .espera-item-actions { display: flex; gap: 5px; flex-wrap: wrap; }
     </style>
@@ -135,11 +166,29 @@
                 </div>
 
                 <div class="tab-pane fade" id="aba-servicos">
-                    <h4 class="text-white mb-3">✂️ Serviços</h4>
+                    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                        <div>
+                            <h4 class="text-white mb-1">✂️ Serviços</h4>
+                            <p class="text-muted small mb-0">Gerencie os serviços que aparecem no site do cliente.</p>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-outline-warning btn-sm" onclick="limparServicosVazios()">
+                                <i class="bi bi-eraser"></i> Limpar vazios
+                            </button>
+                            <button class="btn btn-danger" onclick="adicionarServico()">
+                                <i class="bi bi-plus-circle"></i> Adicionar Serviço
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info d-flex align-items-center gap-2 small" role="alert">
+                        <i class="bi bi-info-circle fs-5"></i>
+                        <div>
+                            Estes são os serviços que aparecem no site do cliente. Clique em <strong>✏️</strong> para editar ou <strong>🗑️</strong> para remover.
+                        </div>
+                    </div>
+
                     <div id="lista-servicos"></div>
-                    <button class="btn btn-danger mt-3" onclick="adicionarServico()">
-                        <i class="bi bi-plus-circle"></i> Adicionar Serviço
-                    </button>
                 </div>
 
                 <div class="tab-pane fade" id="aba-bloqueios">
@@ -208,7 +257,6 @@
                     </div>
                 </div>
 
-                <!-- ============ ABA LISTA DE ESPERA ============ -->
                 <div class="tab-pane fade" id="aba-espera">
                     <h4 class="text-white mb-3">⏳ Lista de Espera</h4>
                     <p class="text-muted small mb-4">
@@ -240,15 +288,15 @@
                     <input type="hidden" id="edit-servico-id">
                     <div class="mb-3">
                         <label class="form-label">Nome</label>
-                        <input type="text" id="edit-servico-nome" class="form-control">
+                        <input type="text" id="edit-servico-nome" class="form-control" placeholder="Ex: CORTE CLÁSSICO">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Duração (minutos)</label>
-                        <input type="number" id="edit-servico-duracao" class="form-control">
+                        <input type="number" id="edit-servico-duracao" class="form-control" placeholder="30">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Preço (R$)</label>
-                        <input type="number" id="edit-servico-preco" class="form-control" step="0.01">
+                        <input type="number" id="edit-servico-preco" class="form-control" step="0.01" placeholder="35.00">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -393,7 +441,6 @@
             const preco = typeof ag.servicoPreco === 'number' ? ag.servicoPreco.toFixed(2).replace('.', ',') : '-';
             const badge = ag.status === 'concluido' ? 'success' : ag.status === 'cancelado' ? 'secondary' : 'warning';
 
-            // Verifica se tem alguém na lista de espera deste dia
             const temEspera = listaEspera[ag.data] && Object.keys(listaEspera[ag.data]).length > 0;
             const avisoEspera = temEspera && ag.status !== 'cancelado'
                 ? `<span class="badge bg-info ms-1" title="Tem gente na lista de espera deste dia"><i class="bi bi-hourglass-split"></i> ${Object.keys(listaEspera[ag.data]).length} na fila</span>`
@@ -452,30 +499,64 @@
             window.open(`https://wa.me/55${tel}?text=${encodeURIComponent(msg)}`, '_blank');
         };
 
-        // ============ SERVIÇOS ============
+        // ============================================
+        // SERVIÇOS (CORRIGIDO)
+        // ============================================
         function renderizarServicos() {
             const container = document.getElementById('lista-servicos');
             if (!container) return;
-            let html = '';
-            servicos.forEach(s => {
-                const preco = typeof s.preco === 'number' ? s.preco.toFixed(2).replace('.', ',') : '-';
+
+            if (servicos.length === 0) {
+                container.innerHTML = `
+                    <div class="alert alert-secondary text-center">
+                        <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                        Nenhum serviço cadastrado. Clique em <strong>"Adicionar Serviço"</strong> para começar.
+                    </div>
+                `;
+                return;
+            }
+
+            let html = `
+                <div class="mb-2">
+                    <span class="badge bg-danger">${servicos.length} serviço${servicos.length > 1 ? 's' : ''} cadastrado${servicos.length > 1 ? 's' : ''}</span>
+                </div>
+            `;
+
+            const ordenados = [...servicos].sort((a, b) => (a.nome || '').localeCompare(b.nome || ''));
+
+            ordenados.forEach(s => {
+                const preco = typeof s.preco === 'number' ? s.preco.toFixed(2).replace('.', ',') : '0,00';
+                const vazio = (s.preco === 0 || !s.nome || s.nome === 'NOVO SERVIÇO');
+
                 html += `
-                    <div class="servico-admin-card">
-                        <div>
-                            <h6 class="mb-0">${s.nome || '-'}</h6>
-                            <small>${s.duracao || '-'} min - R$ ${preco}</small>
+                    <div class="servico-admin-card ${vazio ? 'servico-vazio' : ''}">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="servico-icone-admin">
+                                <i class="bi ${s.icone || 'bi-scissors'}"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">
+                                    ${s.nome || 'SEM NOME'}
+                                    ${vazio ? '<span class="badge bg-warning text-dark ms-2">não configurado</span>' : ''}
+                                </h6>
+                                <small class="text-muted">
+                                    <i class="bi bi-clock"></i> ${s.duracao || 30} min • 
+                                    <strong>R$ ${preco}</strong>
+                                </small>
+                            </div>
                         </div>
                         <div class="d-flex gap-2">
-                            <button class="btn btn-sm btn-primary" onclick="editarServico('${s.id}')">
+                            <button class="btn btn-sm btn-primary" onclick="editarServico('${s.id}')" title="Editar">
                                 <i class="bi bi-pencil"></i>
                             </button>
-                            <button class="btn btn-sm btn-danger" onclick="excluirServico('${s.id}')">
+                            <button class="btn btn-sm btn-danger" onclick="excluirServico('${s.id}')" title="Excluir">
                                 <i class="bi bi-trash"></i>
                             </button>
                         </div>
                     </div>
                 `;
             });
+
             container.innerHTML = html;
         }
 
@@ -486,33 +567,124 @@
             document.getElementById('edit-servico-nome').value = s.nome || '';
             document.getElementById('edit-servico-duracao').value = s.duracao || 30;
             document.getElementById('edit-servico-preco').value = s.preco || 0;
+            document.querySelector('#modalServico .modal-title').textContent = 'Editar Serviço';
             new bootstrap.Modal(document.getElementById('modalServico')).show();
         };
 
         window.salvarServico = function() {
             const id = document.getElementById('edit-servico-id').value;
+            const nome = document.getElementById('edit-servico-nome').value.trim().toUpperCase();
+            const duracao = parseInt(document.getElementById('edit-servico-duracao').value) || 30;
+            const preco = parseFloat(document.getElementById('edit-servico-preco').value) || 0;
+
+            if (!nome) {
+                alert('⚠️ Digite um nome para o serviço!');
+                return;
+            }
+
+            if (preco <= 0) {
+                if (!confirm('⚠️ O preço está zerado. Deseja salvar mesmo assim?')) return;
+            }
+
             const dados = {
-                nome: document.getElementById('edit-servico-nome').value.toUpperCase(),
-                duracao: parseInt(document.getElementById('edit-servico-duracao').value) || 30,
-                preco: parseFloat(document.getElementById('edit-servico-preco').value) || 0,
+                nome: nome,
+                duracao: duracao,
+                preco: preco,
                 icone: 'bi-scissors',
                 ativo: true
             };
-            db.ref('config/servicos/' + id).update(dados);
-            bootstrap.Modal.getInstance(document.getElementById('modalServico')).hide();
+
+            if (id) {
+                db.ref('config/servicos/' + id).update(dados).then(() => {
+                    bootstrap.Modal.getInstance(document.getElementById('modalServico')).hide();
+                    mostrarAlertaAdmin('✅ Serviço atualizado com sucesso!', 'success');
+                });
+            } else {
+                const novoId = 's' + Date.now();
+                db.ref('config/servicos/' + novoId).set(dados).then(() => {
+                    bootstrap.Modal.getInstance(document.getElementById('modalServico')).hide();
+                    mostrarAlertaAdmin('✅ Serviço criado com sucesso!', 'success');
+                });
+            }
         };
 
         window.adicionarServico = function() {
-            const id = 's' + Date.now();
-            db.ref('config/servicos/' + id).set({
-                nome: 'NOVO SERVIÇO', duracao: 30, preco: 0,
-                icone: 'bi-scissors', ativo: true
-            });
+            // Limpa o formulário
+            document.getElementById('edit-servico-id').value = '';
+            document.getElementById('edit-servico-nome').value = '';
+            document.getElementById('edit-servico-duracao').value = 30;
+            document.getElementById('edit-servico-preco').value = '';
+            
+            // Muda o título do modal
+            document.querySelector('#modalServico .modal-title').textContent = 'Novo Serviço';
+            
+            // Abre o modal SEM criar no Firebase ainda
+            new bootstrap.Modal(document.getElementById('modalServico')).show();
         };
 
         window.excluirServico = function(id) {
-            if (confirm('Excluir este serviço?')) db.ref('config/servicos/' + id).remove();
+            const s = servicos.find(sv => sv.id === id);
+            if (!s) return;
+
+            if (confirm(`🗑️ Excluir o serviço "${s.nome}"?\n\nEssa ação não pode ser desfeita.`)) {
+                db.ref('config/servicos/' + id).remove().then(() => {
+                    mostrarAlertaAdmin('🗑️ Serviço removido.', 'warning');
+                });
+            }
         };
+
+        window.limparServicosVazios = function() {
+            const vazios = servicos.filter(s =>
+                s.preco === 0 || !s.nome || s.nome === 'NOVO SERVIÇO'
+            );
+
+            if (vazios.length === 0) {
+                mostrarAlertaAdmin('✅ Nenhum serviço vazio para limpar.', 'success');
+                return;
+            }
+
+            if (!confirm(`🧹 Encontrei ${vazios.length} serviço(s) vazio(s):\n\n` +
+                         vazios.map(v => '• ' + (v.nome || 'SEM NOME')).join('\n') +
+                         `\n\nDeseja remover todos?`)) {
+                return;
+            }
+
+            const updates = {};
+            vazios.forEach(v => {
+                updates['config/servicos/' + v.id] = null;
+            });
+
+            db.ref().update(updates).then(() => {
+                mostrarAlertaAdmin(`🧹 ${vazios.length} serviço(s) vazio(s) removido(s)!`, 'success');
+            });
+        };
+
+        function mostrarAlertaAdmin(mensagem, tipo = 'success') {
+            const anterior = document.getElementById('alerta-admin');
+            if (anterior) anterior.remove();
+
+            const cores = {
+                success: 'alert-success',
+                info: 'alert-info',
+                warning: 'alert-warning',
+                danger: 'alert-danger'
+            };
+
+            const alerta = document.createElement('div');
+            alerta.id = 'alerta-admin';
+            alerta.className = `alert ${cores[tipo]} alert-dismissible fade show`;
+            alerta.style.cssText = 'position: fixed; top: 80px; right: 20px; z-index: 9999; min-width: 300px; box-shadow: 0 4px 20px rgba(0,0,0,.3);';
+            alerta.innerHTML = `
+                ${mensagem}
+                <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
+            `;
+
+            document.body.appendChild(alerta);
+
+            setTimeout(() => {
+                if (alerta.parentElement) alerta.remove();
+            }, 4000);
+        }
 
         // ============================================
         // BLOQUEIOS
@@ -760,7 +932,7 @@
         };
 
         // ============================================
-        // LISTA DE ESPERA (ADMIN)
+        // LISTA DE ESPERA
         // ============================================
         function renderizarListaEspera() {
             const container = document.getElementById('lista-espera-admin');
@@ -805,7 +977,6 @@
 
                 lista.forEach((item, index) => {
                     const posicao = index + 1;
-                    const telLimpo = (item.telefone || '').replace(/\D/g, '');
                     const horaEntrada = item.criadoEm
                         ? new Date(item.criadoEm).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
                         : '';

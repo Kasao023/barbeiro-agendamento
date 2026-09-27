@@ -25,14 +25,18 @@ const CONFIG = {
     mesesAFrente: 12
 };
 
-const servicos = [
-    { id: 1, nome: "CORTE CLÁSSICO", duracao: 30, preco: 35.00, icone: "bi-scissors" },
-    { id: 2, nome: "BARBA NA NAVALHA", duracao: 20, preco: 25.00, icone: "bi-brush" },
-    { id: 3, nome: "CORTE + BARBA", duracao: 50, preco: 55.00, icone: "bi-star" },
-    { id: 4, nome: "SOBRANCELHA", duracao: 10, preco: 15.00, icone: "bi-eye" },
-    { id: 5, nome: "PIGMENTAÇÃO", duracao: 30, preco: 40.00, icone: "bi-droplet" },
-    { id: 6, nome: "COMBO COMPLETO", duracao: 60, preco: 75.00, icone: "bi-trophy" }
+// Serviços padrão - usados apenas na primeira vez (para popular o Firebase)
+const SERVICOS_PADRAO = [
+    { nome: "CORTE CLÁSSICO", duracao: 30, preco: 35.00, icone: "bi-scissors", ativo: true },
+    { nome: "BARBA NA NAVALHA", duracao: 20, preco: 25.00, icone: "bi-brush", ativo: true },
+    { nome: "CORTE + BARBA", duracao: 50, preco: 55.00, icone: "bi-star", ativo: true },
+    { nome: "SOBRANCELHA", duracao: 10, preco: 15.00, icone: "bi-eye", ativo: true },
+    { nome: "PIGMENTAÇÃO", duracao: 30, preco: 40.00, icone: "bi-droplet", ativo: true },
+    { nome: "COMBO COMPLETO", duracao: 60, preco: 75.00, icone: "bi-trophy", ativo: true }
 ];
+
+// Será preenchido do Firebase
+let servicos = [];
 
 let agendamento = {
     servico: null,
@@ -50,17 +54,73 @@ let diasInteirosBloqueados = {};
 let diaEstaCheio = false;
 
 // ============================================
+// CARREGAR SERVIÇOS DO FIREBASE
+// ============================================
+function carregarServicosDoFirebase() {
+    db.ref('config/servicos').on('value', snap => {
+        // Primeira vez? Popula com os serviços padrão
+        if (!snap.exists()) {
+            console.log('📦 Primeira vez: salvando serviços padrão no Firebase...');
+            SERVICOS_PADRAO.forEach((s, i) => {
+                const id = 's' + (Date.now() + i);
+                db.ref('config/servicos/' + id).set(s);
+            });
+            return; // o listener dispara de novo quando salvar
+        }
+
+        // Converte snapshot em array
+        servicos = [];
+        snap.forEach(child => {
+            const val = child.val();
+            if (val.ativo !== false) {
+                servicos.push({
+                    id: child.key,
+                    nome: val.nome || 'SEM NOME',
+                    duracao: val.duracao || 30,
+                    preco: typeof val.preco === 'number' ? val.preco : 0,
+                    icone: val.icone || 'bi-scissors'
+                });
+            }
+        });
+
+        console.log('✅ Serviços carregados do Firebase:', servicos.length);
+
+        // Se o serviço selecionado existia, reencontra pelo ID
+        if (agendamento.servico) {
+            const reencontrado = servicos.find(s => s.id === agendamento.servico.id);
+            if (reencontrado) {
+                agendamento.servico = reencontrado;
+            } else {
+                // Foi removido do painel
+                agendamento.servico = null;
+                agendamento.data = null;
+                agendamento.horario = null;
+            }
+        }
+
+        // Re-renderiza tudo
+        renderizarServicos();
+        renderizarAgendamento();
+    });
+}
+
+// ============================================
 // RENDERIZAR SERVIÇOS
 // ============================================
 function renderizarServicos() {
     const container = document.getElementById('servicos-container');
     if (!container) return;
 
+    if (servicos.length === 0) {
+        container.innerHTML = '<p class="text-center text-muted">Nenhum serviço cadastrado no momento.</p>';
+        return;
+    }
+
     let html = '';
     servicos.forEach(servico => {
         html += `
             <div class="col-md-4 col-sm-6">
-                <div class="servico-card" onclick="selecionarServicoRapido(${servico.id})">
+                <div class="servico-card" onclick="selecionarServicoRapido('${servico.id}')">
                     <i class="bi ${servico.icone} servico-icone"></i>
                     <h5 class="servico-nome">${servico.nome}</h5>
                     <p class="servico-duracao"><i class="bi bi-clock"></i> ${servico.duracao} min</p>
@@ -90,20 +150,24 @@ function renderizarAgendamento() {
     const servicosContainer = document.getElementById('servicos-agendamento');
     if (!servicosContainer) return;
 
-    let htmlServicos = '';
-    servicos.forEach(s => {
-        const selecionado = agendamento.servico && agendamento.servico.id === s.id;
-        htmlServicos += `
-            <div class="col-md-4 col-6">
-                <div class="opcao-servico ${selecionado ? 'selecionado' : ''}" onclick="selecionarServico(${s.id})">
-                    <div class="opcao-nome">${s.nome}</div>
-                    <div class="opcao-info">${s.duracao} min</div>
-                    <div class="opcao-preco">R$ ${s.preco.toFixed(2).replace('.', ',')}</div>
+    if (servicos.length === 0) {
+        servicosContainer.innerHTML = '<p class="text-center text-muted">Nenhum serviço cadastrado no momento.</p>';
+    } else {
+        let htmlServicos = '';
+        servicos.forEach(s => {
+            const selecionado = agendamento.servico && agendamento.servico.id === s.id;
+            htmlServicos += `
+                <div class="col-md-4 col-6">
+                    <div class="opcao-servico ${selecionado ? 'selecionado' : ''}" onclick="selecionarServico('${s.id}')">
+                        <div class="opcao-nome">${s.nome}</div>
+                        <div class="opcao-info">${s.duracao} min</div>
+                        <div class="opcao-preco">R$ ${s.preco.toFixed(2).replace('.', ',')}</div>
+                    </div>
                 </div>
-            </div>
-        `;
-    });
-    servicosContainer.innerHTML = htmlServicos;
+            `;
+        });
+        servicosContainer.innerHTML = htmlServicos;
+    }
 
     if (agendamento.servico) {
         document.getElementById('passo-2').style.display = 'block';
@@ -321,7 +385,6 @@ function renderizarHorarios() {
     container.innerHTML = html;
     diaEstaCheio = todosOcupados;
 
-    // Mostra ou esconde a lista de espera
     if (listaEsperaContainer) {
         if (todosOcupados) {
             listaEsperaContainer.style.display = 'block';
@@ -409,7 +472,6 @@ function salvarListaEspera() {
         return;
     }
 
-    // Verifica se já existe alguém com o mesmo telefone na lista deste dia
     db.ref('lista-espera/' + agendamento.data).once('value')
         .then(snap => {
             let duplicado = false;
@@ -448,7 +510,6 @@ function salvarListaEspera() {
                   new Date(agendamento.data + 'T00:00:00').toLocaleDateString('pt-BR') + 
                   ', o Seu Jorge entrará em contato pelo WhatsApp.');
 
-            // Limpa o agendamento atual
             agendamento.horario = null;
             document.getElementById('lista-espera-container').style.display = 'none';
         })
@@ -578,9 +639,10 @@ document.addEventListener('input', function(e) {
 // INICIALIZAÇÃO
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
-    renderizarServicos();
-    renderizarAgendamento();
+    // Primeiro carrega os serviços do Firebase
+    carregarServicosDoFirebase();
 
+    // Depois os bloqueios
     db.ref('bloqueios-semana').on('value', snap => {
         diasSemanaBloqueados = snap.val() || {};
         if (agendamento.servico) renderizarCalendario();
@@ -591,5 +653,5 @@ document.addEventListener('DOMContentLoaded', () => {
         if (agendamento.servico) renderizarCalendario();
     });
 
-    console.log('✅ Site carregado. Serviços:', servicos.length);
+    console.log('✅ Site carregado.');
 });
