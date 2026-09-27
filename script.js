@@ -22,7 +22,7 @@ const CONFIG = {
     horarioFechamento: 20,
     intervaloMinutos: 30,
     diasFuncionamento: [1, 2, 3, 4, 5, 6],
-    mesesAFrente: 3
+    mesesAFrente: 12
 };
 
 const servicos = [
@@ -45,6 +45,9 @@ mesAtual.setDate(1);
 mesAtual.setHours(0, 0, 0, 0);
 
 let horariosOcupados = {};
+let diasSemanaBloqueados = {};
+let diasInteirosBloqueados = {};
+let diaEstaCheio = false;
 
 // ============================================
 // RENDERIZAR SERVIÇOS
@@ -211,18 +214,26 @@ function renderizarCalendario() {
         const ehPassado = dataObj < hoje;
         const ehHoje = dataObj.getTime() === hoje.getTime();
         const selecionado = agendamento.data === dataStr;
-        const indisponivel = ehDomingo || ehPassado;
+
+        const diaSemanaBloqueado = !!diasSemanaBloqueados[diaSemana];
+        const diaInteiroBloqueado = !!diasInteirosBloqueados[dataStr];
+
+        const indisponivel = ehDomingo || ehPassado || diaSemanaBloqueado || diaInteiroBloqueado;
 
         let classes = 'dia-calendario';
         if (indisponivel) classes += ' indisponivel';
         if (ehPassado && !ehDomingo) classes += ' passado';
         if (ehHoje) classes += ' hoje';
         if (selecionado) classes += ' selecionado';
+        if (diaSemanaBloqueado || diaInteiroBloqueado) classes += ' bloqueado';
 
         const onclickAttr = indisponivel ? '' : `onclick="selecionarData('${dataStr}')"`;
+        const titleAttr = diaInteiroBloqueado
+            ? 'Dia bloqueado'
+            : (diaSemanaBloqueado ? 'Dia da semana bloqueado' : '');
 
         html += `
-            <div class="${classes}" ${onclickAttr}>
+            <div class="${classes}" ${onclickAttr} title="${titleAttr}">
                 ${dia}
             </div>
         `;
@@ -242,6 +253,19 @@ function carregarHorariosOcupados() {
     if (!dataStr) return;
 
     horariosOcupados = {};
+
+    const diaSemana = new Date(dataStr + 'T00:00:00').getDay();
+    const diaSemanaBloqueado = !!diasSemanaBloqueados[diaSemana];
+    const diaInteiroBloqueado = !!diasInteirosBloqueados[dataStr];
+
+    if (diaSemanaBloqueado || diaInteiroBloqueado) {
+        gerarSlotsHorarios().forEach(slot => {
+            horariosOcupados[slot.hora] = true;
+        });
+        diaEstaCheio = false;
+        renderizarHorarios();
+        return;
+    }
 
     db.ref('agendamentos').orderByChild('data').equalTo(dataStr).once('value')
         .then(snapshot => {
@@ -270,14 +294,18 @@ function carregarHorariosOcupados() {
 
 function renderizarHorarios() {
     const container = document.getElementById('horarios-container');
+    const listaEsperaContainer = document.getElementById('lista-espera-container');
     if (!container) return;
 
-    let html = '';
     const slots = gerarSlotsHorarios();
+    let todosOcupados = true;
+    let html = '';
 
     slots.forEach(slot => {
         const selecionado = agendamento.horario === slot.hora;
         const indisponivel = horariosOcupados[slot.hora] === true;
+
+        if (!indisponivel) todosOcupados = false;
 
         html += `
             <div class="col-md-2 col-4">
@@ -291,6 +319,16 @@ function renderizarHorarios() {
     });
 
     container.innerHTML = html;
+    diaEstaCheio = todosOcupados;
+
+    // Mostra ou esconde a lista de espera
+    if (listaEsperaContainer) {
+        if (todosOcupados) {
+            listaEsperaContainer.style.display = 'block';
+        } else {
+            listaEsperaContainer.style.display = 'none';
+        }
+    }
 }
 
 function gerarSlotsHorarios() {
@@ -335,6 +373,92 @@ function voltarPasso() {
 }
 
 // ============================================
+// LISTA DE ESPERA
+// ============================================
+function abrirFormEspera() {
+    if (!agendamento.data || !agendamento.servico) {
+        alert('Selecione um serviço e uma data primeiro.');
+        return;
+    }
+
+    const dataLabel = document.getElementById('espera-data-label');
+    const dataObj = new Date(agendamento.data + 'T00:00:00');
+    dataLabel.textContent = dataObj.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+    document.getElementById('espera-nome').value = '';
+    document.getElementById('espera-telefone').value = '';
+    document.getElementById('espera-erro').textContent = '';
+
+    new bootstrap.Modal(document.getElementById('modalEspera')).show();
+}
+
+function salvarListaEspera() {
+    const nome = document.getElementById('espera-nome').value.trim();
+    const telefone = document.getElementById('espera-telefone').value.trim();
+    const erroEl = document.getElementById('espera-erro');
+
+    erroEl.textContent = '';
+
+    if (!nome || !telefone) {
+        erroEl.textContent = 'Preencha nome e WhatsApp.';
+        return;
+    }
+
+    if (telefone.replace(/\D/g, '').length < 10) {
+        erroEl.textContent = 'Telefone inválido.';
+        return;
+    }
+
+    // Verifica se já existe alguém com o mesmo telefone na lista deste dia
+    db.ref('lista-espera/' + agendamento.data).once('value')
+        .then(snap => {
+            let duplicado = false;
+            const telLimpo = telefone.replace(/\D/g, '');
+
+            if (snap.exists()) {
+                snap.forEach(child => {
+                    const item = child.val();
+                    const telItem = (item.telefone || '').replace(/\D/g, '');
+                    if (telItem === telLimpo) duplicado = true;
+                });
+            }
+
+            if (duplicado) {
+                erroEl.textContent = 'Você já está na lista deste dia!';
+                return;
+            }
+
+            const novaEspera = {
+                nome: nome,
+                telefone: telefone,
+                servicoNome: agendamento.servico.nome,
+                servicoPreco: agendamento.servico.preco,
+                criadoEm: Date.now(),
+                status: 'aguardando'
+            };
+
+            return db.ref('lista-espera/' + agendamento.data).push(novaEspera);
+        })
+        .then(resultado => {
+            if (!resultado) return;
+
+            bootstrap.Modal.getInstance(document.getElementById('modalEspera')).hide();
+
+            alert('✅ Você entrou na lista de espera!\n\nSe alguém cancelar no dia ' + 
+                  new Date(agendamento.data + 'T00:00:00').toLocaleDateString('pt-BR') + 
+                  ', o Seu Jorge entrará em contato pelo WhatsApp.');
+
+            // Limpa o agendamento atual
+            agendamento.horario = null;
+            document.getElementById('lista-espera-container').style.display = 'none';
+        })
+        .catch(error => {
+            console.error('Erro ao entrar na lista:', error);
+            erroEl.textContent = 'Erro ao salvar. Tente novamente.';
+        });
+}
+
+// ============================================
 // CONFIRMAR AGENDAMENTO
 // ============================================
 function confirmarAgendamento() {
@@ -344,6 +468,12 @@ function confirmarAgendamento() {
 
     if (!nome || !telefone) {
         alert('Preencha seu nome e telefone!');
+        return;
+    }
+
+    const diaSemana = new Date(agendamento.data + 'T00:00:00').getDay();
+    if (diasSemanaBloqueados[diaSemana] || diasInteirosBloqueados[agendamento.data]) {
+        alert('Este dia não está disponível para agendamento.');
         return;
     }
 
@@ -410,7 +540,6 @@ function confirmarAgendamento() {
 
             window.open(`https://wa.me/${CONFIG.whatsapp}?text=${mensagem}`, '_blank');
 
-            // NOTIFICAÇÃO LOCAL PARA O CLIENTE
             if (typeof Notificacoes !== 'undefined' && Notificacoes.statusPermissao() === 'granted') {
                 const dataNotif = new Date(agendamento.data + 'T00:00:00').toLocaleDateString('pt-BR');
                 Notificacoes.exibirNotificacaoLocal(
@@ -418,14 +547,6 @@ function confirmarAgendamento() {
                     `Seu horário: ${dataNotif} às ${agendamento.horario}. Mantenha as notificações ativas para receber lembretes!`,
                     'seujorge.png'
                 );
-            } else if (typeof Notificacoes !== 'undefined') {
-                setTimeout(() => {
-                    if (confirm('🔔 Ative as notificações para receber lembretes do seu agendamento. Deseja ativar agora?')) {
-                        if (typeof ativarNotificacoesCliente === 'function') {
-                            ativarNotificacoesCliente();
-                        }
-                    }
-                }, 2000);
             }
 
             agendamento = { servico: null, data: null, horario: null };
@@ -453,8 +574,22 @@ document.addEventListener('input', function(e) {
     }
 });
 
+// ============================================
+// INICIALIZAÇÃO
+// ============================================
 document.addEventListener('DOMContentLoaded', () => {
     renderizarServicos();
     renderizarAgendamento();
+
+    db.ref('bloqueios-semana').on('value', snap => {
+        diasSemanaBloqueados = snap.val() || {};
+        if (agendamento.servico) renderizarCalendario();
+    });
+
+    db.ref('bloqueios-dia').on('value', snap => {
+        diasInteirosBloqueados = snap.val() || {};
+        if (agendamento.servico) renderizarCalendario();
+    });
+
     console.log('✅ Site carregado. Serviços:', servicos.length);
 });

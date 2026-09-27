@@ -23,6 +23,67 @@
             margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;
         }
         .card { color: #333; }
+        
+        .bloqueio-section {
+            background: #1a1a1a; border-radius: 12px; padding: 20px;
+            margin-bottom: 20px; border-left: 4px solid var(--cor-primaria);
+        }
+        .bloqueio-section h6 { color: #fff; margin-bottom: 15px; }
+        .bloqueio-item {
+            background: #fff; color: #333; border-radius: 8px; padding: 10px 15px;
+            margin-bottom: 8px; display: flex; justify-content: space-between;
+            align-items: center; border-left: 3px solid var(--cor-primaria);
+        }
+        .bloqueio-item.dia-inteiro { border-left-color: #dc3545; }
+        .bloqueio-item.recorrente { border-left-color: #ffc107; }
+        .horario-check {
+            display: inline-flex; align-items: center; gap: 5px;
+            padding: 6px 12px; background: #fff; color: #333;
+            border-radius: 8px; margin: 3px; cursor: pointer;
+            border: 2px solid transparent; user-select: none;
+            font-weight: 600; font-size: 0.85rem;
+        }
+        .horario-check:hover { border-color: var(--cor-primaria); }
+        .horario-check input { cursor: pointer; }
+        .horario-check.marcado { background: var(--cor-primaria); color: #fff; border-color: var(--cor-primaria); }
+        .dias-semana-grid {
+            display: grid; grid-template-columns: repeat(7, 1fr);
+            gap: 8px; margin-top: 10px;
+        }
+        .dia-semana-btn {
+            background: #fff; color: #333; border: 2px solid transparent;
+            padding: 12px 5px; border-radius: 10px; text-align: center;
+            font-weight: 700; cursor: pointer; transition: 0.2s;
+            font-size: 0.8rem;
+        }
+        .dia-semana-btn:hover { border-color: var(--cor-primaria); }
+        .dia-semana-btn.ativo {
+            background: var(--cor-primaria); color: #fff;
+            border-color: var(--cor-primaria);
+        }
+
+        /* Lista de espera - admin */
+        .espera-dia-bloco {
+            background: #1a1a1a; border-radius: 12px; padding: 20px;
+            margin-bottom: 20px; border-left: 4px solid #ffc107;
+        }
+        .espera-dia-titulo {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 15px; padding-bottom: 10px;
+            border-bottom: 2px solid #333;
+        }
+        .espera-dia-titulo h6 { margin: 0; color: #fff; font-size: 1.1rem; }
+        .espera-dia-titulo .badge { font-size: 0.85rem; }
+        .espera-item {
+            background: #fff; color: #333; border-radius: 10px; padding: 12px 15px;
+            margin-bottom: 8px; display: flex; justify-content: space-between;
+            align-items: center; flex-wrap: wrap; gap: 10px;
+            border-left: 3px solid #ffc107;
+        }
+        .espera-item-info { flex: 1; min-width: 200px; }
+        .espera-item-info strong { display: block; font-size: 1rem; }
+        .espera-item-info small { color: #666; font-size: 0.85rem; }
+        .espera-item-actions { display: flex; gap: 5px; flex-wrap: wrap; }
     </style>
 </head>
 <body>
@@ -57,8 +118,13 @@
             <ul class="nav nav-pills mb-4 flex-wrap">
                 <li class="nav-item"><a class="nav-link active" data-bs-toggle="pill" href="#aba-agendamentos">📅 Agendamentos</a></li>
                 <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#aba-servicos">✂️ Serviços</a></li>
-                <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#aba-bloqueios">🚫 Bloqueios</a></li>
-                <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#aba-notificacoes">🔔 Notificações</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#aba-bloqueios">🚫 Folgas</a></li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="pill" href="#aba-espera" id="tab-espera">
+                        ⏳ Lista de Espera
+                        <span class="badge bg-warning text-dark ms-1" id="badge-espera" style="display:none;">0</span>
+                    </a>
+                </li>
                 <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#aba-config">⚙️ Config</a></li>
             </ul>
 
@@ -77,59 +143,78 @@
                 </div>
 
                 <div class="tab-pane fade" id="aba-bloqueios">
-                    <h4 class="text-white mb-3">🚫 Bloquear Horários</h4>
-                    <p class="text-muted small">Bloqueie horários que você não vai atender.</p>
-                    <div class="row g-3">
-                        <div class="col-md-4">
-                            <label class="form-label text-white">Data</label>
-                            <input type="date" id="bloqueio-data" class="form-control">
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label text-white">Horário</label>
-                            <input type="time" id="bloqueio-hora" class="form-control" step="1800">
-                        </div>
-                        <div class="col-md-4 d-flex align-items-end">
-                            <button class="btn btn-danger w-100" onclick="bloquearHorario()">
-                                <i class="bi bi-lock"></i> Bloquear
-                            </button>
+                    <h4 class="text-white mb-4">🚫 Folgas & Bloqueios</h4>
+                    <p class="text-muted small mb-4">Configure os dias e horários que você não vai atender.</p>
+
+                    <div class="bloqueio-section">
+                        <h6><i class="bi bi-calendar-x text-danger"></i> 1. Bloquear dia inteiro</h6>
+                        <p class="text-muted small mb-3">Ex: feriado, folga, viagem...</p>
+                        <div class="row g-2">
+                            <div class="col-md-5">
+                                <input type="date" id="bloqueio-dia-data" class="form-control">
+                            </div>
+                            <div class="col-md-5">
+                                <input type="text" id="bloqueio-dia-motivo" class="form-control" placeholder="Motivo (opcional) Ex: Feriado">
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-danger w-100" onclick="bloquearDiaInteiro()">
+                                    <i class="bi bi-lock-fill"></i> Bloquear
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <div id="lista-bloqueios" class="mt-4"></div>
+
+                    <div class="bloqueio-section">
+                        <h6><i class="bi bi-clock-history text-warning"></i> 2. Bloquear horários específicos</h6>
+                        <p class="text-muted small mb-3">Ex: almoço, compromisso, dentista...</p>
+                        <div class="row g-2 mb-3">
+                            <div class="col-md-6">
+                                <label class="text-white small">Data</label>
+                                <input type="date" id="bloqueio-hora-data" class="form-control" onchange="carregarHorariosParaBloquear()">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="text-white small">Motivo (opcional)</label>
+                                <input type="text" id="bloqueio-hora-motivo" class="form-control" placeholder="Ex: Almoço">
+                            </div>
+                        </div>
+                        <div id="horarios-para-bloquear" class="mb-3">
+                            <p class="text-muted small">Selecione uma data para ver os horários.</p>
+                        </div>
+                        <button class="btn btn-warning w-100" onclick="bloquearHorariosSelecionados()">
+                            <i class="bi bi-lock-fill"></i> Bloquear horários selecionados
+                        </button>
+                    </div>
+
+                    <div class="bloqueio-section">
+                        <h6><i class="bi bi-arrow-repeat text-info"></i> 3. Bloquear dia da semana (toda semana)</h6>
+                        <p class="text-muted small mb-3">Ex: toda segunda-feira você não trabalha.</p>
+                        <div class="dias-semana-grid">
+                            <div class="dia-semana-btn" data-dia="0" onclick="toggleDiaSemana(this, 0)">Dom</div>
+                            <div class="dia-semana-btn" data-dia="1" onclick="toggleDiaSemana(this, 1)">Seg</div>
+                            <div class="dia-semana-btn" data-dia="2" onclick="toggleDiaSemana(this, 2)">Ter</div>
+                            <div class="dia-semana-btn" data-dia="3" onclick="toggleDiaSemana(this, 3)">Qua</div>
+                            <div class="dia-semana-btn" data-dia="4" onclick="toggleDiaSemana(this, 4)">Qui</div>
+                            <div class="dia-semana-btn" data-dia="5" onclick="toggleDiaSemana(this, 5)">Sex</div>
+                            <div class="dia-semana-btn" data-dia="6" onclick="toggleDiaSemana(this, 6)">Sáb</div>
+                        </div>
+                        <button class="btn btn-info w-100 mt-3" onclick="salvarDiasSemana()">
+                            <i class="bi bi-save"></i> Salvar dias da semana
+                        </button>
+                    </div>
+
+                    <div class="bloqueio-section">
+                        <h6><i class="bi bi-list-check text-success"></i> 4. Bloqueios ativos</h6>
+                        <div id="lista-bloqueios"></div>
+                    </div>
                 </div>
 
-                <div class="tab-pane fade" id="aba-notificacoes">
-                    <h4 class="text-white mb-3">🔔 Notificações</h4>
-                    
-                    <div class="card p-3 mb-3">
-                        <h6>Status das Notificações</h6>
-                        <p id="status-notificacao" class="text-muted mb-2">Verificando...</p>
-                        <button class="btn btn-danger" onclick="ativarNotificacoesAdmin()">
-                            <i class="bi bi-bell"></i> Ativar Notificações
-                        </button>
-                        <button class="btn btn-outline-secondary mt-2" onclick="enviarNotificacaoTeste()">
-                            <i class="bi bi-send"></i> Enviar Notificação de Teste
-                        </button>
-                    </div>
-
-                    <div class="card p-3 mb-3">
-                        <h6>📢 Enviar Notificação para Clientes</h6>
-                        <p class="text-muted small">Envie uma mensagem para todos os clientes que ativaram as notificações.</p>
-                        <input type="text" id="notif-titulo" class="form-control mb-2" placeholder="Título da notificação">
-                        <textarea id="notif-corpo" class="form-control mb-2" rows="3" placeholder="Mensagem..."></textarea>
-                        <button class="btn btn-danger w-100" onclick="enviarNotificacaoClientes()">
-                            <i class="bi bi-send"></i> Enviar para Todos
-                        </button>
-                    </div>
-
-                    <div class="card p-3">
-                        <h6>📋 Instruções para o Barbeiro</h6>
-                        <ol class="small mb-0">
-                            <li>Clique em <strong>"Ativar Notificações"</strong> acima</li>
-                            <li>O navegador vai pedir permissão — clique em <strong>"Permitir"</strong></li>
-                            <li>Pronto! Você vai receber notificações quando um cliente agendar</li>
-                            <li>Mantenha esta aba ou o navegador aberto para receber os avisos</li>
-                        </ol>
-                    </div>
+                <!-- ============ ABA LISTA DE ESPERA ============ -->
+                <div class="tab-pane fade" id="aba-espera">
+                    <h4 class="text-white mb-3">⏳ Lista de Espera</h4>
+                    <p class="text-muted small mb-4">
+                        Clientes que entraram na fila quando o dia estava lotado. Quando alguém cancelar, clique em <strong>📲 Chamar</strong> para avisar pelo WhatsApp.
+                    </p>
+                    <div id="lista-espera-admin"></div>
                 </div>
 
                 <div class="tab-pane fade" id="aba-config">
@@ -177,8 +262,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-messaging-compat.js"></script>
-    <script src="notifications.js"></script>
 
     <script>
     (function() {
@@ -197,6 +280,7 @@
         let db = null;
         let servicos = [];
         let agendamentos = [];
+        let listaEspera = {};
 
         try {
             firebase.initializeApp(firebaseConfig);
@@ -205,69 +289,7 @@
             console.error('❌ Firebase:', e);
         }
 
-        window.ativarNotificacoesAdmin = async function() {
-            const sucesso = await Notificacoes.inicializarNotificacoes('admin');
-            if (sucesso) {
-                document.getElementById('status-notificacao').textContent = '✅ Notificações ativadas!';
-                document.getElementById('status-notificacao').className = 'text-success';
-                alert('✅ Notificações ativadas com sucesso!');
-            } else {
-                document.getElementById('status-notificacao').textContent = '❌ Não foi possível ativar.';
-                document.getElementById('status-notificacao').className = 'text-danger';
-            }
-            atualizarStatusNotificacao();
-        };
-
-        function atualizarStatusNotificacao() {
-            const status = Notificacoes.statusPermissao();
-            const el = document.getElementById('status-notificacao');
-            if (!el) return;
-            
-            const textos = {
-                'granted': '✅ Notificações ativadas',
-                'denied': '❌ Notificações bloqueadas. Ative nas configurações do navegador.',
-                'default': '⚠️ Notificações não ativadas. Clique no botão abaixo.',
-                'nao_suportado': '⚠️ Notificações não suportadas neste navegador.'
-            };
-            const cores = {
-                'granted': 'text-success',
-                'denied': 'text-danger',
-                'default': 'text-warning',
-                'nao_suportado': 'text-muted'
-            };
-            el.textContent = textos[status] || 'Desconhecido';
-            el.className = cores[status] || '';
-        }
-
-        window.enviarNotificacaoTeste = function() {
-            Notificacoes.exibirNotificacaoLocal(
-                '🔔 Teste de Notificação',
-                'Se você está vendo isso, as notificações estão funcionando!',
-                'seujorge.png'
-            );
-        };
-
-        window.enviarNotificacaoClientes = async function() {
-            const titulo = document.getElementById('notif-titulo').value.trim();
-            const corpo = document.getElementById('notif-corpo').value.trim();
-            
-            if (!titulo || !corpo) {
-                alert('Preencha título e mensagem!');
-                return;
-            }
-            
-            await db.ref('notificacoes').push({
-                titulo: titulo,
-                corpo: corpo,
-                criadoEm: Date.now(),
-                tipo: 'admin'
-            });
-            
-            alert('✅ Notificação enviada para a fila!');
-            document.getElementById('notif-titulo').value = '';
-            document.getElementById('notif-corpo').value = '';
-        };
-
+        // ============ LOGIN ============
         window.fazerLogin = function() {
             const input = document.getElementById('senha-input');
             const erroEl = document.getElementById('login-erro');
@@ -305,9 +327,9 @@
             elLogin.style.setProperty('display', 'none', 'important');
             elPainel.style.display = 'block';
             carregarTudo();
-            atualizarStatusNotificacao();
         };
 
+        // ============ CARREGAR ============
         function carregarTudo() {
             if (!db) return;
 
@@ -323,11 +345,17 @@
                 renderizarAgendamentos();
             });
 
-            db.ref('bloqueios').on('value', snap => {
-                renderizarBloqueios(snap.val() || {});
+            db.ref('bloqueios').on('value', () => renderizarListaCompleta());
+            db.ref('bloqueios-dia').on('value', () => renderizarListaCompleta());
+            db.ref('bloqueios-semana').on('value', snap => carregarDiasSemana(snap.val() || {}));
+
+            db.ref('lista-espera').on('value', snap => {
+                listaEspera = snap.val() || {};
+                renderizarListaEspera();
             });
         }
 
+        // ============ AGENDAMENTOS ============
         function renderizarAgendamentos() {
             const container = document.getElementById('lista-agendamentos');
             if (!container) return;
@@ -365,6 +393,12 @@
             const preco = typeof ag.servicoPreco === 'number' ? ag.servicoPreco.toFixed(2).replace('.', ',') : '-';
             const badge = ag.status === 'concluido' ? 'success' : ag.status === 'cancelado' ? 'secondary' : 'warning';
 
+            // Verifica se tem alguém na lista de espera deste dia
+            const temEspera = listaEspera[ag.data] && Object.keys(listaEspera[ag.data]).length > 0;
+            const avisoEspera = temEspera && ag.status !== 'cancelado'
+                ? `<span class="badge bg-info ms-1" title="Tem gente na lista de espera deste dia"><i class="bi bi-hourglass-split"></i> ${Object.keys(listaEspera[ag.data]).length} na fila</span>`
+                : '';
+
             return `
                 <div class="agendamento-card ${classe}" ${ehHoje ? 'style="border-left-color:#ffc107;"' : ''}>
                     <div class="d-flex justify-content-between align-items-start">
@@ -374,7 +408,10 @@
                             <p class="mb-1 small">💈 ${ag.servicoNome || '-'} — R$ ${preco}</p>
                             <p class="mb-1 small">📞 ${ag.clienteTelefone || '-'}</p>
                             ${ag.observacoes ? `<p class="mb-0 small text-muted">📝 ${ag.observacoes}</p>` : ''}
-                            <span class="badge bg-${badge} mt-1">${ag.status || 'pendente'}</span>
+                            <div class="mt-1">
+                                <span class="badge bg-${badge}">${ag.status || 'pendente'}</span>
+                                ${avisoEspera}
+                            </div>
                         </div>
                         <div class="d-flex gap-1 flex-wrap justify-content-end">
                             <button class="btn btn-sm btn-warning" onclick="lembrarCliente('${ag.id}')" title="Lembrar">
@@ -415,6 +452,7 @@
             window.open(`https://wa.me/55${tel}?text=${encodeURIComponent(msg)}`, '_blank');
         };
 
+        // ============ SERVIÇOS ============
         function renderizarServicos() {
             const container = document.getElementById('lista-servicos');
             if (!container) return;
@@ -476,43 +514,370 @@
             if (confirm('Excluir este serviço?')) db.ref('config/servicos/' + id).remove();
         };
 
-        window.bloquearHorario = function() {
-            const data = document.getElementById('bloqueio-data').value;
-            const hora = document.getElementById('bloqueio-hora').value;
-            if (!data || !hora) { alert('Preencha data e hora!'); return; }
-            db.ref('bloqueios/' + data + '/' + hora).set(true).then(() => {
-                alert('Horário bloqueado!');
-                document.getElementById('bloqueio-data').value = '';
-                document.getElementById('bloqueio-hora').value = '';
+        // ============================================
+        // BLOQUEIOS
+        // ============================================
+        window.bloquearDiaInteiro = function() {
+            const data = document.getElementById('bloqueio-dia-data').value;
+            const motivo = document.getElementById('bloqueio-dia-motivo').value.trim() || 'Folga';
+
+            if (!data) { alert('Selecione uma data!'); return; }
+
+            db.ref('bloqueios-dia/' + data).set({
+                motivo: motivo,
+                criadoEm: Date.now()
+            }).then(() => {
+                alert('✅ Dia ' + new Date(data + 'T00:00:00').toLocaleDateString('pt-BR') + ' bloqueado!');
+                document.getElementById('bloqueio-dia-data').value = '';
+                document.getElementById('bloqueio-dia-motivo').value = '';
             });
         };
 
-        function renderizarBloqueios(bloqueios) {
-            const container = document.getElementById('lista-bloqueios');
+        window.carregarHorariosParaBloquear = function() {
+            const data = document.getElementById('bloqueio-hora-data').value;
+            const container = document.getElementById('horarios-para-bloquear');
             if (!container) return;
-            let html = '<h6 class="text-white">Horários bloqueados:</h6>';
-            const datas = Object.keys(bloqueios).sort();
-            if (datas.length === 0) {
-                html += '<p class="text-muted small">Nenhum horário bloqueado.</p>';
-            } else {
-                datas.forEach(data => {
-                    const horas = Object.keys(bloqueios[data]);
-                    if (horas.length === 0) return;
-                    const dataFmt = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR');
-                    html += `<div class="agendamento-card"><strong>${dataFmt}</strong><div class="d-flex gap-1 flex-wrap mt-2">`;
-                    horas.forEach(hora => {
-                        html += `<button class="btn btn-sm btn-outline-danger" onclick="desbloquear('${data}', '${hora}')">${hora} ✕</button>`;
-                    });
-                    html += `</div></div>`;
-                });
+
+            if (!data) {
+                container.innerHTML = '<p class="text-muted small">Selecione uma data para ver os horários.</p>';
+                return;
             }
-            container.innerHTML = html;
+
+            const horarios = [];
+            for (let h = 9; h < 20; h++) {
+                for (let m = 0; m < 60; m += 30) {
+                    horarios.push(`${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`);
+                }
+            }
+
+            Promise.all([
+                db.ref('bloqueios/' + data).once('value'),
+                db.ref('bloqueios-dia/' + data).once('value')
+            ]).then(([snapHoras, snapDia]) => {
+                const jaBloqueados = snapHoras.val() || {};
+                const diaInteiro = snapDia.exists();
+
+                if (diaInteiro) {
+                    container.innerHTML = '<p class="text-danger small"><i class="bi bi-exclamation-triangle"></i> Este dia já está bloqueado por completo.</p>';
+                    return;
+                }
+
+                let html = '<p class="text-white small mb-2">Marque os horários que deseja bloquear:</p><div>';
+                horarios.forEach(hora => {
+                    const marcado = jaBloqueados[hora] ? 'checked' : '';
+                    const classeMarcado = jaBloqueados[hora] ? 'marcado' : '';
+                    html += `
+                        <label class="horario-check ${classeMarcado}" data-hora="${hora}">
+                            <input type="checkbox" value="${hora}" ${marcado} onchange="toggleHorarioCheck(this)">
+                            ${hora}
+                        </label>
+                    `;
+                });
+                html += '</div>';
+                container.innerHTML = html;
+            });
+        };
+
+        window.toggleHorarioCheck = function(input) {
+            const label = input.closest('.horario-check');
+            if (input.checked) label.classList.add('marcado');
+            else label.classList.remove('marcado');
+        };
+
+        window.bloquearHorariosSelecionados = function() {
+            const data = document.getElementById('bloqueio-hora-data').value;
+            const motivo = document.getElementById('bloqueio-hora-motivo').value.trim() || 'Bloqueado';
+
+            if (!data) { alert('Selecione uma data!'); return; }
+
+            const checkboxes = document.querySelectorAll('#horarios-para-bloquear input[type="checkbox"]');
+            if (checkboxes.length === 0) {
+                alert('Nenhum horário disponível. Selecione uma data primeiro.');
+                return;
+            }
+
+            let selecionados = [];
+            checkboxes.forEach(cb => {
+                if (cb.checked) selecionados.push(cb.value);
+            });
+
+            if (selecionados.length === 0) {
+                alert('Selecione pelo menos um horário!');
+                return;
+            }
+
+            const updates = {};
+            selecionados.forEach(hora => {
+                updates['bloqueios/' + data + '/' + hora] = motivo;
+            });
+
+            db.ref().update(updates).then(() => {
+                alert(`✅ ${selecionados.length} horário(s) bloqueado(s)!`);
+                document.getElementById('bloqueio-hora-motivo').value = '';
+                carregarHorariosParaBloquear();
+            });
+        };
+
+        window.toggleDiaSemana = function(el) {
+            el.classList.toggle('ativo');
+        };
+
+        window.salvarDiasSemana = function() {
+            const botoes = document.querySelectorAll('.dia-semana-btn');
+            const diasAtivos = [];
+            botoes.forEach(btn => {
+                if (btn.classList.contains('ativo')) {
+                    diasAtivos.push(parseInt(btn.dataset.dia));
+                }
+            });
+
+            const updates = {};
+            for (let i = 0; i <= 6; i++) {
+                updates['bloqueios-semana/' + i] = null;
+            }
+            diasAtivos.forEach(dia => {
+                updates['bloqueios-semana/' + dia] = true;
+            });
+
+            db.ref().update(updates).then(() => {
+                if (diasAtivos.length === 0) {
+                    alert('✅ Nenhum dia da semana bloqueado.');
+                } else {
+                    const nomes = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+                    const nomesAtivos = diasAtivos.map(d => nomes[d]).join(', ');
+                    alert('✅ Bloqueado toda semana: ' + nomesAtivos);
+                }
+            });
+        };
+
+        function carregarDiasSemana(bloqueios) {
+            const botoes = document.querySelectorAll('.dia-semana-btn');
+            botoes.forEach(btn => {
+                const dia = parseInt(btn.dataset.dia);
+                if (bloqueios[dia]) btn.classList.add('ativo');
+                else btn.classList.remove('ativo');
+            });
         }
 
-        window.desbloquear = function(data, hora) {
+        function renderizarListaCompleta() {
+            const container = document.getElementById('lista-bloqueios');
+            if (!container) return;
+
+            Promise.all([
+                db.ref('bloqueios').once('value'),
+                db.ref('bloqueios-dia').once('value'),
+                db.ref('bloqueios-semana').once('value')
+            ]).then(([snapHoras, snapDia, snapSemana]) => {
+                const horas = snapHoras.val() || {};
+                const dias = snapDia.val() || {};
+                const semana = snapSemana.val() || {};
+
+                let html = '';
+                let temAlgo = false;
+
+                const datasDia = Object.keys(dias).sort();
+                if (datasDia.length > 0) {
+                    temAlgo = true;
+                    html += '<h6 class="text-white mt-3 mb-2"><i class="bi bi-calendar-x text-danger"></i> Dias inteiros bloqueados:</h6>';
+                    datasDia.forEach(data => {
+                        const info = dias[data];
+                        const dataFmt = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR');
+                        const motivo = info.motivo || 'Folga';
+                        html += `
+                            <div class="bloqueio-item dia-inteiro">
+                                <div>
+                                    <strong>${dataFmt}</strong>
+                                    <small class="d-block text-muted">${motivo}</small>
+                                </div>
+                                <button class="btn btn-sm btn-danger" onclick="desbloquearDiaInteiro('${data}')">
+                                    <i class="bi bi-trash"></i> Remover
+                                </button>
+                            </div>
+                        `;
+                    });
+                }
+
+                const datasHoras = Object.keys(horas).sort();
+                if (datasHoras.length > 0) {
+                    temAlgo = true;
+                    html += '<h6 class="text-white mt-4 mb-2"><i class="bi bi-clock-history text-warning"></i> Horários bloqueados:</h6>';
+                    datasHoras.forEach(data => {
+                        const horasDoDia = horas[data];
+                        if (!horasDoDia || typeof horasDoDia !== 'object') return;
+                        const dataFmt = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR');
+                        const listaHoras = Object.keys(horasDoDia).sort();
+                        if (listaHoras.length === 0) return;
+
+                        html += `<div class="bloqueio-item">`;
+                        html += `<div><strong>${dataFmt}</strong><div class="d-flex gap-1 flex-wrap mt-2">`;
+                        listaHoras.forEach(hora => {
+                            html += `<button class="btn btn-sm btn-outline-danger" onclick="desbloquearHorario('${data}', '${hora}')">${hora} ✕</button>`;
+                        });
+                        html += `</div></div></div>`;
+                    });
+                }
+
+                const diasSemana = Object.keys(semana).filter(d => semana[d]);
+                if (diasSemana.length > 0) {
+                    temAlgo = true;
+                    const nomes = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+                    html += '<h6 class="text-white mt-4 mb-2"><i class="bi bi-arrow-repeat text-info"></i> Dias da semana recorrentes:</h6>';
+                    diasSemana.forEach(dia => {
+                        html += `
+                            <div class="bloqueio-item recorrente">
+                                <div><strong>${nomes[dia]}s</strong> <small class="text-muted">(toda semana)</small></div>
+                                <button class="btn btn-sm btn-danger" onclick="desbloquearDiaSemana(${dia})">
+                                    <i class="bi bi-trash"></i> Remover
+                                </button>
+                            </div>
+                        `;
+                    });
+                }
+
+                if (!temAlgo) {
+                    html = '<p class="text-muted small">Nenhum bloqueio ativo no momento.</p>';
+                }
+
+                container.innerHTML = html;
+            });
+        }
+
+        window.desbloquearDiaInteiro = function(data) {
+            if (confirm('Remover bloqueio do dia ' + new Date(data + 'T00:00:00').toLocaleDateString('pt-BR') + '?')) {
+                db.ref('bloqueios-dia/' + data).remove();
+            }
+        };
+
+        window.desbloquearHorario = function(data, hora) {
             db.ref('bloqueios/' + data + '/' + hora).remove();
         };
 
+        window.desbloquearDiaSemana = function(dia) {
+            const nomes = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+            if (confirm('Remover bloqueio de todas as ' + nomes[dia] + 's?')) {
+                db.ref('bloqueios-semana/' + dia).remove();
+            }
+        };
+
+        // ============================================
+        // LISTA DE ESPERA (ADMIN)
+        // ============================================
+        function renderizarListaEspera() {
+            const container = document.getElementById('lista-espera-admin');
+            const badge = document.getElementById('badge-espera');
+            if (!container) return;
+
+            const datas = Object.keys(listaEspera).sort();
+            let totalGeral = 0;
+
+            if (datas.length === 0) {
+                container.innerHTML = '<p class="text-muted text-center py-4">📭 Nenhum cliente na lista de espera.</p>';
+                if (badge) badge.style.display = 'none';
+                return;
+            }
+
+            let html = '';
+
+            datas.forEach(data => {
+                const itens = listaEspera[data];
+                if (!itens) return;
+
+                const lista = Object.entries(itens)
+                    .map(([id, item]) => ({ id, ...item }))
+                    .filter(item => item.status !== 'convertido')
+                    .sort((a, b) => (a.criadoEm || 0) - (b.criadoEm || 0));
+
+                if (lista.length === 0) return;
+
+                totalGeral += lista.length;
+
+                const dataFmt = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR', {
+                    weekday: 'long', day: 'numeric', month: 'long'
+                });
+
+                html += `
+                    <div class="espera-dia-bloco">
+                        <div class="espera-dia-titulo">
+                            <h6><i class="bi bi-calendar-event text-warning"></i> ${dataFmt}</h6>
+                            <span class="badge bg-warning text-dark">${lista.length} pessoa${lista.length > 1 ? 's' : ''}</span>
+                        </div>
+                `;
+
+                lista.forEach((item, index) => {
+                    const posicao = index + 1;
+                    const telLimpo = (item.telefone || '').replace(/\D/g, '');
+                    const horaEntrada = item.criadoEm
+                        ? new Date(item.criadoEm).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+                        : '';
+
+                    html += `
+                        <div class="espera-item">
+                            <div class="espera-item-info">
+                                <strong>${posicao}º — ${item.nome || 'Sem nome'}</strong>
+                                <small>
+                                    📞 ${item.telefone || '-'} • 
+                                    💈 ${item.servicoNome || '-'}
+                                    ${horaEntrada ? ` • 🕐 ${horaEntrada}` : ''}
+                                </small>
+                            </div>
+                            <div class="espera-item-actions">
+                                <button class="btn btn-sm btn-success" onclick="chamarEspera('${data}', '${item.id}')" title="Chamar no WhatsApp">
+                                    <i class="bi bi-whatsapp"></i> Chamar
+                                </button>
+                                <button class="btn btn-sm btn-primary" onclick="marcarConvertido('${data}', '${item.id}')" title="Marcar como atendido">
+                                    <i class="bi bi-check-circle"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" onclick="removerEspera('${data}', '${item.id}')" title="Remover da lista">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += `</div>`;
+            });
+
+            if (!html) {
+                container.innerHTML = '<p class="text-muted text-center py-4">📭 Nenhum cliente na lista de espera.</p>';
+                if (badge) badge.style.display = 'none';
+                return;
+            }
+
+            container.innerHTML = html;
+
+            if (badge) {
+                badge.textContent = totalGeral;
+                badge.style.display = totalGeral > 0 ? 'inline-block' : 'none';
+            }
+        }
+
+        window.chamarEspera = function(data, id) {
+            const item = listaEspera[data] && listaEspera[data][id];
+            if (!item) return;
+
+            const telLimpo = (item.telefone || '').replace(/\D/g, '');
+            if (!telLimpo) { alert('Sem telefone cadastrado.'); return; }
+
+            const primeiro = (item.nome || '').split(' ')[0] || 'tudo bem';
+            const dataFmt = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
+
+            const msg = `Olá ${primeiro}! Aqui é o Seu Jorge. Vagou um horário no dia ${dataFmt}. Ainda tem interesse em agendar ${item.servicoNome || 'um corte'}? Me responde aqui rapidinho. 💈`;
+
+            window.open(`https://wa.me/55${telLimpo}?text=${encodeURIComponent(msg)}`, '_blank');
+        };
+
+        window.marcarConvertido = function(data, id) {
+            if (!confirm('Marcar como atendido? (vai sair da lista)')) return;
+            db.ref('lista-espera/' + data + '/' + id + '/status').set('convertido');
+        };
+
+        window.removerEspera = function(data, id) {
+            if (!confirm('Remover da lista de espera?')) return;
+            db.ref('lista-espera/' + data + '/' + id).remove();
+        };
+
+        // ============ SENHA ============
         window.alterarSenha = function() {
             const nova = document.getElementById('nova-senha').value;
             if (!nova || nova.length < 4) {
@@ -525,6 +890,7 @@
             });
         };
 
+        // ============ INICIALIZAÇÃO ============
         if (sessionStorage.getItem('logado') === 'true') {
             window.abrirPainel();
         }

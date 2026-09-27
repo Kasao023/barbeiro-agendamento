@@ -141,6 +141,25 @@
                                 <h4>Escolha o horário</h4>
                             </div>
                             <div class="row g-2" id="horarios-container"></div>
+
+                            <!-- LISTA DE ESPERA -->
+                            <div id="lista-espera-container" style="display: none;">
+                                <div class="lista-espera-box">
+                                    <div class="lista-espera-header">
+                                        <i class="bi bi-hourglass-split"></i>
+                                        <div>
+                                            <h5>Dia lotado!</h5>
+                                            <p>Todos os horários foram preenchidos.</p>
+                                        </div>
+                                    </div>
+                                    <p class="lista-espera-msg">
+                                        Quer que a gente te avise se alguém cancelar? Entre na lista de espera e o Seu Jorge entrará em contato pelo WhatsApp.
+                                    </p>
+                                    <button class="btn btn-danger w-100 fw-bold" onclick="abrirFormEspera()">
+                                        <i class="bi bi-list-check"></i> ENTRAR NA LISTA DE ESPERA
+                                    </button>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="passo" id="passo-4" style="display: none;">
@@ -182,6 +201,44 @@
             </div>
         </div>
     </section>
+
+    <!-- MODAL LISTA DE ESPERA -->
+    <div class="modal fade" id="modalEspera" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 20px; border-top: 5px solid var(--cor-primaria);">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold">
+                        <i class="bi bi-hourglass-split text-danger"></i> Lista de Espera
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-warning small">
+                        <i class="bi bi-calendar-event"></i>
+                        <strong>Data:</strong> <span id="espera-data-label">-</span>
+                    </div>
+                    <p class="small text-muted mb-3">
+                        Preencha seus dados. Se alguém cancelar nesse dia, o Seu Jorge entrará em contato pelo WhatsApp.
+                    </p>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Nome completo *</label>
+                        <input type="text" class="form-control" id="espera-nome" placeholder="Seu nome">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">WhatsApp *</label>
+                        <input type="tel" class="form-control" id="espera-telefone" placeholder="(15) 99999-9999" maxlength="15">
+                    </div>
+                    <div id="espera-erro" class="text-danger small"></div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-danger fw-bold" onclick="salvarListaEspera()">
+                        <i class="bi bi-check-circle"></i> Entrar na fila
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <section id="contato" class="py-5 bg-black text-white">
         <div class="container">
@@ -227,6 +284,19 @@
         document.addEventListener('DOMContentLoaded', () => {
             if (Notificacoes.statusPermissao() === 'granted') {
                 document.getElementById('banner-notificacao').style.display = 'none';
+            }
+        });
+
+        // Máscara do telefone do modal de espera
+        document.addEventListener('input', function(e) {
+            if (e.target.id === 'espera-telefone') {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 11) value = value.slice(0, 11);
+                if (value.length > 10) value = value.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
+                else if (value.length > 6) value = value.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
+                else if (value.length > 2) value = value.replace(/^(\d{2})(\d{0,5}).*/, '($1) $2');
+                else value = value.replace(/^(\d{0,2}).*/, '($1');
+                e.target.value = value;
             }
         });
     </script>

@@ -571,6 +571,132 @@ button:focus, .btn:focus {
     color: var(--cor-dourada);
 }
 
+/* ---------- DIA BLOQUEADO ---------- */
+.dia-calendario.bloqueado {
+    background: #ffe0e0;
+    color: #a71d2a;
+    cursor: not-allowed;
+    position: relative;
+    text-decoration: line-through;
+}
+
+.dia-calendario.bloqueado::after {
+    content: '🚫';
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    font-size: 0.7rem;
+}
+
+/* ---------- LISTA DE ESPERA (CLIENTE) ---------- */
+.lista-espera-box {
+    background: linear-gradient(135deg, #fff5f5, #ffe0e0);
+    border: 2px solid var(--cor-primaria);
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.lista-espera-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.lista-espera-header i {
+    font-size: 2.5rem;
+    color: var(--cor-primaria);
+}
+
+.lista-espera-header h5 {
+    margin: 0;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 2px;
+    font-size: 1.5rem;
+    color: var(--cor-primaria);
+}
+
+.lista-espera-header p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.lista-espera-msg {
+    color: #555;
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+}
+
+/* ---------- LISTA DE ESPERA (ADMIN) ---------- */
+.espera-dia-bloco {
+    background: #1a1a1a;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-left: 4px solid #ffc107;
+}
+
+.espera-dia-titulo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #333;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.espera-dia-titulo h6 {
+    margin: 0;
+    color: #fff;
+    font-size: 1.1rem;
+}
+
+.espera-dia-titulo .badge {
+    font-size: 0.85rem;
+}
+
+.espera-item {
+    background: #fff;
+    color: #333;
+    border-radius: 10px;
+    padding: 12px 15px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    border-left: 3px solid #ffc107;
+}
+
+.espera-item-info {
+    flex: 1;
+    min-width: 200px;
+}
+
+.espera-item-info strong {
+    display: block;
+    font-size: 1rem;
+    color: #333;
+}
+
+.espera-item-info small {
+    color: #666;
+    font-size: 0.85rem;
+}
+
+.espera-item-actions {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
 /* ---------- RESPONSIVO ---------- */
 @media (max-width: 768px) {
     .hero h1 {
@@ -619,5 +745,15 @@ button:focus, .btn:focus {
 
     .calendario-dias-semana span {
         font-size: 0.65rem;
+    }
+
+    .espera-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .espera-item-actions {
+        width: 100%;
+        justify-content: flex-end;
     }
 }
