@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Debug Firebase</title>
+    <style>
+        body { font-family: Arial; padding: 40px; background: #111; color: #fff; }
+        h1 { color: #dc3545; }
+        .contador { font-size: 80px; color: #ffc107; font-weight: bold; text-align: center; padding: 30px; background: #222; border-radius: 15px; margin: 20px 0; }
+        .item { background: #333; padding: 15px; margin: 10px 0; border-radius: 8px; border-left: 5px solid #dc3545; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Debug Firebase - Agendamentos</h1>
+
+    <div class="contador" id="contador">...</div>
+
+    <div id="resultado">Carregando...</div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBg2LvzNxheXfb_78I9BIqn60DqNAoTLgw",
+            authDomain: "seu-jorge-barbearia.firebaseapp.com",
+            databaseURL: "https://seu-jorge-barbearia-default-rtdb.firebaseio.com",
+            projectId: "seu-jorge-barbearia",
+            storageBucket: "seu-jorge-barbearia.firebasestorage.app",
+            messagingSenderId: "941746252187",
+            appId: "1:941746252187:web:4a3a79dd1d6a8d5967993e"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        db.ref('agendamentos').once('value').then(snap => {
+            const total = snap.numChildren();
+            document.getElementById('contador').textContent = total;
+            
+            let html = `<h2>Total: ${total} agendamento(s)</h2>`;
+            
+            if (total === 0) {
+                html += '<p>Nenhum agendamento encontrado.</p>';
+            } else {
+                snap.forEach(child => {
+                    const d = child.val();
+                    html += `
+                        <div class="item">
+                            <strong>${d.clienteNome || 'Sem nome'}</strong><br>
+                            📅 ${d.data || '-'} às ${d.horario || '-'}<br>
+                            💈 ${d.servicoNome || '-'}<br>
+                            💰 R$ ${d.servicoPreco || '-'}<br>
+                            📞 ${d.clienteTelefone || '-'}<br>
+                            Status: ${d.status || 'pendente'}<br>
+                            <small>ID: ${child.key}</small>
+                        </div>
+                    `;
+                });
+            }
+            
+            document.getElementById('resultado').innerHTML = html;
+        }).catch(err => {
+            document.getElementById('resultado').innerHTML = '❌ Erro: ' + err.message;
+        });
+    </script>
+</body>
+</html>
