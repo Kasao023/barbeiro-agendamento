@@ -12,46 +12,104 @@
         body { background: #0a0a0a !important; color: #fff; padding-top: 0 !important; }
         .nav-pills .nav-link { color: #fff; border-radius: 10px; }
         .nav-pills .nav-link.active { background: var(--cor-primaria); }
-        .agendamento-card {
-            background: #fff; color: #333; border-radius: 10px; padding: 15px;
-            margin-bottom: 10px; border-left: 4px solid var(--cor-primaria);
-        }
-        .agendamento-card.concluido { border-left-color: var(--cor-sucesso); opacity: 0.7; }
-        .agendamento-card.cancelado { border-left-color: #6c757d; opacity: 0.5; text-decoration: line-through; }
         .card { color: #333; }
 
+        .filtros-agendamentos {
+            display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;
+        }
+        .filtro-btn {
+            background: #1a1a1a; color: #fff; border: 2px solid #333;
+            border-radius: 10px; padding: 8px 16px; font-weight: 600;
+            font-size: 0.85rem; cursor: pointer; transition: all 0.2s;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .filtro-btn:hover { border-color: var(--cor-primaria); }
+        .filtro-btn.ativo {
+            background: var(--cor-primaria); border-color: var(--cor-primaria); color: #fff;
+        }
+        .filtro-btn .contador {
+            background: rgba(255,255,255,.2); padding: 2px 8px;
+            border-radius: 10px; font-size: 0.75rem;
+        }
+        .filtro-btn.ativo .contador { background: rgba(0,0,0,.3); }
+
+        .agendamento-item {
+            background: #fff; color: #333; border-radius: 12px; padding: 15px;
+            margin-bottom: 10px; border-left: 5px solid var(--cor-primaria);
+            display: flex; justify-content: space-between; align-items: center;
+            gap: 15px; flex-wrap: wrap; transition: all 0.2s;
+        }
+        .agendamento-item:hover {
+            transform: translateX(4px); box-shadow: 0 6px 18px rgba(0,0,0,.15);
+        }
+        .agendamento-item.status-concluido {
+            border-left-color: var(--cor-sucesso); background: #f0fff4;
+        }
+        .agendamento-item.status-cancelado {
+            border-left-color: #6c757d; background: #f8f8f8; opacity: 0.7;
+        }
+        .agendamento-item.status-passado { border-left-color: #adb5bd; }
+        .agendamento-item.status-hoje { border-left-color: #ffc107; background: #fffbf0; }
+
+        .agendamento-info { flex: 1; min-width: 250px; }
+        .agendamento-data-hora {
+            display: flex; align-items: center; gap: 10px; margin-bottom: 6px;
+            font-size: 1.05rem; font-weight: 700; flex-wrap: wrap;
+        }
+        .agendamento-data-hora .data {
+            color: #666; font-weight: 500; font-size: 0.9rem;
+        }
+        .agendamento-data-hora .hora {
+            background: var(--cor-primaria); color: #fff; padding: 3px 10px;
+            border-radius: 8px; font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 1px; font-size: 1.1rem;
+        }
+        .agendamento-item.status-hoje .hora { background: #ffc107; color: #333; }
+        .agendamento-item.status-concluido .hora { background: var(--cor-sucesso); }
+        .agendamento-item.status-cancelado .hora { background: #6c757d; }
+
+        .agendamento-detalhes {
+            display: flex; flex-wrap: wrap; gap: 15px;
+            font-size: 0.9rem; color: #555;
+        }
+        .agendamento-detalhes span {
+            display: inline-flex; align-items: center; gap: 4px;
+        }
+
+        .agendamento-actions {
+            display: flex; gap: 6px; flex-wrap: wrap; align-items: center;
+        }
+
+        .badge-status {
+            display: inline-block; padding: 4px 10px; border-radius: 20px;
+            font-size: 0.7rem; font-weight: 700; letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .badge-pendente { background: #fff3cd; color: #856404; }
+        .badge-concluido { background: #d4edda; color: #155724; }
+        .badge-cancelado { background: #f8d7da; color: #721c24; }
+
+        .agendamento-vazio {
+            text-align: center; padding: 40px 20px; color: #666;
+            background: #1a1a1a; border-radius: 12px;
+        }
+        .agendamento-vazio i {
+            font-size: 3rem; color: #444; display: block; margin-bottom: 10px;
+        }
+
         .servico-admin-card {
-            background: #fff;
-            color: #333;
-            border-radius: 12px;
-            padding: 15px 18px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-left: 4px solid var(--cor-primaria);
-            transition: all 0.2s;
-            gap: 10px;
+            background: #fff; color: #333; border-radius: 12px; padding: 15px 18px;
+            margin-bottom: 10px; display: flex; justify-content: space-between;
+            align-items: center; border-left: 4px solid var(--cor-primaria);
+            transition: all 0.2s; gap: 10px;
         }
-        .servico-admin-card:hover {
-            transform: translateX(4px);
-            box-shadow: 0 4px 12px rgba(0,0,0,.15);
-        }
-        .servico-admin-card.servico-vazio {
-            border-left-color: #ffc107;
-            background: #fffbf0;
-        }
+        .servico-admin-card:hover { transform: translateX(4px); box-shadow: 0 4px 12px rgba(0,0,0,.15); }
+        .servico-admin-card.servico-vazio { border-left-color: #ffc107; background: #fffbf0; }
         .servico-icone-admin {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
+            width: 45px; height: 45px; border-radius: 50%;
             background: linear-gradient(135deg, var(--cor-primaria), var(--cor-primaria-escura));
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            flex-shrink: 0;
+            color: #fff; display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem; flex-shrink: 0;
         }
         .servico-admin-card.servico-vazio .servico-icone-admin {
             background: linear-gradient(135deg, #ffc107, #e0a800);
@@ -79,21 +137,14 @@
         .horario-check:hover { border-color: var(--cor-primaria); }
         .horario-check input { cursor: pointer; }
         .horario-check.marcado { background: var(--cor-primaria); color: #fff; border-color: var(--cor-primaria); }
-        .dias-semana-grid {
-            display: grid; grid-template-columns: repeat(7, 1fr);
-            gap: 8px; margin-top: 10px;
-        }
+        .dias-semana-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-top: 10px; }
         .dia-semana-btn {
             background: #fff; color: #333; border: 2px solid transparent;
             padding: 12px 5px; border-radius: 10px; text-align: center;
-            font-weight: 700; cursor: pointer; transition: 0.2s;
-            font-size: 0.8rem;
+            font-weight: 700; cursor: pointer; transition: 0.2s; font-size: 0.8rem;
         }
         .dia-semana-btn:hover { border-color: var(--cor-primaria); }
-        .dia-semana-btn.ativo {
-            background: var(--cor-primaria); color: #fff;
-            border-color: var(--cor-primaria);
-        }
+        .dia-semana-btn.ativo { background: var(--cor-primaria); color: #fff; border-color: var(--cor-primaria); }
 
         .espera-dia-bloco {
             background: #1a1a1a; border-radius: 12px; padding: 20px;
@@ -147,7 +198,12 @@
 
         <div class="container py-4">
             <ul class="nav nav-pills mb-4 flex-wrap">
-                <li class="nav-item"><a class="nav-link active" data-bs-toggle="pill" href="#aba-agendamentos">📅 Agendamentos</a></li>
+                <li class="nav-item">
+                    <a class="nav-link active" data-bs-toggle="pill" href="#aba-agendamentos">
+                        📅 Agendamentos
+                        <span class="badge bg-warning text-dark ms-1" id="badge-agendamentos" style="display:none;">0</span>
+                    </a>
+                </li>
                 <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#aba-servicos">✂️ Serviços</a></li>
                 <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#aba-bloqueios">🚫 Folgas</a></li>
                 <li class="nav-item">
@@ -161,7 +217,47 @@
 
             <div class="tab-content">
                 <div class="tab-pane fade show active" id="aba-agendamentos">
-                    <h4 class="text-white mb-3">📅 Agendamentos</h4>
+                    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                        <div>
+                            <h4 class="text-white mb-1">📅 Agendamentos</h4>
+                            <p class="text-muted small mb-0">Todos os agendamentos ficam salvos aqui.</p>
+                        </div>
+                        <button class="btn btn-outline-warning btn-sm" onclick="limparAgendamentosAntigos()">
+                            <i class="bi bi-eraser"></i> Limpar antigos
+                        </button>
+                    </div>
+
+                    <div class="filtros-agendamentos" id="filtros-agendamentos">
+                        <button class="filtro-btn ativo" data-filtro="todos">
+                            <i class="bi bi-list-ul"></i> Todos
+                            <span class="contador" id="cnt-todos">0</span>
+                        </button>
+                        <button class="filtro-btn" data-filtro="hoje">
+                            <i class="bi bi-calendar-day"></i> Hoje
+                            <span class="contador" id="cnt-hoje">0</span>
+                        </button>
+                        <button class="filtro-btn" data-filtro="proximos">
+                            <i class="bi bi-calendar-week"></i> Próximos
+                            <span class="contador" id="cnt-proximos">0</span>
+                        </button>
+                        <button class="filtro-btn" data-filtro="passados">
+                            <i class="bi bi-calendar-x"></i> Passados
+                            <span class="contador" id="cnt-passados">0</span>
+                        </button>
+                        <button class="filtro-btn" data-filtro="pendentes">
+                            <i class="bi bi-hourglass"></i> Pendentes
+                            <span class="contador" id="cnt-pendentes">0</span>
+                        </button>
+                        <button class="filtro-btn" data-filtro="concluidos">
+                            <i class="bi bi-check-circle"></i> Concluídos
+                            <span class="contador" id="cnt-concluidos">0</span>
+                        </button>
+                        <button class="filtro-btn" data-filtro="cancelados">
+                            <i class="bi bi-x-circle"></i> Cancelados
+                            <span class="contador" id="cnt-cancelados">0</span>
+                        </button>
+                    </div>
+
                     <div id="lista-agendamentos"></div>
                 </div>
 
@@ -203,7 +299,7 @@
                                 <input type="date" id="bloqueio-dia-data" class="form-control">
                             </div>
                             <div class="col-md-5">
-                                <input type="text" id="bloqueio-dia-motivo" class="form-control" placeholder="Motivo (opcional) Ex: Feriado">
+                                <input type="text" id="bloqueio-dia-motivo" class="form-control" placeholder="Motivo (opcional)">
                             </div>
                             <div class="col-md-2">
                                 <button class="btn btn-danger w-100" onclick="bloquearDiaInteiro()">
@@ -215,7 +311,6 @@
 
                     <div class="bloqueio-section">
                         <h6><i class="bi bi-clock-history text-warning"></i> 2. Bloquear horários específicos</h6>
-                        <p class="text-muted small mb-3">Ex: almoço, compromisso, dentista...</p>
                         <div class="row g-2 mb-3">
                             <div class="col-md-6">
                                 <label class="text-white small">Data</label>
@@ -235,8 +330,7 @@
                     </div>
 
                     <div class="bloqueio-section">
-                        <h6><i class="bi bi-arrow-repeat text-info"></i> 3. Bloquear dia da semana (toda semana)</h6>
-                        <p class="text-muted small mb-3">Ex: toda segunda-feira você não trabalha.</p>
+                        <h6><i class="bi bi-arrow-repeat text-info"></i> 3. Bloquear dia da semana</h6>
                         <div class="dias-semana-grid">
                             <div class="dia-semana-btn" data-dia="0" onclick="toggleDiaSemana(this, 0)">Dom</div>
                             <div class="dia-semana-btn" data-dia="1" onclick="toggleDiaSemana(this, 1)">Seg</div>
@@ -259,9 +353,6 @@
 
                 <div class="tab-pane fade" id="aba-espera">
                     <h4 class="text-white mb-3">⏳ Lista de Espera</h4>
-                    <p class="text-muted small mb-4">
-                        Clientes que entraram na fila quando o dia estava lotado. Quando alguém cancelar, clique em <strong>📲 Chamar</strong> para avisar pelo WhatsApp.
-                    </p>
                     <div id="lista-espera-admin"></div>
                 </div>
 
@@ -288,15 +379,15 @@
                     <input type="hidden" id="edit-servico-id">
                     <div class="mb-3">
                         <label class="form-label">Nome</label>
-                        <input type="text" id="edit-servico-nome" class="form-control" placeholder="Ex: CORTE CLÁSSICO">
+                        <input type="text" id="edit-servico-nome" class="form-control">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Duração (minutos)</label>
-                        <input type="number" id="edit-servico-duracao" class="form-control" placeholder="30">
+                        <input type="number" id="edit-servico-duracao" class="form-control">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Preço (R$)</label>
-                        <input type="number" id="edit-servico-preco" class="form-control" step="0.01" placeholder="35.00">
+                        <input type="number" id="edit-servico-preco" class="form-control" step="0.01">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -329,12 +420,24 @@
         let servicos = [];
         let agendamentos = [];
         let listaEspera = {};
+        let filtroAtivo = 'todos';
 
         try {
             firebase.initializeApp(firebaseConfig);
             db = firebase.database();
         } catch (e) {
             console.error('❌ Firebase:', e);
+        }
+
+        // ============================================
+        // ✅ DATA LOCAL (não UTC)
+        // ============================================
+        function getHojeStr() {
+            const agora = new Date();
+            const ano = agora.getFullYear();
+            const mes = String(agora.getMonth() + 1).padStart(2, '0');
+            const dia = String(agora.getDate()).padStart(2, '0');
+            return `${ano}-${mes}-${dia}`;
         }
 
         // ============ LOGIN ============
@@ -390,6 +493,8 @@
             db.ref('agendamentos').on('value', snap => {
                 agendamentos = [];
                 snap.forEach(c => agendamentos.push({ id: c.key, ...c.val() }));
+                console.log('📋 Agendamentos carregados:', agendamentos.length, agendamentos);
+                atualizarContadores();
                 renderizarAgendamentos();
             });
 
@@ -401,91 +506,206 @@
                 listaEspera = snap.val() || {};
                 renderizarListaEspera();
             });
+
+            document.querySelectorAll('.filtro-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('ativo'));
+                    btn.classList.add('ativo');
+                    filtroAtivo = btn.dataset.filtro;
+                    renderizarAgendamentos();
+                });
+            });
         }
 
-        // ============ AGENDAMENTOS ============
+        // ============ CONTADORES ============
+        function atualizarContadores() {
+            const hojeStr = getHojeStr();
+
+            const total = agendamentos.length;
+            const hoje = agendamentos.filter(a => a.data === hojeStr).length;
+            const proximos = agendamentos.filter(a => a.data > hojeStr).length;
+            const passados = agendamentos.filter(a => a.data < hojeStr).length;
+            const pendentes = agendamentos.filter(a => (a.status || 'pendente') === 'pendente').length;
+            const concluidos = agendamentos.filter(a => a.status === 'concluido').length;
+            const cancelados = agendamentos.filter(a => a.status === 'cancelado').length;
+
+            const set = (id, val) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = val;
+            };
+
+            set('cnt-todos', total);
+            set('cnt-hoje', hoje);
+            set('cnt-proximos', proximos);
+            set('cnt-passados', passados);
+            set('cnt-pendentes', pendentes);
+            set('cnt-concluidos', concluidos);
+            set('cnt-cancelados', cancelados);
+
+            const badge = document.getElementById('badge-agendamentos');
+            const naoConcluidos = agendamentos.filter(a => (a.status || 'pendente') === 'pendente' && a.data >= hojeStr).length;
+            if (badge) {
+                badge.textContent = naoConcluidos;
+                badge.style.display = naoConcluidos > 0 ? 'inline-block' : 'none';
+            }
+        }
+
+        // ============================================
+        // ✅ RENDERIZAR AGENDAMENTOS (VERSÃO CORRIGIDA)
+        // ============================================
         function renderizarAgendamentos() {
             const container = document.getElementById('lista-agendamentos');
             if (!container) return;
 
-            const hojeStr = new Date().toISOString().split('T')[0];
-            const hoje = agendamentos.filter(a => a.data === hojeStr)
-                .sort((a, b) => (a.horario || '').localeCompare(b.horario || ''));
-            const futuros = agendamentos.filter(a => a.data > hojeStr)
-                .sort((a, b) => ((a.data || '') + (a.horario || '')).localeCompare((b.data || '') + (b.horario || '')));
+            const hojeStr = getHojeStr();
+            let lista = [...agendamentos];
 
-            if (hoje.length === 0 && futuros.length === 0) {
-                container.innerHTML = '<p class="text-muted">Nenhum agendamento futuro.</p>';
+            if (filtroAtivo === 'hoje') {
+                lista = lista.filter(a => a.data === hojeStr);
+            } else if (filtroAtivo === 'proximos') {
+                lista = lista.filter(a => a.data > hojeStr);
+            } else if (filtroAtivo === 'passados') {
+                lista = lista.filter(a => a.data < hojeStr);
+            } else if (filtroAtivo === 'pendentes') {
+                lista = lista.filter(a => (a.status || 'pendente') === 'pendente');
+            } else if (filtroAtivo === 'concluidos') {
+                lista = lista.filter(a => a.status === 'concluido');
+            } else if (filtroAtivo === 'cancelados') {
+                lista = lista.filter(a => a.status === 'cancelado');
+            }
+
+            // Ordenação
+            lista.sort((a, b) => {
+                const dataA = (a.data || '') + (a.horario || '');
+                const dataB = (b.data || '') + (b.horario || '');
+                if (filtroAtivo === 'passados') return dataB.localeCompare(dataA);
+                return dataA.localeCompare(dataB);
+            });
+
+            console.log('🔍 renderizarAgendamentos:');
+            console.log('   Total:', agendamentos.length);
+            console.log('   Filtro:', filtroAtivo);
+            console.log('   Após filtro:', lista.length);
+            console.log('   Lista:', lista);
+
+            // ✅ LIMPA O CONTAINER
+            container.innerHTML = '';
+
+            if (lista.length === 0) {
+                container.innerHTML = `
+                    <div class="agendamento-vazio">
+                        <i class="bi bi-calendar-x"></i>
+                        <p class="mb-0">Nenhum agendamento ${filtroAtivo !== 'todos' ? 'neste filtro' : ''}.</p>
+                    </div>
+                `;
                 return;
             }
 
-            let html = '';
+            // ✅ ADICIONA O CONTADOR
+            const contador = document.createElement('div');
+            contador.className = 'mb-3';
+            contador.innerHTML = `<span class="badge bg-secondary">${lista.length} agendamento${lista.length > 1 ? 's' : ''}</span>`;
+            container.appendChild(contador);
 
-            if (hoje.length > 0) {
-                html += `<h5 class="text-warning mb-3 mt-2"><i class="bi bi-fire"></i> HOJE (${hoje.length})</h5>`;
-                hoje.forEach(ag => { html += montarCard(ag, true); });
-            }
+            // ✅ ADICIONA CADA ITEM INDIVIDUALMENTE
+            lista.forEach((ag, index) => {
+                console.log(`   [${index + 1}/${lista.length}]`, ag.clienteNome, ag.data, ag.horario);
+                try {
+                    const htmlItem = montarItemAgendamento(ag, hojeStr);
+                    const wrapper = document.createElement('div');
+                    wrapper.innerHTML = htmlItem;
+                    while (wrapper.firstChild) {
+                        container.appendChild(wrapper.firstChild);
+                    }
+                } catch (err) {
+                    console.error('❌ Erro ao montar item:', ag, err);
+                }
+            });
 
-            if (futuros.length > 0) {
-                html += `<h5 class="text-white mb-3 mt-4"><i class="bi bi-calendar-week"></i> PRÓXIMOS (${futuros.length})</h5>`;
-                futuros.forEach(ag => { html += montarCard(ag, false); });
-            }
-
-            container.innerHTML = html;
+            console.log('   ✅ Renderizados:', container.querySelectorAll('.agendamento-item').length);
         }
 
-        function montarCard(ag, ehHoje) {
+        function montarItemAgendamento(ag, hojeStr) {
             const dataFmt = new Date(ag.data + 'T00:00:00').toLocaleDateString('pt-BR');
-            const classe = ag.status === 'concluido' ? 'concluido' : (ag.status === 'cancelado' ? 'cancelado' : '');
+            const status = ag.status || 'pendente';
+            const ehHoje = ag.data === hojeStr;
+            const ehPassado = ag.data < hojeStr;
+
+            let classe = 'agendamento-item';
+            if (status === 'concluido') classe += ' status-concluido';
+            else if (status === 'cancelado') classe += ' status-cancelado';
+            else if (ehHoje) classe += ' status-hoje';
+            else if (ehPassado) classe += ' status-passado';
+
             const tel = (ag.clienteTelefone || '').replace(/\D/g, '');
             const preco = typeof ag.servicoPreco === 'number' ? ag.servicoPreco.toFixed(2).replace('.', ',') : '-';
-            const badge = ag.status === 'concluido' ? 'success' : ag.status === 'cancelado' ? 'secondary' : 'warning';
+
+            const badgeClass = status === 'concluido' ? 'badge-concluido'
+                             : status === 'cancelado' ? 'badge-cancelado'
+                             : 'badge-pendente';
 
             const temEspera = listaEspera[ag.data] && Object.keys(listaEspera[ag.data]).length > 0;
-            const avisoEspera = temEspera && ag.status !== 'cancelado'
+            const avisoEspera = temEspera && status !== 'cancelado'
                 ? `<span class="badge bg-info ms-1" title="Tem gente na lista de espera deste dia"><i class="bi bi-hourglass-split"></i> ${Object.keys(listaEspera[ag.data]).length} na fila</span>`
                 : '';
 
             return `
-                <div class="agendamento-card ${classe}" ${ehHoje ? 'style="border-left-color:#ffc107;"' : ''}>
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <h6 class="mb-1"><strong>${ag.horario || '--:--'}</strong> — ${ag.clienteNome || 'Sem nome'}</h6>
-                            <p class="mb-1 small">📅 ${dataFmt}</p>
-                            <p class="mb-1 small">💈 ${ag.servicoNome || '-'} — R$ ${preco}</p>
-                            <p class="mb-1 small">📞 ${ag.clienteTelefone || '-'}</p>
-                            ${ag.observacoes ? `<p class="mb-0 small text-muted">📝 ${ag.observacoes}</p>` : ''}
-                            <div class="mt-1">
-                                <span class="badge bg-${badge}">${ag.status || 'pendente'}</span>
-                                ${avisoEspera}
-                            </div>
+                <div class="${classe}">
+                    <div class="agendamento-info">
+                        <div class="agendamento-data-hora">
+                            <span class="hora">${ag.horario || '--:--'}</span>
+                            <span class="data">
+                                📅 ${dataFmt}
+                                ${ehHoje ? '<span class="badge bg-warning text-dark ms-1">HOJE</span>' : ''}
+                            </span>
                         </div>
-                        <div class="d-flex gap-1 flex-wrap justify-content-end">
-                            <button class="btn btn-sm btn-warning" onclick="lembrarCliente('${ag.id}')" title="Lembrar">
+                        <div class="agendamento-detalhes">
+                            <span>👤 <strong>${ag.clienteNome || 'Sem nome'}</strong></span>
+                            <span>💈 ${ag.servicoNome || '-'}</span>
+                            <span>💰 R$ ${preco}</span>
+                            <span>📞 ${ag.clienteTelefone || '-'}</span>
+                            ${ag.observacoes ? `<span>📝 ${ag.observacoes}</span>` : ''}
+                        </div>
+                        <div class="mt-2">
+                            <span class="badge-status ${badgeClass}">${status}</span>
+                            ${avisoEspera}
+                        </div>
+                    </div>
+                    <div class="agendamento-actions">
+                        ${status !== 'concluido' && status !== 'cancelado' ? `
+                            <button class="btn btn-sm btn-warning" onclick="lembrarCliente('${ag.id}')" title="Lembrar no WhatsApp">
                                 <i class="bi bi-bell"></i>
                             </button>
-                            <a href="https://wa.me/55${tel}" target="_blank" class="btn btn-sm btn-success">
-                                <i class="bi bi-whatsapp"></i>
-                            </a>
-                            <button class="btn btn-sm btn-primary" onclick="mudarStatus('${ag.id}', 'concluido')">
+                        ` : ''}
+                        <a href="https://wa.me/55${tel}" target="_blank" class="btn btn-sm btn-success" title="Abrir WhatsApp">
+                            <i class="bi bi-whatsapp"></i>
+                        </a>
+                        ${status !== 'concluido' ? `
+                            <button class="btn btn-sm btn-primary" onclick="mudarStatus('${ag.id}', 'concluido')" title="Marcar como concluído">
                                 <i class="bi bi-check"></i>
                             </button>
-                            <button class="btn btn-sm btn-secondary" onclick="mudarStatus('${ag.id}', 'cancelado')">
+                        ` : ''}
+                        ${status !== 'cancelado' ? `
+                            <button class="btn btn-sm btn-secondary" onclick="mudarStatus('${ag.id}', 'cancelado')" title="Cancelar">
                                 <i class="bi bi-x"></i>
                             </button>
-                            <button class="btn btn-sm btn-danger" onclick="excluirAgendamento('${ag.id}')">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </div>
+                        ` : ''}
+                        <button class="btn btn-sm btn-danger" onclick="excluirAgendamento('${ag.id}')" title="Excluir">
+                            <i class="bi bi-trash"></i>
+                        </button>
                     </div>
                 </div>
             `;
         }
 
-        window.mudarStatus = function(id, status) { db.ref('agendamentos/' + id + '/status').set(status); };
+        window.mudarStatus = function(id, status) {
+            db.ref('agendamentos/' + id + '/status').set(status);
+        };
 
         window.excluirAgendamento = function(id) {
-            if (confirm('Excluir este agendamento?')) db.ref('agendamentos/' + id).remove();
+            if (confirm('Excluir este agendamento permanentemente?')) {
+                db.ref('agendamentos/' + id).remove();
+            }
         };
 
         window.lembrarCliente = function(id) {
@@ -499,8 +719,36 @@
             window.open(`https://wa.me/55${tel}?text=${encodeURIComponent(msg)}`, '_blank');
         };
 
+        // ============ LIMPAR AGENDAMENTOS ANTIGOS ============
+        window.limparAgendamentosAntigos = function() {
+            const hojeStr = getHojeStr();
+            const paraRemover = agendamentos.filter(a => {
+                const passado = a.data < hojeStr;
+                const concluidoOuCancelado = a.status === 'concluido' || a.status === 'cancelado';
+                return passado && concluidoOuCancelado;
+            });
+
+            if (paraRemover.length === 0) {
+                mostrarAlertaAdmin('✅ Nenhum agendamento antigo (concluído/cancelado) para limpar.', 'success');
+                return;
+            }
+
+            if (!confirm(`🧹 Encontrei ${paraRemover.length} agendamento(s) passado(s) que já estão concluídos ou cancelados.\n\nDeseja remover todos?`)) {
+                return;
+            }
+
+            const updates = {};
+            paraRemover.forEach(a => {
+                updates['agendamentos/' + a.id] = null;
+            });
+
+            db.ref().update(updates).then(() => {
+                mostrarAlertaAdmin(`🧹 ${paraRemover.length} agendamento(s) removido(s)!`, 'success');
+            });
+        };
+
         // ============================================
-        // SERVIÇOS (CORRIGIDO)
+        // SERVIÇOS
         // ============================================
         function renderizarServicos() {
             const container = document.getElementById('lista-servicos');
@@ -609,16 +857,11 @@
         };
 
         window.adicionarServico = function() {
-            // Limpa o formulário
             document.getElementById('edit-servico-id').value = '';
             document.getElementById('edit-servico-nome').value = '';
             document.getElementById('edit-servico-duracao').value = 30;
             document.getElementById('edit-servico-preco').value = '';
-            
-            // Muda o título do modal
             document.querySelector('#modalServico .modal-title').textContent = 'Novo Serviço';
-            
-            // Abre o modal SEM criar no Firebase ainda
             new bootstrap.Modal(document.getElementById('modalServico')).show();
         };
 
