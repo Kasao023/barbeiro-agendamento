@@ -401,11 +401,15 @@
             appId: "1:941746252187:web:4a3a79dd1d6a8d5967993e"
         };
 
+        // URL base do Firebase para REST
+        const FIREBASE_URL = 'https://seu-jorge-barbearia-default-rtdb.firebaseio.com';
+
         let db = null;
         let servicos = [];
         let agendamentos = [];
         let listaEspera = {};
         let filtroAtivo = 'todos';
+        let intervaloAgendamentos = null;
 
         try {
             firebase.initializeApp(firebaseConfig);
@@ -466,60 +470,55 @@
         };
 
         // ============================================
-        // ✅ CARREGAR (COM LISTENERS GRANULARES)
+        // ✅ CARREGAR AGENDAMENTOS VIA REST API
+        // (mesmo método que funcionou no teste-debug)
+        // ============================================
+        async function carregarAgendamentosREST() {
+            try {
+                const resposta = await fetch(FIREBASE_URL + '/agendamentos.json');
+
+                if (!resposta.ok) {
+                    console.error('❌ Erro HTTP:', resposta.status);
+                    return;
+                }
+
+                const dados = await resposta.json();
+
+                agendamentos = [];
+                if (dados) {
+                    Object.keys(dados).forEach(id => {
+                        agendamentos.push({ id, ...dados[id] });
+                    });
+                }
+
+                console.log('📋 Carregados via REST:', agendamentos.length, agendamentos.map(a => a.clienteNome));
+
+                atualizarContadores();
+                renderizarAgendamentos();
+            } catch (err) {
+                console.error('❌ Erro REST:', err);
+            }
+        }
+
+        // ============================================
+        // CARREGAR TUDO
         // ============================================
         function carregarTudo() {
             if (!db) return;
 
-            // Serviços
+            // Serviços via SDK
             db.ref('config/servicos').on('value', snap => {
                 servicos = [];
                 snap.forEach(c => servicos.push({ id: c.key, ...c.val() }));
                 renderizarServicos();
             });
 
-            // ✅ AGENDAMENTOS - carrega tudo de uma vez (confiável)
-            db.ref('agendamentos').once('value').then(snap => {
-                agendamentos = [];
-                snap.forEach(c => agendamentos.push({ id: c.key, ...c.val() }));
-                console.log('📋 Agendamentos carregados (once):', agendamentos.length, agendamentos.map(a => a.clienteNome));
-                atualizarContadores();
-                renderizarAgendamentos();
-            }).catch(err => {
-                console.error('❌ Erro ao carregar agendamentos:', err);
-            });
+            // ✅ Agendamentos via REST (confiável)
+            carregarAgendamentosREST();
 
-            // ✅ Escuta NOVOS agendamentos
-            db.ref('agendamentos').on('child_added', snap => {
-                const existe = agendamentos.find(a => a.id === snap.key);
-                if (!existe) {
-                    agendamentos.push({ id: snap.key, ...snap.val() });
-                    console.log('📥 Novo agendamento:', snap.val().clienteNome);
-                    atualizarContadores();
-                    renderizarAgendamentos();
-                }
-            });
-
-            // ✅ Escuta MUDANÇAS (ex: status)
-            db.ref('agendamentos').on('child_changed', snap => {
-                const idx = agendamentos.findIndex(a => a.id === snap.key);
-                if (idx >= 0) {
-                    agendamentos[idx] = { id: snap.key, ...snap.val() };
-                } else {
-                    agendamentos.push({ id: snap.key, ...snap.val() });
-                }
-                console.log('🔄 Agendamento alterado:', snap.val().clienteNome);
-                atualizarContadores();
-                renderizarAgendamentos();
-            });
-
-            // ✅ Escuta REMOÇÕES
-            db.ref('agendamentos').on('child_removed', snap => {
-                agendamentos = agendamentos.filter(a => a.id !== snap.key);
-                console.log('🗑️ Agendamento removido:', snap.key);
-                atualizarContadores();
-                renderizarAgendamentos();
-            });
+            // ✅ Polling a cada 10s
+            if (intervaloAgendamentos) clearInterval(intervaloAgendamentos);
+            intervaloAgendamentos = setInterval(carregarAgendamentosREST, 10000);
 
             // Bloqueios
             db.ref('bloqueios').on('value', () => renderizarListaCompleta());
@@ -544,15 +543,10 @@
         }
 
         // ============================================
-        // ✅ RECARREGAR (botão "Atualizar")
+        // BOTÃO "ATUALIZAR"
         // ============================================
         window.recarregarAgendamentos = function() {
-            db.ref('agendamentos').once('value').then(snap => {
-                agendamentos = [];
-                snap.forEach(c => agendamentos.push({ id: c.key, ...c.val() }));
-                console.log('🔄 Recarregado:', agendamentos.length, 'agendamentos');
-                atualizarContadores();
-                renderizarAgendamentos();
+            carregarAgendamentosREST().then(() => {
                 mostrarAlertaAdmin(`🔄 ${agendamentos.length} agendamento(s) carregado(s)`, 'info');
             });
         };
@@ -727,11 +721,14 @@
 
         window.mudarStatus = function(id, status) {
             db.ref('agendamentos/' + id + '/status').set(status);
+            // Recarrega após 500ms
+            setTimeout(carregarAgendamentosREST, 500);
         };
 
         window.excluirAgendamento = function(id) {
             if (confirm('Excluir este agendamento permanentemente?')) {
                 db.ref('agendamentos/' + id).remove();
+                setTimeout(carregarAgendamentosREST, 500);
             }
         };
 
@@ -771,6 +768,7 @@
 
             db.ref().update(updates).then(() => {
                 mostrarAlertaAdmin(`🧹 ${paraRemover.length} agendamento(s) removido(s)!`, 'success');
+                setTimeout(carregarAgendamentosREST, 500);
             });
         };
 
