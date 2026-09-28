@@ -14,9 +14,7 @@
         .nav-pills .nav-link.active { background: var(--cor-primaria); }
         .card { color: #333; }
 
-        .filtros-agendamentos {
-            display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;
-        }
+        .filtros-agendamentos { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
         .filtro-btn {
             background: #1a1a1a; color: #fff; border: 2px solid #333;
             border-radius: 10px; padding: 8px 16px; font-weight: 600;
@@ -24,9 +22,7 @@
             display: flex; align-items: center; gap: 6px;
         }
         .filtro-btn:hover { border-color: var(--cor-primaria); }
-        .filtro-btn.ativo {
-            background: var(--cor-primaria); border-color: var(--cor-primaria); color: #fff;
-        }
+        .filtro-btn.ativo { background: var(--cor-primaria); border-color: var(--cor-primaria); color: #fff; }
         .filtro-btn .contador {
             background: rgba(255,255,255,.2); padding: 2px 8px;
             border-radius: 10px; font-size: 0.75rem;
@@ -39,15 +35,9 @@
             display: flex; justify-content: space-between; align-items: center;
             gap: 15px; flex-wrap: wrap; transition: all 0.2s;
         }
-        .agendamento-item:hover {
-            transform: translateX(4px); box-shadow: 0 6px 18px rgba(0,0,0,.15);
-        }
-        .agendamento-item.status-concluido {
-            border-left-color: var(--cor-sucesso); background: #f0fff4;
-        }
-        .agendamento-item.status-cancelado {
-            border-left-color: #6c757d; background: #f8f8f8; opacity: 0.7;
-        }
+        .agendamento-item:hover { transform: translateX(4px); box-shadow: 0 6px 18px rgba(0,0,0,.15); }
+        .agendamento-item.status-concluido { border-left-color: var(--cor-sucesso); background: #f0fff4; }
+        .agendamento-item.status-cancelado { border-left-color: #6c757d; background: #f8f8f8; opacity: 0.7; }
         .agendamento-item.status-passado { border-left-color: #adb5bd; }
         .agendamento-item.status-hoje { border-left-color: #ffc107; background: #fffbf0; }
 
@@ -56,9 +46,7 @@
             display: flex; align-items: center; gap: 10px; margin-bottom: 6px;
             font-size: 1.05rem; font-weight: 700; flex-wrap: wrap;
         }
-        .agendamento-data-hora .data {
-            color: #666; font-weight: 500; font-size: 0.9rem;
-        }
+        .agendamento-data-hora .data { color: #666; font-weight: 500; font-size: 0.9rem; }
         .agendamento-data-hora .hora {
             background: var(--cor-primaria); color: #fff; padding: 3px 10px;
             border-radius: 8px; font-family: 'Bebas Neue', sans-serif;
@@ -72,13 +60,9 @@
             display: flex; flex-wrap: wrap; gap: 15px;
             font-size: 0.9rem; color: #555;
         }
-        .agendamento-detalhes span {
-            display: inline-flex; align-items: center; gap: 4px;
-        }
+        .agendamento-detalhes span { display: inline-flex; align-items: center; gap: 4px; }
 
-        .agendamento-actions {
-            display: flex; gap: 6px; flex-wrap: wrap; align-items: center;
-        }
+        .agendamento-actions { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
 
         .badge-status {
             display: inline-block; padding: 4px 10px; border-radius: 20px;
@@ -93,9 +77,7 @@
             text-align: center; padding: 40px 20px; color: #666;
             background: #1a1a1a; border-radius: 12px;
         }
-        .agendamento-vazio i {
-            font-size: 3rem; color: #444; display: block; margin-bottom: 10px;
-        }
+        .agendamento-vazio i { font-size: 3rem; color: #444; display: block; margin-bottom: 10px; }
 
         .servico-admin-card {
             background: #fff; color: #333; border-radius: 12px; padding: 15px 18px;
@@ -111,9 +93,7 @@
             color: #fff; display: flex; align-items: center; justify-content: center;
             font-size: 1.3rem; flex-shrink: 0;
         }
-        .servico-admin-card.servico-vazio .servico-icone-admin {
-            background: linear-gradient(135deg, #ffc107, #e0a800);
-        }
+        .servico-admin-card.servico-vazio .servico-icone-admin { background: linear-gradient(135deg, #ffc107, #e0a800); }
 
         .bloqueio-section {
             background: #1a1a1a; border-radius: 12px; padding: 20px;
@@ -222,9 +202,14 @@
                             <h4 class="text-white mb-1">📅 Agendamentos</h4>
                             <p class="text-muted small mb-0">Todos os agendamentos ficam salvos aqui.</p>
                         </div>
-                        <button class="btn btn-outline-warning btn-sm" onclick="limparAgendamentosAntigos()">
-                            <i class="bi bi-eraser"></i> Limpar antigos
-                        </button>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-outline-info btn-sm" onclick="recarregarAgendamentos()">
+                                <i class="bi bi-arrow-clockwise"></i> Atualizar
+                            </button>
+                            <button class="btn btn-outline-warning btn-sm" onclick="limparAgendamentosAntigos()">
+                                <i class="bi bi-eraser"></i> Limpar antigos
+                            </button>
+                        </div>
                     </div>
 
                     <div class="filtros-agendamentos" id="filtros-agendamentos">
@@ -480,33 +465,74 @@
             carregarTudo();
         };
 
-        // ============ CARREGAR ============
+        // ============================================
+        // ✅ CARREGAR (COM LISTENERS GRANULARES)
+        // ============================================
         function carregarTudo() {
             if (!db) return;
 
+            // Serviços
             db.ref('config/servicos').on('value', snap => {
                 servicos = [];
                 snap.forEach(c => servicos.push({ id: c.key, ...c.val() }));
                 renderizarServicos();
             });
 
-            db.ref('agendamentos').on('value', snap => {
+            // ✅ AGENDAMENTOS - carrega tudo de uma vez (confiável)
+            db.ref('agendamentos').once('value').then(snap => {
                 agendamentos = [];
                 snap.forEach(c => agendamentos.push({ id: c.key, ...c.val() }));
-                console.log('📋 Agendamentos carregados:', agendamentos.length, agendamentos);
+                console.log('📋 Agendamentos carregados (once):', agendamentos.length, agendamentos.map(a => a.clienteNome));
+                atualizarContadores();
+                renderizarAgendamentos();
+            }).catch(err => {
+                console.error('❌ Erro ao carregar agendamentos:', err);
+            });
+
+            // ✅ Escuta NOVOS agendamentos
+            db.ref('agendamentos').on('child_added', snap => {
+                const existe = agendamentos.find(a => a.id === snap.key);
+                if (!existe) {
+                    agendamentos.push({ id: snap.key, ...snap.val() });
+                    console.log('📥 Novo agendamento:', snap.val().clienteNome);
+                    atualizarContadores();
+                    renderizarAgendamentos();
+                }
+            });
+
+            // ✅ Escuta MUDANÇAS (ex: status)
+            db.ref('agendamentos').on('child_changed', snap => {
+                const idx = agendamentos.findIndex(a => a.id === snap.key);
+                if (idx >= 0) {
+                    agendamentos[idx] = { id: snap.key, ...snap.val() };
+                } else {
+                    agendamentos.push({ id: snap.key, ...snap.val() });
+                }
+                console.log('🔄 Agendamento alterado:', snap.val().clienteNome);
                 atualizarContadores();
                 renderizarAgendamentos();
             });
 
+            // ✅ Escuta REMOÇÕES
+            db.ref('agendamentos').on('child_removed', snap => {
+                agendamentos = agendamentos.filter(a => a.id !== snap.key);
+                console.log('🗑️ Agendamento removido:', snap.key);
+                atualizarContadores();
+                renderizarAgendamentos();
+            });
+
+            // Bloqueios
             db.ref('bloqueios').on('value', () => renderizarListaCompleta());
             db.ref('bloqueios-dia').on('value', () => renderizarListaCompleta());
             db.ref('bloqueios-semana').on('value', snap => carregarDiasSemana(snap.val() || {}));
 
+            // Lista de espera
             db.ref('lista-espera').on('value', snap => {
                 listaEspera = snap.val() || {};
                 renderizarListaEspera();
             });
 
+            // Filtros
             document.querySelectorAll('.filtro-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('ativo'));
@@ -516,6 +542,20 @@
                 });
             });
         }
+
+        // ============================================
+        // ✅ RECARREGAR (botão "Atualizar")
+        // ============================================
+        window.recarregarAgendamentos = function() {
+            db.ref('agendamentos').once('value').then(snap => {
+                agendamentos = [];
+                snap.forEach(c => agendamentos.push({ id: c.key, ...c.val() }));
+                console.log('🔄 Recarregado:', agendamentos.length, 'agendamentos');
+                atualizarContadores();
+                renderizarAgendamentos();
+                mostrarAlertaAdmin(`🔄 ${agendamentos.length} agendamento(s) carregado(s)`, 'info');
+            });
+        };
 
         // ============ CONTADORES ============
         function atualizarContadores() {
@@ -551,7 +591,7 @@
         }
 
         // ============================================
-        // ✅ RENDERIZAR AGENDAMENTOS (VERSÃO CORRIGIDA)
+        // RENDERIZAR AGENDAMENTOS
         // ============================================
         function renderizarAgendamentos() {
             const container = document.getElementById('lista-agendamentos');
@@ -574,7 +614,6 @@
                 lista = lista.filter(a => a.status === 'cancelado');
             }
 
-            // Ordenação
             lista.sort((a, b) => {
                 const dataA = (a.data || '') + (a.horario || '');
                 const dataB = (b.data || '') + (b.horario || '');
@@ -582,13 +621,6 @@
                 return dataA.localeCompare(dataB);
             });
 
-            console.log('🔍 renderizarAgendamentos:');
-            console.log('   Total:', agendamentos.length);
-            console.log('   Filtro:', filtroAtivo);
-            console.log('   Após filtro:', lista.length);
-            console.log('   Lista:', lista);
-
-            // ✅ LIMPA O CONTAINER
             container.innerHTML = '';
 
             if (lista.length === 0) {
@@ -601,15 +633,12 @@
                 return;
             }
 
-            // ✅ ADICIONA O CONTADOR
             const contador = document.createElement('div');
             contador.className = 'mb-3';
             contador.innerHTML = `<span class="badge bg-secondary">${lista.length} agendamento${lista.length > 1 ? 's' : ''}</span>`;
             container.appendChild(contador);
 
-            // ✅ ADICIONA CADA ITEM INDIVIDUALMENTE
-            lista.forEach((ag, index) => {
-                console.log(`   [${index + 1}/${lista.length}]`, ag.clienteNome, ag.data, ag.horario);
+            lista.forEach(ag => {
                 try {
                     const htmlItem = montarItemAgendamento(ag, hojeStr);
                     const wrapper = document.createElement('div');
@@ -621,8 +650,6 @@
                     console.error('❌ Erro ao montar item:', ag, err);
                 }
             });
-
-            console.log('   ✅ Renderizados:', container.querySelectorAll('.agendamento-item').length);
         }
 
         function montarItemAgendamento(ag, hojeStr) {
