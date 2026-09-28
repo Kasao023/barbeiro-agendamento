@@ -79,22 +79,53 @@
         }
         .agendamento-vazio i { font-size: 3rem; color: #444; display: block; margin-bottom: 10px; }
 
-        .servico-admin-card {
-            background: #fff; color: #333; border-radius: 12px; padding: 15px 18px;
-            margin-bottom: 10px; display: flex; justify-content: space-between;
-            align-items: center; border-left: 4px solid var(--cor-primaria);
-            transition: all 0.2s; gap: 10px;
+        /* SERVIÇOS - LISTA MELHORADA */
+        .servico-item {
+            background: #fff; color: #333; border-radius: 12px; padding: 15px;
+            margin-bottom: 10px; border-left: 5px solid var(--cor-primaria);
+            display: flex; justify-content: space-between; align-items: center;
+            gap: 15px; flex-wrap: wrap; transition: all 0.2s;
         }
-        .servico-admin-card:hover { transform: translateX(4px); box-shadow: 0 4px 12px rgba(0,0,0,.15); }
-        .servico-admin-card.servico-vazio { border-left-color: #ffc107; background: #fffbf0; }
-        .servico-icone-admin {
-            width: 45px; height: 45px; border-radius: 50%;
+        .servico-item:hover { transform: translateX(4px); box-shadow: 0 6px 18px rgba(0,0,0,.15); }
+        .servico-item.servico-vazio { border-left-color: #ffc107; background: #fffbf0; }
+        .servico-item.servico-inativo { border-left-color: #6c757d; background: #f8f8f8; opacity: 0.7; }
+
+        .servico-info {
+            flex: 1; min-width: 250px;
+            display: flex; align-items: center; gap: 15px;
+        }
+        .servico-icone-lista {
+            width: 55px; height: 55px; border-radius: 50%;
             background: linear-gradient(135deg, var(--cor-primaria), var(--cor-primaria-escura));
             color: #fff; display: flex; align-items: center; justify-content: center;
-            font-size: 1.3rem; flex-shrink: 0;
+            font-size: 1.6rem; flex-shrink: 0;
         }
-        .servico-admin-card.servico-vazio .servico-icone-admin { background: linear-gradient(135deg, #ffc107, #e0a800); }
+        .servico-item.servico-vazio .servico-icone-lista {
+            background: linear-gradient(135deg, #ffc107, #e0a800);
+        }
+        .servico-texto { flex: 1; }
+        .servico-nome-lista {
+            font-size: 1.1rem; font-weight: 700; margin-bottom: 4px;
+            color: #222; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .servico-detalhes-lista {
+            display: flex; flex-wrap: wrap; gap: 15px;
+            font-size: 0.9rem; color: #555;
+        }
+        .servico-detalhes-lista span {
+            display: inline-flex; align-items: center; gap: 4px;
+        }
+        .servico-preco-lista {
+            font-weight: 700; color: var(--cor-primaria);
+            font-size: 1.1rem; font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 1px;
+        }
+        .servico-item.servico-vazio .servico-preco-lista { color: #856404; }
+        .servico-acoes {
+            display: flex; gap: 6px; flex-wrap: wrap; align-items: center;
+        }
 
+        /* BLOQUEIOS */
         .bloqueio-section {
             background: #1a1a1a; border-radius: 12px; padding: 20px;
             margin-bottom: 20px; border-left: 4px solid var(--cor-primaria);
@@ -126,6 +157,7 @@
         .dia-semana-btn:hover { border-color: var(--cor-primaria); }
         .dia-semana-btn.ativo { background: var(--cor-primaria); color: #fff; border-color: var(--cor-primaria); }
 
+        /* LISTA DE ESPERA */
         .espera-dia-bloco {
             background: #1a1a1a; border-radius: 12px; padding: 20px;
             margin-bottom: 20px; border-left: 4px solid #ffc107;
@@ -253,6 +285,9 @@
                             <p class="text-muted small mb-0">Gerencie os serviços que aparecem no site do cliente.</p>
                         </div>
                         <div class="d-flex gap-2">
+                            <button class="btn btn-outline-info btn-sm" onclick="recarregarServicos()">
+                                <i class="bi bi-arrow-clockwise"></i> Atualizar
+                            </button>
                             <button class="btn btn-outline-warning btn-sm" onclick="limparServicosVazios()">
                                 <i class="bi bi-eraser"></i> Limpar vazios
                             </button>
@@ -267,6 +302,21 @@
                         <div>
                             Estes são os serviços que aparecem no site do cliente. Clique em <strong>✏️</strong> para editar ou <strong>🗑️</strong> para remover.
                         </div>
+                    </div>
+
+                    <div class="filtros-agendamentos" id="filtros-servicos">
+                        <button class="filtro-btn ativo" data-filtro-serv="todos">
+                            <i class="bi bi-list-ul"></i> Todos
+                            <span class="contador" id="cnt-serv-todos">0</span>
+                        </button>
+                        <button class="filtro-btn" data-filtro-serv="ok">
+                            <i class="bi bi-check-circle"></i> Configurados
+                            <span class="contador" id="cnt-serv-ok">0</span>
+                        </button>
+                        <button class="filtro-btn" data-filtro-serv="vazios">
+                            <i class="bi bi-exclamation-triangle"></i> Não configurados
+                            <span class="contador" id="cnt-serv-vazios">0</span>
+                        </button>
                     </div>
 
                     <div id="lista-servicos"></div>
@@ -401,7 +451,6 @@
             appId: "1:941746252187:web:4a3a79dd1d6a8d5967993e"
         };
 
-        // URL base do Firebase para REST
         const FIREBASE_URL = 'https://seu-jorge-barbearia-default-rtdb.firebaseio.com';
 
         let db = null;
@@ -409,7 +458,9 @@
         let agendamentos = [];
         let listaEspera = {};
         let filtroAtivo = 'todos';
+        let filtroServicos = 'todos';
         let intervaloAgendamentos = null;
+        let intervaloServicos = null;
 
         try {
             firebase.initializeApp(firebaseConfig);
@@ -418,9 +469,6 @@
             console.error('❌ Firebase:', e);
         }
 
-        // ============================================
-        // ✅ DATA LOCAL (não UTC)
-        // ============================================
         function getHojeStr() {
             const agora = new Date();
             const ano = agora.getFullYear();
@@ -470,15 +518,44 @@
         };
 
         // ============================================
-        // ✅ CARREGAR AGENDAMENTOS VIA REST API
-        // (mesmo método que funcionou no teste-debug)
+        // ✅ CARREGAR SERVIÇOS VIA REST
+        // ============================================
+        async function carregarServicosREST() {
+            try {
+                const resposta = await fetch(FIREBASE_URL + '/config/servicos.json');
+
+                if (!resposta.ok) {
+                    console.error('❌ Erro HTTP servicos:', resposta.status);
+                    return;
+                }
+
+                const dados = await resposta.json();
+
+                servicos = [];
+                if (dados) {
+                    Object.keys(dados).forEach(id => {
+                        servicos.push({ id, ...dados[id] });
+                    });
+                }
+
+                console.log('📋 Serviços carregados via REST:', servicos.length);
+
+                atualizarContadoresServicos();
+                renderizarServicos();
+            } catch (err) {
+                console.error('❌ Erro REST servicos:', err);
+            }
+        }
+
+        // ============================================
+        // ✅ CARREGAR AGENDAMENTOS VIA REST
         // ============================================
         async function carregarAgendamentosREST() {
             try {
                 const resposta = await fetch(FIREBASE_URL + '/agendamentos.json');
 
                 if (!resposta.ok) {
-                    console.error('❌ Erro HTTP:', resposta.status);
+                    console.error('❌ Erro HTTP agendamentos:', resposta.status);
                     return;
                 }
 
@@ -491,12 +568,12 @@
                     });
                 }
 
-                console.log('📋 Carregados via REST:', agendamentos.length, agendamentos.map(a => a.clienteNome));
+                console.log('📋 Agendamentos carregados via REST:', agendamentos.length);
 
                 atualizarContadores();
                 renderizarAgendamentos();
             } catch (err) {
-                console.error('❌ Erro REST:', err);
+                console.error('❌ Erro REST agendamentos:', err);
             }
         }
 
@@ -506,48 +583,60 @@
         function carregarTudo() {
             if (!db) return;
 
-            // Serviços via SDK
-            db.ref('config/servicos').on('value', snap => {
-                servicos = [];
-                snap.forEach(c => servicos.push({ id: c.key, ...c.val() }));
-                renderizarServicos();
-            });
+            // ✅ Serviços via REST
+            carregarServicosREST();
+            if (intervaloServicos) clearInterval(intervaloServicos);
+            intervaloServicos = setInterval(carregarServicosREST, 15000);
 
-            // ✅ Agendamentos via REST (confiável)
+            // ✅ Agendamentos via REST
             carregarAgendamentosREST();
-
-            // ✅ Polling a cada 10s
             if (intervaloAgendamentos) clearInterval(intervaloAgendamentos);
             intervaloAgendamentos = setInterval(carregarAgendamentosREST, 10000);
 
-            // Bloqueios
+            // Bloqueios via SDK (funciona)
             db.ref('bloqueios').on('value', () => renderizarListaCompleta());
             db.ref('bloqueios-dia').on('value', () => renderizarListaCompleta());
             db.ref('bloqueios-semana').on('value', snap => carregarDiasSemana(snap.val() || {}));
 
-            // Lista de espera
+            // Lista de espera via SDK (funciona)
             db.ref('lista-espera').on('value', snap => {
                 listaEspera = snap.val() || {};
                 renderizarListaEspera();
             });
 
-            // Filtros
-            document.querySelectorAll('.filtro-btn').forEach(btn => {
+            // Filtros de agendamentos
+            document.querySelectorAll('[data-filtro]').forEach(btn => {
                 btn.addEventListener('click', () => {
-                    document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('ativo'));
+                    document.querySelectorAll('[data-filtro]').forEach(b => b.classList.remove('ativo'));
                     btn.classList.add('ativo');
                     filtroAtivo = btn.dataset.filtro;
                     renderizarAgendamentos();
                 });
             });
+
+            // Filtros de serviços
+            document.querySelectorAll('[data-filtro-serv]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('[data-filtro-serv]').forEach(b => b.classList.remove('ativo'));
+                    btn.classList.add('ativo');
+                    filtroServicos = btn.dataset.filtroServ;
+                    renderizarServicos();
+                });
+            });
         }
 
         // ============================================
-        // BOTÃO "ATUALIZAR"
+        // BOTÕES "ATUALIZAR"
         // ============================================
         window.recarregarAgendamentos = function() {
             carregarAgendamentosREST().then(() => {
                 mostrarAlertaAdmin(`🔄 ${agendamentos.length} agendamento(s) carregado(s)`, 'info');
+            });
+        };
+
+        window.recarregarServicos = function() {
+            carregarServicosREST().then(() => {
+                mostrarAlertaAdmin(`🔄 ${servicos.length} serviço(s) carregado(s)`, 'info');
             });
         };
 
@@ -582,6 +671,21 @@
                 badge.textContent = naoConcluidos;
                 badge.style.display = naoConcluidos > 0 ? 'inline-block' : 'none';
             }
+        }
+
+        function atualizarContadoresServicos() {
+            const total = servicos.length;
+            const vazios = servicos.filter(s => s.preco === 0 || !s.nome || s.nome === 'NOVO SERVIÇO').length;
+            const ok = total - vazios;
+
+            const set = (id, val) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = val;
+            };
+
+            set('cnt-serv-todos', total);
+            set('cnt-serv-ok', ok);
+            set('cnt-serv-vazios', vazios);
         }
 
         // ============================================
@@ -721,7 +825,6 @@
 
         window.mudarStatus = function(id, status) {
             db.ref('agendamentos/' + id + '/status').set(status);
-            // Recarrega após 500ms
             setTimeout(carregarAgendamentosREST, 500);
         };
 
@@ -781,56 +884,98 @@
 
             if (servicos.length === 0) {
                 container.innerHTML = `
-                    <div class="alert alert-secondary text-center">
-                        <i class="bi bi-inbox fs-1 d-block mb-2"></i>
-                        Nenhum serviço cadastrado. Clique em <strong>"Adicionar Serviço"</strong> para começar.
+                    <div class="agendamento-vazio">
+                        <i class="bi bi-inbox"></i>
+                        <p class="mb-0">Nenhum serviço cadastrado. Clique em <strong>"Adicionar Serviço"</strong> para começar.</p>
                     </div>
                 `;
                 return;
             }
 
-            let html = `
-                <div class="mb-2">
-                    <span class="badge bg-danger">${servicos.length} serviço${servicos.length > 1 ? 's' : ''} cadastrado${servicos.length > 1 ? 's' : ''}</span>
-                </div>
-            `;
+            let lista = [...servicos];
 
-            const ordenados = [...servicos].sort((a, b) => (a.nome || '').localeCompare(b.nome || ''));
+            if (filtroServicos === 'ok') {
+                lista = lista.filter(s => !(s.preco === 0 || !s.nome || s.nome === 'NOVO SERVIÇO'));
+            } else if (filtroServicos === 'vazios') {
+                lista = lista.filter(s => s.preco === 0 || !s.nome || s.nome === 'NOVO SERVIÇO');
+            }
 
-            ordenados.forEach(s => {
-                const preco = typeof s.preco === 'number' ? s.preco.toFixed(2).replace('.', ',') : '0,00';
-                const vazio = (s.preco === 0 || !s.nome || s.nome === 'NOVO SERVIÇO');
+            lista.sort((a, b) => (a.nome || '').localeCompare(b.nome || ''));
 
-                html += `
-                    <div class="servico-admin-card ${vazio ? 'servico-vazio' : ''}">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="servico-icone-admin">
-                                <i class="bi ${s.icone || 'bi-scissors'}"></i>
-                            </div>
-                            <div>
-                                <h6 class="mb-0">
-                                    ${s.nome || 'SEM NOME'}
-                                    ${vazio ? '<span class="badge bg-warning text-dark ms-2">não configurado</span>' : ''}
-                                </h6>
-                                <small class="text-muted">
-                                    <i class="bi bi-clock"></i> ${s.duracao || 30} min • 
-                                    <strong>R$ ${preco}</strong>
-                                </small>
-                            </div>
-                        </div>
-                        <div class="d-flex gap-2">
-                            <button class="btn btn-sm btn-primary" onclick="editarServico('${s.id}')" title="Editar">
-                                <i class="bi bi-pencil"></i>
-                            </button>
-                            <button class="btn btn-sm btn-danger" onclick="excluirServico('${s.id}')" title="Excluir">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </div>
+            container.innerHTML = '';
+
+            if (lista.length === 0) {
+                container.innerHTML = `
+                    <div class="agendamento-vazio">
+                        <i class="bi bi-inbox"></i>
+                        <p class="mb-0">Nenhum serviço ${filtroServicos !== 'todos' ? 'neste filtro' : ''}.</p>
                     </div>
                 `;
-            });
+                return;
+            }
 
-            container.innerHTML = html;
+            const contador = document.createElement('div');
+            contador.className = 'mb-3';
+            contador.innerHTML = `<span class="badge bg-secondary">${lista.length} serviço${lista.length > 1 ? 's' : ''}</span>`;
+            container.appendChild(contador);
+
+            lista.forEach(s => {
+                try {
+                    const htmlItem = montarItemServico(s);
+                    const wrapper = document.createElement('div');
+                    wrapper.innerHTML = htmlItem;
+                    while (wrapper.firstChild) {
+                        container.appendChild(wrapper.firstChild);
+                    }
+                } catch (err) {
+                    console.error('❌ Erro ao montar serviço:', s, err);
+                }
+            });
+        }
+
+        function montarItemServico(s) {
+            const preco = typeof s.preco === 'number' ? s.preco.toFixed(2).replace('.', ',') : '0,00';
+            const vazio = (s.preco === 0 || !s.nome || s.nome === 'NOVO SERVIÇO');
+            const inativo = s.ativo === false;
+
+            let classe = 'servico-item';
+            if (vazio) classe += ' servico-vazio';
+            if (inativo) classe += ' servico-inativo';
+
+            const badgeHtml = vazio
+                ? '<span class="badge bg-warning text-dark ms-2">não configurado</span>'
+                : (inativo ? '<span class="badge bg-secondary ms-2">inativo</span>' : '<span class="badge bg-success ms-2">ativo</span>');
+
+            return `
+                <div class="${classe}">
+                    <div class="servico-info">
+                        <div class="servico-icone-lista">
+                            <i class="bi ${s.icone || 'bi-scissors'}"></i>
+                        </div>
+                        <div class="servico-texto">
+                            <div class="servico-nome-lista">
+                                ${s.nome || 'SEM NOME'}
+                                ${badgeHtml}
+                            </div>
+                            <div class="servico-detalhes-lista">
+                                <span><i class="bi bi-clock"></i> ${s.duracao || 30} min</span>
+                                <span class="servico-preco-lista">R$ ${preco}</span>
+                                <span class="text-muted" style="font-size: 0.75rem;">
+                                    <i class="bi bi-key"></i> ID: ${s.id}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="servico-acoes">
+                        <button class="btn btn-sm btn-primary" onclick="editarServico('${s.id}')" title="Editar">
+                            <i class="bi bi-pencil"></i> Editar
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="excluirServico('${s.id}')" title="Excluir">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
         }
 
         window.editarServico = function(id) {
@@ -871,12 +1016,14 @@
                 db.ref('config/servicos/' + id).update(dados).then(() => {
                     bootstrap.Modal.getInstance(document.getElementById('modalServico')).hide();
                     mostrarAlertaAdmin('✅ Serviço atualizado com sucesso!', 'success');
+                    setTimeout(carregarServicosREST, 500);
                 });
             } else {
                 const novoId = 's' + Date.now();
                 db.ref('config/servicos/' + novoId).set(dados).then(() => {
                     bootstrap.Modal.getInstance(document.getElementById('modalServico')).hide();
                     mostrarAlertaAdmin('✅ Serviço criado com sucesso!', 'success');
+                    setTimeout(carregarServicosREST, 500);
                 });
             }
         };
@@ -897,6 +1044,7 @@
             if (confirm(`🗑️ Excluir o serviço "${s.nome}"?\n\nEssa ação não pode ser desfeita.`)) {
                 db.ref('config/servicos/' + id).remove().then(() => {
                     mostrarAlertaAdmin('🗑️ Serviço removido.', 'warning');
+                    setTimeout(carregarServicosREST, 500);
                 });
             }
         };
@@ -924,6 +1072,7 @@
 
             db.ref().update(updates).then(() => {
                 mostrarAlertaAdmin(`🧹 ${vazios.length} serviço(s) vazio(s) removido(s)!`, 'success');
+                setTimeout(carregarServicosREST, 500);
             });
         };
 
@@ -955,7 +1104,7 @@
         }
 
         // ============================================
-        // BLOQUEIOS
+        // BLOQUEIOS (via SDK - funciona bem)
         // ============================================
         window.bloquearDiaInteiro = function() {
             const data = document.getElementById('bloqueio-dia-data').value;
