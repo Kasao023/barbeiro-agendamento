@@ -74,12 +74,11 @@
         .badge-cancelado { background: #f8d7da; color: #721c24; }
 
         .agendamento-vazio {
-            text-align: center; padding: 40px 20px; color: #666;
+            text-align: center; padding: 40px 20px; color: #999;
             background: #1a1a1a; border-radius: 12px;
         }
-        .agendamento-vazio i { font-size: 3rem; color: #444; display: block; margin-bottom: 10px; }
+        .agendamento-vazio i { font-size: 3rem; color: #666; display: block; margin-bottom: 10px; }
 
-        /* SERVIÇOS - LISTA MELHORADA */
         .servico-item {
             background: #fff; color: #333; border-radius: 12px; padding: 15px;
             margin-bottom: 10px; border-left: 5px solid var(--cor-primaria);
@@ -125,7 +124,6 @@
             display: flex; gap: 6px; flex-wrap: wrap; align-items: center;
         }
 
-        /* BLOQUEIOS */
         .bloqueio-section {
             background: #1a1a1a; border-radius: 12px; padding: 20px;
             margin-bottom: 20px; border-left: 4px solid var(--cor-primaria);
@@ -157,7 +155,6 @@
         .dia-semana-btn:hover { border-color: var(--cor-primaria); }
         .dia-semana-btn.ativo { background: var(--cor-primaria); color: #fff; border-color: var(--cor-primaria); }
 
-        /* LISTA DE ESPERA */
         .espera-dia-bloco {
             background: #1a1a1a; border-radius: 12px; padding: 20px;
             margin-bottom: 20px; border-left: 4px solid #ffc107;
@@ -178,6 +175,164 @@
         .espera-item-info strong { display: block; font-size: 1rem; color: #333; }
         .espera-item-info small { color: #666; font-size: 0.85rem; }
         .espera-item-actions { display: flex; gap: 5px; flex-wrap: wrap; }
+
+        /* ============================================ */
+        /* CORREÇÕES DE CONTRASTE                       */
+        /* ============================================ */
+
+        /* Alertas com texto legível */
+        .alert {
+            color: #222 !important;
+            border: none;
+        }
+        .alert-info {
+            background: #cfe8ff !important;
+            color: #0a3a6b !important;
+            border-left: 5px solid #0d6efd;
+        }
+        .alert-info strong { color: #084298 !important; }
+        .alert-info i { color: #0d6efd !important; }
+
+        .alert-warning {
+            background: #fff3cd !important;
+            color: #664d03 !important;
+            border-left: 5px solid #ffc107;
+        }
+        .alert-warning strong { color: #664d03 !important; }
+
+        .alert-success {
+            background: #d1e7dd !important;
+            color: #0f5132 !important;
+            border-left: 5px solid #198754;
+        }
+
+        .alert-danger {
+            background: #f8d7da !important;
+            color: #842029 !important;
+            border-left: 5px solid #dc3545;
+        }
+
+        .alert-secondary {
+            background: #e2e3e5 !important;
+            color: #41464b !important;
+            border-left: 5px solid #6c757d;
+        }
+
+        /* Texto muted mais legível em fundo escuro */
+        body .text-muted {
+            color: #a8b2c1 !important;
+        }
+        body .text-white-50 {
+            color: rgba(255, 255, 255, 0.75) !important;
+        }
+
+        /* Dentro de cards brancos, muted mais escuro */
+        .card .text-muted,
+        .agendamento-item .text-muted,
+        .servico-item .text-muted,
+        .espera-item .text-muted,
+        .bloqueio-item .text-muted,
+        .modal-content .text-muted {
+            color: #666 !important;
+        }
+
+        /* Formulários legíveis */
+        .form-control {
+            color: #222 !important;
+            background: #fff !important;
+            border: 2px solid #dee2e6;
+        }
+        .form-control:focus {
+            border-color: var(--cor-primaria);
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2);
+        }
+        .form-control::placeholder {
+            color: #999 !important;
+        }
+
+        /* Labels em fundo escuro */
+        .form-label {
+            color: #e8edf7 !important;
+            font-weight: 600;
+        }
+        .bloqueio-section label.text-white,
+        .bloqueio-section .form-label,
+        label.text-white {
+            color: #e8edf7 !important;
+        }
+
+        /* Modais */
+        .modal-content {
+            color: #222;
+        }
+        .modal-content .form-label {
+            color: #222 !important;
+        }
+        .modal-content .modal-title {
+            color: #222 !important;
+        }
+
+        /* Botões outline mais vivos */
+        .btn-outline-info {
+            color: #4dd0e1 !important;
+            border-color: #4dd0e1 !important;
+        }
+        .btn-outline-info:hover {
+            background: #4dd0e1 !important;
+            color: #0a0a0a !important;
+        }
+        .btn-outline-warning {
+            color: #ffc107 !important;
+            border-color: #ffc107 !important;
+        }
+        .btn-outline-warning:hover {
+            background: #ffc107 !important;
+            color: #0a0a0a !important;
+        }
+        .btn-outline-light {
+            color: #fff !important;
+            border-color: #fff !important;
+        }
+        .btn-outline-light:hover {
+            background: #fff !important;
+            color: #0a0a0a !important;
+        }
+
+        /* Pequenos textos nos bloqueios em fundo escuro */
+        .bloqueio-section .text-muted {
+            color: #a8b2c1 !important;
+        }
+
+        /* Placeholder dos inputs dentro de blocos escuros */
+        .bloqueio-section .form-control::placeholder {
+            color: #999 !important;
+        }
+
+        /* Texto do badge */
+        .badge.bg-secondary {
+            background: #495057 !important;
+            color: #fff !important;
+        }
+
+        /* Melhorar legibilidade dos números dos filtros */
+        .filtro-btn .contador {
+            background: rgba(255,255,255,.25);
+            color: #fff;
+        }
+        .filtro-btn.ativo .contador {
+            background: rgba(0,0,0,.35);
+            color: #fff;
+        }
+
+        /* Corrigir texto "ID: xxx" */
+        .servico-detalhes-lista .text-muted {
+            color: #888 !important;
+        }
+
+        /* Texto do card vazio (agendamento-vazio) */
+        .agendamento-vazio p {
+            color: #ccc !important;
+        }
     </style>
 </head>
 <body>
@@ -346,6 +501,7 @@
 
                     <div class="bloqueio-section">
                         <h6><i class="bi bi-clock-history text-warning"></i> 2. Bloquear horários específicos</h6>
+                        <p class="text-muted small mb-3">Ex: almoço, compromisso, dentista...</p>
                         <div class="row g-2 mb-3">
                             <div class="col-md-6">
                                 <label class="text-white small">Data</label>
@@ -366,6 +522,7 @@
 
                     <div class="bloqueio-section">
                         <h6><i class="bi bi-arrow-repeat text-info"></i> 3. Bloquear dia da semana</h6>
+                        <p class="text-muted small mb-3">Ex: toda segunda-feira você não trabalha.</p>
                         <div class="dias-semana-grid">
                             <div class="dia-semana-btn" data-dia="0" onclick="toggleDiaSemana(this, 0)">Dom</div>
                             <div class="dia-semana-btn" data-dia="1" onclick="toggleDiaSemana(this, 1)">Seg</div>
@@ -388,6 +545,9 @@
 
                 <div class="tab-pane fade" id="aba-espera">
                     <h4 class="text-white mb-3">⏳ Lista de Espera</h4>
+                    <p class="text-muted small mb-4">
+                        Clientes que entraram na fila quando o dia estava lotado. Quando alguém cancelar, clique em <strong>📲 Chamar</strong> para avisar pelo WhatsApp.
+                    </p>
                     <div id="lista-espera-admin"></div>
                 </div>
 
@@ -517,9 +677,7 @@
             carregarTudo();
         };
 
-        // ============================================
-        // ✅ CARREGAR SERVIÇOS VIA REST
-        // ============================================
+        // ============ CARREGAR SERVIÇOS VIA REST ============
         async function carregarServicosREST() {
             try {
                 const resposta = await fetch(FIREBASE_URL + '/config/servicos.json');
@@ -547,9 +705,7 @@
             }
         }
 
-        // ============================================
-        // ✅ CARREGAR AGENDAMENTOS VIA REST
-        // ============================================
+        // ============ CARREGAR AGENDAMENTOS VIA REST ============
         async function carregarAgendamentosREST() {
             try {
                 const resposta = await fetch(FIREBASE_URL + '/agendamentos.json');
@@ -577,34 +733,27 @@
             }
         }
 
-        // ============================================
-        // CARREGAR TUDO
-        // ============================================
+        // ============ CARREGAR TUDO ============
         function carregarTudo() {
             if (!db) return;
 
-            // ✅ Serviços via REST
             carregarServicosREST();
             if (intervaloServicos) clearInterval(intervaloServicos);
             intervaloServicos = setInterval(carregarServicosREST, 15000);
 
-            // ✅ Agendamentos via REST
             carregarAgendamentosREST();
             if (intervaloAgendamentos) clearInterval(intervaloAgendamentos);
             intervaloAgendamentos = setInterval(carregarAgendamentosREST, 10000);
 
-            // Bloqueios via SDK (funciona)
             db.ref('bloqueios').on('value', () => renderizarListaCompleta());
             db.ref('bloqueios-dia').on('value', () => renderizarListaCompleta());
             db.ref('bloqueios-semana').on('value', snap => carregarDiasSemana(snap.val() || {}));
 
-            // Lista de espera via SDK (funciona)
             db.ref('lista-espera').on('value', snap => {
                 listaEspera = snap.val() || {};
                 renderizarListaEspera();
             });
 
-            // Filtros de agendamentos
             document.querySelectorAll('[data-filtro]').forEach(btn => {
                 btn.addEventListener('click', () => {
                     document.querySelectorAll('[data-filtro]').forEach(b => b.classList.remove('ativo'));
@@ -614,7 +763,6 @@
                 });
             });
 
-            // Filtros de serviços
             document.querySelectorAll('[data-filtro-serv]').forEach(btn => {
                 btn.addEventListener('click', () => {
                     document.querySelectorAll('[data-filtro-serv]').forEach(b => b.classList.remove('ativo'));
@@ -625,9 +773,7 @@
             });
         }
 
-        // ============================================
-        // BOTÕES "ATUALIZAR"
-        // ============================================
+        // ============ BOTÕES "ATUALIZAR" ============
         window.recarregarAgendamentos = function() {
             carregarAgendamentosREST().then(() => {
                 mostrarAlertaAdmin(`🔄 ${agendamentos.length} agendamento(s) carregado(s)`, 'info');
@@ -688,9 +834,7 @@
             set('cnt-serv-vazios', vazios);
         }
 
-        // ============================================
-        // RENDERIZAR AGENDAMENTOS
-        // ============================================
+        // ============ RENDERIZAR AGENDAMENTOS ============
         function renderizarAgendamentos() {
             const container = document.getElementById('lista-agendamentos');
             if (!container) return;
@@ -875,9 +1019,7 @@
             });
         };
 
-        // ============================================
-        // SERVIÇOS
-        // ============================================
+        // ============ RENDERIZAR SERVIÇOS ============
         function renderizarServicos() {
             const container = document.getElementById('lista-servicos');
             if (!container) return;
@@ -960,9 +1102,6 @@
                             <div class="servico-detalhes-lista">
                                 <span><i class="bi bi-clock"></i> ${s.duracao || 30} min</span>
                                 <span class="servico-preco-lista">R$ ${preco}</span>
-                                <span class="text-muted" style="font-size: 0.75rem;">
-                                    <i class="bi bi-key"></i> ID: ${s.id}
-                                </span>
                             </div>
                         </div>
                     </div>
@@ -1090,7 +1229,7 @@
             const alerta = document.createElement('div');
             alerta.id = 'alerta-admin';
             alerta.className = `alert ${cores[tipo]} alert-dismissible fade show`;
-            alerta.style.cssText = 'position: fixed; top: 80px; right: 20px; z-index: 9999; min-width: 300px; box-shadow: 0 4px 20px rgba(0,0,0,.3);';
+            alerta.style.cssText = 'position: fixed; top: 80px; right: 20px; z-index: 9999; min-width: 300px; box-shadow: 0 4px 20px rgba(0,0,0,.3); font-weight: 600;';
             alerta.innerHTML = `
                 ${mensagem}
                 <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
@@ -1103,9 +1242,7 @@
             }, 4000);
         }
 
-        // ============================================
-        // BLOQUEIOS (via SDK - funciona bem)
-        // ============================================
+        // ============ BLOQUEIOS ============
         window.bloquearDiaInteiro = function() {
             const data = document.getElementById('bloqueio-dia-data').value;
             const motivo = document.getElementById('bloqueio-dia-motivo').value.trim() || 'Folga';
@@ -1348,9 +1485,7 @@
             }
         };
 
-        // ============================================
-        // LISTA DE ESPERA
-        // ============================================
+        // ============ LISTA DE ESPERA ============
         function renderizarListaEspera() {
             const container = document.getElementById('lista-espera-admin');
             const badge = document.getElementById('badge-espera');
