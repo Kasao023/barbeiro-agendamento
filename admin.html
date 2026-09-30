@@ -176,17 +176,12 @@
         .espera-item-info small { color: #666; font-size: 0.85rem; }
         .espera-item-actions { display: flex; gap: 5px; flex-wrap: wrap; }
 
-        /* ============================================ */
-        /* FATURAMENTO                                  */
-        /* ============================================ */
+        /* FATURAMENTO */
         .faturamento-card {
             background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
-            border-radius: 16px;
-            padding: 22px;
+            border-radius: 16px; padding: 22px;
             border-left: 5px solid var(--cor-primaria);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s;
+            position: relative; overflow: hidden; transition: all 0.3s;
         }
         .faturamento-card:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,.4); }
         .faturamento-card.hoje { border-left-color: #ffc107; }
@@ -194,64 +189,32 @@
         .faturamento-card.mes { border-left-color: #28a745; }
         .faturamento-card.total { border-left-color: #7c3aed; }
 
-        .faturamento-card::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(220, 53, 69, 0.1) 0%, transparent 70%);
-            pointer-events: none;
-        }
-        .faturamento-card.hoje::after { background: radial-gradient(circle, rgba(255, 199, 7, 0.1) 0%, transparent 70%); }
-        .faturamento-card.semana::after { background: radial-gradient(circle, rgba(23, 162, 184, 0.1) 0%, transparent 70%); }
-        .faturamento-card.mes::after { background: radial-gradient(circle, rgba(40, 167, 69, 0.1) 0%, transparent 70%); }
-        .faturamento-card.total::after { background: radial-gradient(circle, rgba(124, 58, 237, 0.15) 0%, transparent 70%); }
-
         .faturamento-label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #a8b2c1;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            font-size: 0.85rem; font-weight: 600; color: #a8b2c1;
+            text-transform: uppercase; letter-spacing: 1.5px;
+            margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
         }
-        .faturamento-label i { font-size: 1rem; }
         .faturamento-card.hoje .faturamento-label i { color: #ffc107; }
         .faturamento-card.semana .faturamento-label i { color: #17a2b8; }
         .faturamento-card.mes .faturamento-label i { color: #28a745; }
         .faturamento-card.total .faturamento-label i { color: #7c3aed; }
 
         .faturamento-valor {
-            font-size: 1.9rem;
-            font-weight: 800;
-            color: #fff;
+            font-size: 1.9rem; font-weight: 800; color: #fff;
             font-family: 'Bebas Neue', sans-serif;
-            letter-spacing: 1px;
-            line-height: 1;
-            margin-bottom: 6px;
+            letter-spacing: 1px; line-height: 1; margin-bottom: 6px;
         }
         .faturamento-card.hoje .faturamento-valor { color: #ffc107; }
         .faturamento-card.semana .faturamento-valor { color: #4dd0e1; }
         .faturamento-card.mes .faturamento-valor { color: #66bb6a; }
         .faturamento-card.total .faturamento-valor { color: #a78bfa; }
-
-        .faturamento-qtd {
-            font-size: 0.8rem;
-            color: #888;
-        }
+        .faturamento-qtd { font-size: 0.8rem; color: #888; }
 
         .fat-item {
             background: #fff; color: #333; border-radius: 12px; padding: 14px 18px;
             margin-bottom: 8px; display: flex; justify-content: space-between;
             align-items: center; gap: 15px; flex-wrap: wrap;
-            border-left: 4px solid var(--cor-sucesso);
-            transition: all 0.2s;
+            border-left: 4px solid var(--cor-sucesso); transition: all 0.2s;
         }
         .fat-item:hover { transform: translateX(4px); box-shadow: 0 4px 12px rgba(0,0,0,.15); }
         .fat-item-info { flex: 1; min-width: 220px; }
@@ -261,7 +224,6 @@
             font-size: 1.2rem; font-weight: 800; color: var(--cor-sucesso);
             font-family: 'Bebas Neue', sans-serif; letter-spacing: 1px;
         }
-
         .fat-dia-titulo {
             background: #1a1a1a; border-radius: 10px; padding: 12px 18px;
             margin-top: 20px; margin-bottom: 10px;
@@ -271,6 +233,16 @@
         }
         .fat-dia-titulo h6 { margin: 0; color: #fff; font-size: 1rem; }
         .fat-dia-titulo .total { color: #66bb6a; font-weight: 800; font-size: 1.1rem; }
+
+        /* LOGIN */
+        .login-box {
+            background: #fff; border-radius: 20px; padding: 40px 30px;
+            width: 100%; max-width: 420px; box-shadow: 0 20px 60px rgba(0,0,0,.5);
+        }
+        .login-box h3 { color: #222; }
+        .login-box .form-label { color: #222 !important; }
+        .login-box .form-control { color: #222 !important; background: #f8f9fa !important; }
+        .login-box .text-muted { color: #666 !important; }
 
         /* CORREÇÕES DE CONTRASTE */
         .alert { color: #222 !important; border: none; }
@@ -312,7 +284,6 @@
         .btn-outline-success:hover { background: #25d366 !important; color: #fff !important; }
 
         .bloqueio-section .text-muted { color: #a8b2c1 !important; }
-        .bloqueio-section .form-control::placeholder { color: #999 !important; }
         .badge.bg-secondary { background: #495057 !important; color: #fff !important; }
         .filtro-btn .contador { background: rgba(255,255,255,.25); color: #fff; }
         .filtro-btn.ativo .contador { background: rgba(0,0,0,.35); color: #fff; }
@@ -321,26 +292,51 @@
 </head>
 <body>
 
+    <!-- ============ TELA DE LOGIN ============ -->
     <div id="tela-login" class="d-flex align-items-center justify-content-center" style="min-height: 100vh;">
-        <div class="card p-4 shadow-lg" style="width: 100%; max-width: 400px;">
+        <div class="login-box">
             <div class="text-center mb-4">
                 <i class="bi bi-scissors display-4 text-danger"></i>
                 <h3 class="mt-3 fw-bold">PAINEL DO JORGE</h3>
-                <p class="text-muted small">Área restrita</p>
+                <p class="text-muted small mb-0">Área restrita</p>
             </div>
-            <input type="password" id="senha-input" class="form-control mb-3" placeholder="Senha"
-                   onkeypress="if(event.key==='Enter') fazerLogin()">
-            <button class="btn btn-danger btn-lg fw-bold" onclick="fazerLogin()">
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">
+                    <i class="bi bi-envelope-fill text-danger"></i> Email
+                </label>
+                <input type="email" id="email-input" class="form-control form-control-lg" 
+                       placeholder="seu@email.com" autocomplete="email">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">
+                    <i class="bi bi-lock-fill text-danger"></i> Senha
+                </label>
+                <input type="password" id="senha-input" class="form-control form-control-lg" 
+                       placeholder="Sua senha" autocomplete="current-password"
+                       onkeypress="if(event.key==='Enter') fazerLogin()">
+            </div>
+
+            <button class="btn btn-danger btn-lg fw-bold w-100 mb-2" id="btn-entrar" onclick="fazerLogin()">
                 <i class="bi bi-box-arrow-in-right"></i> ENTRAR
             </button>
-            <p id="login-erro" class="text-danger small text-center mt-2"></p>
+
+            <button class="btn btn-link text-danger w-100 small" onclick="esqueceuSenha()" type="button">
+                Esqueci minha senha
+            </button>
+
+            <p id="login-erro" class="text-danger small text-center mt-3 mb-0"></p>
         </div>
     </div>
 
     <div id="tela-painel" style="display: none;">
         <nav class="navbar navbar-dark bg-black border-bottom border-danger">
             <div class="container">
-                <span class="navbar-brand fw-bold"><i class="bi bi-scissors"></i> PAINEL</span>
+                <span class="navbar-brand fw-bold">
+                    <i class="bi bi-scissors"></i> PAINEL
+                    <small class="text-muted ms-2" id="user-email" style="font-size: 0.7rem;"></small>
+                </span>
                 <button class="btn btn-outline-light btn-sm" onclick="fazerLogout()">
                     <i class="bi bi-box-arrow-right"></i> Sair
                 </button>
@@ -544,14 +540,11 @@
                 <div class="tab-pane fade" id="aba-espera">
                     <h4 class="text-white mb-3">⏳ Lista de Espera</h4>
                     <p class="text-muted small mb-4">
-                        Clientes que entraram na fila quando o dia estava lotado. Quando alguém cancelar, clique em <strong>📲 Chamar</strong> para avisar pelo WhatsApp.
+                        Clientes que entraram na fila quando o dia estava lotado.
                     </p>
                     <div id="lista-espera-admin"></div>
                 </div>
 
-                <!-- ============================================ -->
-                <!-- ABA FATURAMENTO                              -->
-                <!-- ============================================ -->
                 <div class="tab-pane fade" id="aba-faturamento">
                     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
                         <div>
@@ -563,70 +556,46 @@
                         </button>
                     </div>
 
-                    <!-- Cards de resumo -->
                     <div class="row g-3 mb-4">
                         <div class="col-md-6 col-lg-3">
                             <div class="faturamento-card hoje">
-                                <div class="faturamento-label">
-                                    <i class="bi bi-sun-fill"></i> Hoje
-                                </div>
+                                <div class="faturamento-label"><i class="bi bi-sun-fill"></i> Hoje</div>
                                 <div class="faturamento-valor" id="fat-hoje">R$ 0,00</div>
                                 <div class="faturamento-qtd" id="fat-hoje-qtd">0 atendimentos</div>
                             </div>
                         </div>
-
                         <div class="col-md-6 col-lg-3">
                             <div class="faturamento-card semana">
-                                <div class="faturamento-label">
-                                    <i class="bi bi-calendar-week"></i> Esta semana
-                                </div>
+                                <div class="faturamento-label"><i class="bi bi-calendar-week"></i> Esta semana</div>
                                 <div class="faturamento-valor" id="fat-semana">R$ 0,00</div>
                                 <div class="faturamento-qtd" id="fat-semana-qtd">0 atendimentos</div>
                             </div>
                         </div>
-
                         <div class="col-md-6 col-lg-3">
                             <div class="faturamento-card mes">
-                                <div class="faturamento-label">
-                                    <i class="bi bi-calendar-month"></i> Este mês
-                                </div>
+                                <div class="faturamento-label"><i class="bi bi-calendar-month"></i> Este mês</div>
                                 <div class="faturamento-valor" id="fat-mes">R$ 0,00</div>
                                 <div class="faturamento-qtd" id="fat-mes-qtd">0 atendimentos</div>
                             </div>
                         </div>
-
                         <div class="col-md-6 col-lg-3">
                             <div class="faturamento-card total">
-                                <div class="faturamento-label">
-                                    <i class="bi bi-trophy-fill"></i> Total geral
-                                </div>
+                                <div class="faturamento-label"><i class="bi bi-trophy-fill"></i> Total geral</div>
                                 <div class="faturamento-valor" id="fat-total">R$ 0,00</div>
                                 <div class="faturamento-qtd" id="fat-total-qtd">0 atendimentos</div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Filtros de período -->
                     <h6 class="text-white mb-2"><i class="bi bi-funnel"></i> Detalhes por período</h6>
                     <div class="filtros-agendamentos" id="filtros-faturamento">
-                        <button class="filtro-btn ativo" data-filtro-fat="hoje">
-                            <i class="bi bi-sun"></i> Hoje
-                        </button>
-                        <button class="filtro-btn" data-filtro-fat="semana">
-                            <i class="bi bi-calendar-week"></i> Esta semana
-                        </button>
-                        <button class="filtro-btn" data-filtro-fat="mes">
-                            <i class="bi bi-calendar-month"></i> Este mês
-                        </button>
-                        <button class="filtro-btn" data-filtro-fat="ano">
-                            <i class="bi bi-calendar"></i> Este ano
-                        </button>
-                        <button class="filtro-btn" data-filtro-fat="todos">
-                            <i class="bi bi-list-ul"></i> Todos
-                        </button>
+                        <button class="filtro-btn ativo" data-filtro-fat="hoje"><i class="bi bi-sun"></i> Hoje</button>
+                        <button class="filtro-btn" data-filtro-fat="semana"><i class="bi bi-calendar-week"></i> Esta semana</button>
+                        <button class="filtro-btn" data-filtro-fat="mes"><i class="bi bi-calendar-month"></i> Este mês</button>
+                        <button class="filtro-btn" data-filtro-fat="ano"><i class="bi bi-calendar"></i> Este ano</button>
+                        <button class="filtro-btn" data-filtro-fat="todos"><i class="bi bi-list-ul"></i> Todos</button>
                     </div>
 
-                    <!-- Resumo do filtro ativo -->
                     <div id="fat-resumo-filtro" class="alert alert-success d-flex justify-content-between align-items-center flex-wrap gap-2" role="alert">
                         <div>
                             <i class="bi bi-cash-coin fs-4"></i>
@@ -635,20 +604,35 @@
                         <div class="fs-4 fw-bold" id="fat-filtro-total">R$ 0,00</div>
                     </div>
 
-                    <!-- Lista detalhada -->
                     <div id="lista-faturamento"></div>
                 </div>
 
                 <div class="tab-pane fade" id="aba-config">
                     <h4 class="text-white mb-3">⚙️ Configurações</h4>
+
                     <div class="card p-3 mb-3">
-                        <label class="form-label">Alterar Senha</label>
-                        <input type="password" id="nova-senha" class="form-control mb-2" placeholder="Nova senha">
-                        <button class="btn btn-danger" onclick="alterarSenha()">Salvar Nova Senha</button>
+                        <h6><i class="bi bi-shield-lock-fill text-danger"></i> Conta</h6>
+                        <p class="small text-muted mb-2">
+                            Você está logado como: <strong id="config-email">-</strong>
+                        </p>
+                        <button class="btn btn-outline-danger" onclick="fazerLogout()">
+                            <i class="bi bi-box-arrow-right"></i> Sair da conta
+                        </button>
                     </div>
+
+                    <div class="card p-3 mb-3">
+                        <h6><i class="bi bi-key-fill text-danger"></i> Alterar senha</h6>
+                        <p class="small text-muted mb-2">
+                            Enviaremos um link para o seu email. Clique no link para criar uma nova senha.
+                        </p>
+                        <button class="btn btn-danger" onclick="esqueceuSenha()">
+                            <i class="bi bi-envelope"></i> Enviar link de alteração
+                        </button>
+                    </div>
+
                     <div class="card p-3 mb-3">
                         <label class="form-label">Notificações do Navegador</label>
-                        <p class="small text-muted mb-2">Ative para receber lembretes dos agendamentos direto no seu celular/PC.</p>
+                        <p class="small text-muted mb-2">Ative para receber lembretes dos agendamentos.</p>
                         <button class="btn btn-primary" onclick="ativarNotificacoesNavegador()">
                             <i class="bi bi-bell"></i> Ativar Notificações
                         </button>
@@ -695,16 +679,10 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title">
-                        <i class="bi bi-megaphone-fill"></i> Avisar clientes de amanhã
-                    </h5>
+                    <h5 class="modal-title"><i class="bi bi-megaphone-fill"></i> Avisar clientes de amanhã</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="alert alert-info small mb-3">
-                        <i class="bi bi-info-circle"></i>
-                        Clique em <strong>📲 WhatsApp</strong> para abrir a conversa com o cliente. A mensagem já vem pronta.
-                    </div>
                     <div id="lista-avisar-amanha"></div>
                 </div>
                 <div class="modal-footer">
@@ -716,6 +694,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
     <script>
@@ -735,6 +714,7 @@
         const FIREBASE_URL = 'https://seu-jorge-barbearia-default-rtdb.firebaseio.com';
 
         let db = null;
+        let auth = null;
         let servicos = [];
         let agendamentos = [];
         let listaEspera = {};
@@ -743,10 +723,12 @@
         let filtroFaturamento = 'hoje';
         let intervaloAgendamentos = null;
         let intervaloServicos = null;
+        let usuarioLogado = null;
 
         try {
             firebase.initializeApp(firebaseConfig);
             db = firebase.database();
+            auth = firebase.auth();
         } catch (e) {
             console.error('❌ Firebase:', e);
         }
@@ -766,13 +748,11 @@
             return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         }
 
-        // Datas de referência para faturamento
         function getInicioSemana() {
             const d = new Date();
-            const dia = d.getDay(); // 0=Dom, 1=Seg...
-            const diff = dia === 0 ? 6 : dia - 1; // segunda é o início
+            const dia = d.getDay();
+            const diff = dia === 0 ? 6 : dia - 1;
             d.setDate(d.getDate() - diff);
-            d.setHours(0, 0, 0, 0);
             return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
         }
 
@@ -785,6 +765,114 @@
             const d = new Date();
             return `${d.getFullYear()}-01-01`;
         }
+
+        // ============================================
+        // LOGIN VIA FIREBASE AUTH
+        // ============================================
+        window.fazerLogin = async function() {
+            const emailInput = document.getElementById('email-input');
+            const senhaInput = document.getElementById('senha-input');
+            const erroEl = document.getElementById('login-erro');
+            const btn = document.getElementById('btn-entrar');
+
+            const email = (emailInput.value || '').trim();
+            const senha = senhaInput.value || '';
+
+            erroEl.textContent = '';
+
+            if (!email || !senha) {
+                erroEl.textContent = 'Preencha email e senha.';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Entrando...';
+
+            try {
+                await auth.signInWithEmailAndPassword(email, senha);
+                // onAuthStateChanged vai cuidar do resto
+            } catch (err) {
+                console.error('Erro login:', err);
+                btn.disabled = false;
+                btn.innerHTML = '<i class="bi bi-box-arrow-in-right"></i> ENTRAR';
+
+                const mensagens = {
+                    'auth/user-not-found': '❌ Email não encontrado.',
+                    'auth/wrong-password': '❌ Senha incorreta.',
+                    'auth/invalid-email': '❌ Email inválido.',
+                    'auth/too-many-requests': '⚠️ Muitas tentativas. Aguarde 1 minuto.',
+                    'auth/invalid-credential': '❌ Email ou senha incorretos.',
+                    'auth/network-request-failed': '🌐 Sem conexão. Verifique sua internet.'
+                };
+                erroEl.textContent = mensagens[err.code] || '❌ Erro: ' + err.message;
+            }
+        };
+
+        window.fazerLogout = async function() {
+            if (!confirm('Deseja sair do painel?')) return;
+            try {
+                await auth.signOut();
+                location.reload();
+            } catch (err) {
+                console.error('Erro logout:', err);
+            }
+        };
+
+        window.esqueceuSenha = async function() {
+            const emailInput = document.getElementById('email-input');
+            let email = (emailInput.value || '').trim();
+
+            if (!email && usuarioLogado) {
+                email = usuarioLogado.email;
+            }
+
+            if (!email) {
+                email = prompt('Digite o email da conta admin:');
+                if (!email) return;
+            }
+
+            if (!confirm(`Enviar link de redefinição de senha para:\n\n${email}\n\nConfirma?`)) return;
+
+            try {
+                await auth.sendPasswordResetEmail(email);
+                alert('✅ Link enviado! Verifique sua caixa de entrada e o spam.\n\nO link abre uma página do Google para você criar uma nova senha.');
+            } catch (err) {
+                console.error('Erro reset:', err);
+                alert('❌ Erro ao enviar: ' + err.message);
+            }
+        };
+
+        // ============================================
+        // LISTENER DE AUTENTICAÇÃO
+        // ============================================
+        auth.onAuthStateChanged((user) => {
+            const elLogin = document.getElementById('tela-login');
+            const elPainel = document.getElementById('tela-painel');
+
+            if (user) {
+                // Logado
+                usuarioLogado = user;
+                elLogin.style.setProperty('display', 'none', 'important');
+                elPainel.style.display = 'block';
+
+                const userEmailEl = document.getElementById('user-email');
+                if (userEmailEl) userEmailEl.textContent = `(${user.email})`;
+
+                const configEmail = document.getElementById('config-email');
+                if (configEmail) configEmail.textContent = user.email;
+
+                carregarTudo();
+                atualizarAvisoNotificacao();
+            } else {
+                // Deslogado
+                usuarioLogado = null;
+                elLogin.style.display = 'flex';
+                elPainel.style.display = 'none';
+
+                if (intervaloAgendamentos) clearInterval(intervaloAgendamentos);
+                if (intervaloServicos) clearInterval(intervaloServicos);
+            }
+        });
 
         // ============================================
         // NOTIFICAÇÕES DO NAVEGADOR
@@ -837,50 +925,7 @@
         }
 
         // ============================================
-        // LOGIN
-        // ============================================
-        window.fazerLogin = function() {
-            const input = document.getElementById('senha-input');
-            const erroEl = document.getElementById('login-erro');
-            const senha = (input.value || '').trim();
-            erroEl.textContent = '';
-
-            if (!db) { erroEl.textContent = 'Erro: Firebase não carregou.'; return; }
-
-            db.ref('config/admin/senha').once('value')
-                .then(snap => {
-                    const senhaBanco = snap.val();
-                    const senhaCorreta = (senhaBanco || 'jorge2026').toString().trim();
-                    if (senha === senhaCorreta) {
-                        sessionStorage.setItem('logado', 'true');
-                        window.abrirPainel();
-                    } else {
-                        erroEl.textContent = 'Senha incorreta!';
-                    }
-                })
-                .catch(err => {
-                    console.error('❌ Erro:', err);
-                    erroEl.textContent = 'Erro de conexão.';
-                });
-        };
-
-        window.fazerLogout = function() {
-            sessionStorage.removeItem('logado');
-            location.reload();
-        };
-
-        window.abrirPainel = function() {
-            const elLogin = document.getElementById('tela-login');
-            const elPainel = document.getElementById('tela-painel');
-            if (!elLogin || !elPainel) return;
-            elLogin.style.setProperty('display', 'none', 'important');
-            elPainel.style.display = 'block';
-            carregarTudo();
-            atualizarAvisoNotificacao();
-        };
-
-        // ============================================
-        // CARREGAR SERVIÇOS VIA REST
+        // CARREGAR DADOS
         // ============================================
         async function carregarServicosREST() {
             try {
@@ -901,9 +946,6 @@
             }
         }
 
-        // ============================================
-        // CARREGAR AGENDAMENTOS VIA REST
-        // ============================================
         async function carregarAgendamentosREST() {
             try {
                 const resposta = await fetch(FIREBASE_URL + '/agendamentos.json');
@@ -933,11 +975,8 @@
             if (el) el.textContent = qtd;
         }
 
-        // ============================================
-        // CARREGAR TUDO
-        // ============================================
         function carregarTudo() {
-            if (!db) return;
+            if (!db || !usuarioLogado) return;
 
             carregarServicosREST();
             if (intervaloServicos) clearInterval(intervaloServicos);
@@ -986,13 +1025,13 @@
 
         window.recarregarAgendamentos = function() {
             carregarAgendamentosREST().then(() => {
-                mostrarAlertaAdmin(`🔄 ${agendamentos.length} agendamento(s) carregado(s)`, 'info');
+                mostrarAlertaAdmin(`🔄 ${agendamentos.length} agendamento(s)`, 'info');
             });
         };
 
         window.recarregarServicos = function() {
             carregarServicosREST().then(() => {
-                mostrarAlertaAdmin(`🔄 ${servicos.length} serviço(s) carregado(s)`, 'info');
+                mostrarAlertaAdmin(`🔄 ${servicos.length} serviço(s)`, 'info');
             });
         };
 
@@ -1002,9 +1041,7 @@
             });
         };
 
-        // ============================================
         // CONTADORES
-        // ============================================
         function atualizarContadores() {
             const hojeStr = getHojeStr();
             const total = agendamentos.length;
@@ -1042,9 +1079,7 @@
             set('cnt-serv-vazios', vazios);
         }
 
-        // ============================================
         // RENDERIZAR AGENDAMENTOS
-        // ============================================
         function renderizarAgendamentos() {
             const container = document.getElementById('lista-agendamentos');
             if (!container) return;
@@ -1069,11 +1104,7 @@
             container.innerHTML = '';
 
             if (lista.length === 0) {
-                container.innerHTML = `
-                    <div class="agendamento-vazio">
-                        <i class="bi bi-calendar-x"></i>
-                        <p class="mb-0">Nenhum agendamento ${filtroAtivo !== 'todos' ? 'neste filtro' : ''}.</p>
-                    </div>`;
+                container.innerHTML = `<div class="agendamento-vazio"><i class="bi bi-calendar-x"></i><p class="mb-0">Nenhum agendamento ${filtroAtivo !== 'todos' ? 'neste filtro' : ''}.</p></div>`;
                 return;
             }
 
@@ -1088,7 +1119,7 @@
                     const wrapper = document.createElement('div');
                     wrapper.innerHTML = htmlItem;
                     while (wrapper.firstChild) container.appendChild(wrapper.firstChild);
-                } catch (err) { console.error('❌ Erro:', err); }
+                } catch (err) { console.error('❌', err); }
             });
         }
 
@@ -1117,10 +1148,7 @@
                     <div class="agendamento-info">
                         <div class="agendamento-data-hora">
                             <span class="hora">${ag.horario || '--:--'}</span>
-                            <span class="data">
-                                📅 ${dataFmt}
-                                ${ehHoje ? '<span class="badge bg-warning text-dark ms-1">HOJE</span>' : ''}
-                            </span>
+                            <span class="data">📅 ${dataFmt}${ehHoje ? ' <span class="badge bg-warning text-dark ms-1">HOJE</span>' : ''}</span>
                         </div>
                         <div class="agendamento-detalhes">
                             <span>👤 <strong>${ag.clienteNome || 'Sem nome'}</strong></span>
@@ -1130,29 +1158,15 @@
                             ${ag.observacoes ? `<span>📝 ${ag.observacoes}</span>` : ''}
                         </div>
                         <div class="mt-2">
-                            <span class="badge-status ${badgeClass}">${status}</span>
-                            ${avisoEspera}
+                            <span class="badge-status ${badgeClass}">${status}</span>${avisoEspera}
                         </div>
                     </div>
                     <div class="agendamento-actions">
-                        ${status !== 'concluido' && status !== 'cancelado' ? `
-                            <button class="btn btn-sm btn-warning" onclick="lembrarCliente('${ag.id}')" title="Enviar lembrete">
-                                <i class="bi bi-bell-fill"></i>
-                            </button>` : ''}
-                        <a href="https://wa.me/55${tel}" target="_blank" class="btn btn-sm btn-success" title="Abrir WhatsApp">
-                            <i class="bi bi-whatsapp"></i>
-                        </a>
-                        ${status !== 'concluido' ? `
-                            <button class="btn btn-sm btn-primary" onclick="mudarStatus('${ag.id}', 'concluido')" title="Marcar como concluído">
-                                <i class="bi bi-check"></i>
-                            </button>` : ''}
-                        ${status !== 'cancelado' ? `
-                            <button class="btn btn-sm btn-secondary" onclick="mudarStatus('${ag.id}', 'cancelado')" title="Cancelar">
-                                <i class="bi bi-x"></i>
-                            </button>` : ''}
-                        <button class="btn btn-sm btn-danger" onclick="excluirAgendamento('${ag.id}')" title="Excluir">
-                            <i class="bi bi-trash"></i>
-                        </button>
+                        ${status !== 'concluido' && status !== 'cancelado' ? `<button class="btn btn-sm btn-warning" onclick="lembrarCliente('${ag.id}')" title="Enviar lembrete"><i class="bi bi-bell-fill"></i></button>` : ''}
+                        <a href="https://wa.me/55${tel}" target="_blank" class="btn btn-sm btn-success" title="Abrir WhatsApp"><i class="bi bi-whatsapp"></i></a>
+                        ${status !== 'concluido' ? `<button class="btn btn-sm btn-primary" onclick="mudarStatus('${ag.id}', 'concluido')" title="Concluir"><i class="bi bi-check"></i></button>` : ''}
+                        ${status !== 'cancelado' ? `<button class="btn btn-sm btn-secondary" onclick="mudarStatus('${ag.id}', 'cancelado')" title="Cancelar"><i class="bi bi-x"></i></button>` : ''}
+                        <button class="btn btn-sm btn-danger" onclick="excluirAgendamento('${ag.id}')" title="Excluir"><i class="bi bi-trash"></i></button>
                     </div>
                 </div>
             `;
@@ -1165,16 +1179,13 @@
             const dataFmt = new Date(ag.data + 'T00:00:00').toLocaleDateString('pt-BR');
 
             if ('Notification' in window && Notification.permission === 'granted') {
-                new Notification('🔔 Lembrete de agendamento', {
+                new Notification('🔔 Lembrete', {
                     body: `${primeiro} — ${dataFmt} às ${ag.horario} — ${ag.servicoNome}`,
-                    icon: 'seujorge.PNG',
-                    tag: 'lembrete-' + id,
-                    requireInteraction: true
+                    icon: 'seujorge.PNG', tag: 'lembrete-' + id, requireInteraction: true
                 });
-                mostrarAlertaAdmin(`🔔 Lembrete enviado: ${primeiro} às ${ag.horario}`, 'info');
+                mostrarAlertaAdmin(`🔔 ${primeiro} às ${ag.horario}`, 'info');
             } else {
-                alert(`🔔 Lembrete: ${primeiro} — ${dataFmt} às ${ag.horario}`);
-                if ('Notification' in window && Notification.permission !== 'denied') Notification.requestPermission();
+                alert(`🔔 ${primeiro} — ${dataFmt} às ${ag.horario}`);
             }
         };
 
@@ -1184,15 +1195,12 @@
         };
 
         window.excluirAgendamento = function(id) {
-            if (confirm('Excluir este agendamento permanentemente?')) {
+            if (confirm('Excluir permanentemente?')) {
                 db.ref('agendamentos/' + id).remove();
                 setTimeout(carregarAgendamentosREST, 500);
             }
         };
 
-        // ============================================
-        // AVISAR AMANHÃ
-        // ============================================
         window.abrirAvisarAmanha = function() {
             const amanhaStr = getAmanhaStr();
             const lista = agendamentos.filter(a => a.data === amanhaStr && a.status !== 'cancelado')
@@ -1202,16 +1210,12 @@
             const dataFmt = new Date(amanhaStr + 'T00:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
 
             if (lista.length === 0) {
-                container.innerHTML = `
-                    <div class="alert alert-warning text-center">
-                        <i class="bi bi-calendar-x fs-1 d-block mb-2"></i>
-                        <strong>Nenhum agendamento para amanhã (${dataFmt}).</strong>
-                    </div>`;
+                container.innerHTML = `<div class="alert alert-warning text-center"><i class="bi bi-calendar-x fs-1 d-block mb-2"></i><strong>Nenhum agendamento para amanhã (${dataFmt}).</strong></div>`;
                 new bootstrap.Modal(document.getElementById('modalAvisarAmanha')).show();
                 return;
             }
 
-            let html = `<h6 class="mb-3 text-dark"><i class="bi bi-calendar-event"></i> ${lista.length} agendamento(s) para amanhã — ${dataFmt}</h6>`;
+            let html = `<h6 class="mb-3 text-dark"><i class="bi bi-calendar-event"></i> ${lista.length} agendamento(s) — ${dataFmt}</h6>`;
 
             lista.forEach(ag => {
                 const telLimpo = (ag.clienteTelefone || '').replace(/\D/g, '');
@@ -1224,9 +1228,7 @@
                             <strong>${ag.horario} — ${ag.clienteNome}</strong>
                             <small class="d-block text-muted">💈 ${ag.servicoNome} • 📞 ${ag.clienteTelefone}</small>
                         </div>
-                        <a href="https://wa.me/55${telLimpo}?text=${encodeURIComponent(msg)}" target="_blank" class="btn btn-sm btn-success fw-bold">
-                            <i class="bi bi-whatsapp"></i> Avisar
-                        </a>
+                        <a href="https://wa.me/55${telLimpo}?text=${encodeURIComponent(msg)}" target="_blank" class="btn btn-sm btn-success fw-bold"><i class="bi bi-whatsapp"></i> Avisar</a>
                     </div>`;
             });
 
@@ -1236,32 +1238,27 @@
             new bootstrap.Modal(document.getElementById('modalAvisarAmanha')).show();
         };
 
-        // ============================================
-        // LIMPAR AGENDAMENTOS ANTIGOS
-        // ============================================
         window.limparAgendamentosAntigos = function() {
             const hojeStr = getHojeStr();
             const paraRemover = agendamentos.filter(a => a.data < hojeStr && (a.status === 'concluido' || a.status === 'cancelado'));
 
             if (paraRemover.length === 0) {
-                mostrarAlertaAdmin('✅ Nenhum agendamento antigo para limpar.', 'success');
+                mostrarAlertaAdmin('✅ Nada para limpar.', 'success');
                 return;
             }
 
-            if (!confirm(`🧹 Encontrei ${paraRemover.length} agendamento(s) passado(s) concluídos/cancelados.\n\nDeseja remover todos?`)) return;
+            if (!confirm(`🧹 Remover ${paraRemover.length} agendamento(s) antigo(s)?`)) return;
 
             const updates = {};
             paraRemover.forEach(a => { updates['agendamentos/' + a.id] = null; });
 
             db.ref().update(updates).then(() => {
-                mostrarAlertaAdmin(`🧹 ${paraRemover.length} agendamento(s) removido(s)!`, 'success');
+                mostrarAlertaAdmin(`🧹 ${paraRemover.length} removido(s)!`, 'success');
                 setTimeout(carregarAgendamentosREST, 500);
             });
         };
 
-        // ============================================
-        // RENDERIZAR SERVIÇOS
-        // ============================================
+        // SERVIÇOS
         function renderizarServicos() {
             const container = document.getElementById('lista-servicos');
             if (!container) return;
@@ -1339,8 +1336,8 @@
             const duracao = parseInt(document.getElementById('edit-servico-duracao').value) || 30;
             const preco = parseFloat(document.getElementById('edit-servico-preco').value) || 0;
 
-            if (!nome) { alert('⚠️ Digite um nome para o serviço!'); return; }
-            if (preco <= 0) { if (!confirm('⚠️ O preço está zerado. Salvar mesmo assim?')) return; }
+            if (!nome) { alert('⚠️ Digite um nome!'); return; }
+            if (preco <= 0) { if (!confirm('⚠️ Preço zerado. Salvar?')) return; }
 
             const dados = { nome, duracao, preco, icone: 'bi-scissors', ativo: true };
 
@@ -1372,9 +1369,9 @@
         window.excluirServico = function(id) {
             const s = servicos.find(sv => sv.id === id);
             if (!s) return;
-            if (confirm(`🗑️ Excluir o serviço "${s.nome}"?`)) {
+            if (confirm(`🗑️ Excluir "${s.nome}"?`)) {
                 db.ref('config/servicos/' + id).remove().then(() => {
-                    mostrarAlertaAdmin('🗑️ Serviço removido.', 'warning');
+                    mostrarAlertaAdmin('🗑️ Removido.', 'warning');
                     setTimeout(carregarServicosREST, 500);
                 });
             }
@@ -1382,10 +1379,7 @@
 
         window.limparServicosVazios = function() {
             const vazios = servicos.filter(s => s.preco === 0 || !s.nome || s.nome === 'NOVO SERVIÇO');
-            if (vazios.length === 0) {
-                mostrarAlertaAdmin('✅ Nenhum serviço vazio.', 'success');
-                return;
-            }
+            if (vazios.length === 0) { mostrarAlertaAdmin('✅ Nada para limpar.', 'success'); return; }
             if (!confirm(`🧹 Remover ${vazios.length} serviço(s) vazio(s)?`)) return;
 
             const updates = {};
@@ -1400,9 +1394,7 @@
         function mostrarAlertaAdmin(mensagem, tipo = 'success') {
             const anterior = document.getElementById('alerta-admin');
             if (anterior) anterior.remove();
-
             const cores = { success: 'alert-success', info: 'alert-info', warning: 'alert-warning', danger: 'alert-danger' };
-
             const alerta = document.createElement('div');
             alerta.id = 'alerta-admin';
             alerta.className = `alert ${cores[tipo]} alert-dismissible fade show`;
@@ -1412,105 +1404,63 @@
             setTimeout(() => { if (alerta.parentElement) alerta.remove(); }, 4000);
         }
 
-        // ============================================
         // FATURAMENTO
-        // ============================================
         function renderizarFaturamento() {
-            // Apenas concluídos
             const concluidos = agendamentos.filter(a => a.status === 'concluido');
-
             const hojeStr = getHojeStr();
             const inicioSemana = getInicioSemana();
             const inicioMes = getInicioMes();
             const inicioAno = getInicioAno();
 
-            // Totais
             const hoje = concluidos.filter(a => a.data === hojeStr);
             const semana = concluidos.filter(a => a.data >= inicioSemana && a.data <= hojeStr);
             const mes = concluidos.filter(a => a.data >= inicioMes && a.data <= hojeStr);
-            const total = concluidos;
 
             const soma = arr => arr.reduce((s, a) => s + (typeof a.servicoPreco === 'number' ? a.servicoPreco : 0), 0);
-
-            // Atualiza cards
             const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
 
             set('fat-hoje', formatBRL(soma(hoje)));
             set('fat-hoje-qtd', `${hoje.length} atendimento${hoje.length !== 1 ? 's' : ''}`);
-
             set('fat-semana', formatBRL(soma(semana)));
             set('fat-semana-qtd', `${semana.length} atendimento${semana.length !== 1 ? 's' : ''}`);
-
             set('fat-mes', formatBRL(soma(mes)));
             set('fat-mes-qtd', `${mes.length} atendimento${mes.length !== 1 ? 's' : ''}`);
+            set('fat-total', formatBRL(soma(concluidos)));
+            set('fat-total-qtd', `${concluidos.length} atendimento${concluidos.length !== 1 ? 's' : ''}`);
 
-            set('fat-total', formatBRL(soma(total)));
-            set('fat-total-qtd', `${total.length} atendimento${total.length !== 1 ? 's' : ''}`);
-
-            // Filtro ativo para lista detalhada
             let listaFiltrada = concluidos;
-            let titulo = 'Todos os concluídos';
-
-            if (filtroFaturamento === 'hoje') {
-                listaFiltrada = hoje;
-                titulo = 'Hoje';
-            } else if (filtroFaturamento === 'semana') {
-                listaFiltrada = semana;
-                titulo = 'Esta semana';
-            } else if (filtroFaturamento === 'mes') {
-                listaFiltrada = mes;
-                titulo = 'Este mês';
-            } else if (filtroFaturamento === 'ano') {
-                listaFiltrada = concluidos.filter(a => a.data >= inicioAno && a.data <= hojeStr);
-                titulo = 'Este ano';
-            }
+            if (filtroFaturamento === 'hoje') listaFiltrada = hoje;
+            else if (filtroFaturamento === 'semana') listaFiltrada = semana;
+            else if (filtroFaturamento === 'mes') listaFiltrada = mes;
+            else if (filtroFaturamento === 'ano') listaFiltrada = concluidos.filter(a => a.data >= inicioAno && a.data <= hojeStr);
 
             set('fat-filtro-total', formatBRL(soma(listaFiltrada)));
 
-            // Ordena por data (mais recente primeiro)
             listaFiltrada.sort((a, b) => {
                 const da = (a.data || '') + (a.horario || '');
                 const db_ = (b.data || '') + (b.horario || '');
                 return db_.localeCompare(da);
             });
 
-            // Renderiza lista agrupada por dia
             const container = document.getElementById('lista-faturamento');
             if (!container) return;
             container.innerHTML = '';
 
             if (listaFiltrada.length === 0) {
-                container.innerHTML = `
-                    <div class="agendamento-vazio">
-                        <i class="bi bi-cash-stack"></i>
-                        <p class="mb-0">Nenhum atendimento concluído ${filtroFaturamento !== 'todos' ? 'neste período' : ''}.</p>
-                    </div>`;
+                container.innerHTML = `<div class="agendamento-vazio"><i class="bi bi-cash-stack"></i><p class="mb-0">Nenhum atendimento concluído ${filtroFaturamento !== 'todos' ? 'neste período' : ''}.</p></div>`;
                 return;
             }
 
-            // Agrupa por data
             const porDia = {};
-            listaFiltrada.forEach(a => {
-                if (!porDia[a.data]) porDia[a.data] = [];
-                porDia[a.data].push(a);
-            });
+            listaFiltrada.forEach(a => { if (!porDia[a.data]) porDia[a.data] = []; porDia[a.data].push(a); });
 
-            // Ordena dias (mais recente primeiro)
-            const diasOrdenados = Object.keys(porDia).sort().reverse();
-
-            diasOrdenados.forEach(data => {
+            Object.keys(porDia).sort().reverse().forEach(data => {
                 const itens = porDia[data].sort((a, b) => (b.horario || '').localeCompare(a.horario || ''));
-                const totalDia = soma(itens);
-                const dataFmt = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR', {
-                    weekday: 'long', day: 'numeric', month: 'long'
-                });
+                const dataFmt = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
 
                 const titulo = document.createElement('div');
                 titulo.className = 'fat-dia-titulo';
-                titulo.innerHTML = `
-                    <h6><i class="bi bi-calendar-check text-success"></i> ${dataFmt}</h6>
-                    <span class="total">${formatBRL(totalDia)} <small class="text-muted">(${itens.length} atend.)</small></span>
-                `;
+                titulo.innerHTML = `<h6><i class="bi bi-calendar-check text-success"></i> ${dataFmt}</h6><span class="total">${formatBRL(soma(itens))} <small class="text-muted">(${itens.length} atend.)</small></span>`;
                 container.appendChild(titulo);
 
                 itens.forEach(a => {
@@ -1528,15 +1478,13 @@
             });
         }
 
-        // ============================================
         // BLOQUEIOS
-        // ============================================
         window.bloquearDiaInteiro = function() {
             const data = document.getElementById('bloqueio-dia-data').value;
             const motivo = document.getElementById('bloqueio-dia-motivo').value.trim() || 'Folga';
             if (!data) { alert('Selecione uma data!'); return; }
             db.ref('bloqueios-dia/' + data).set({ motivo, criadoEm: Date.now() }).then(() => {
-                alert('✅ Dia ' + new Date(data + 'T00:00:00').toLocaleDateString('pt-BR') + ' bloqueado!');
+                alert('✅ Dia bloqueado!');
                 document.getElementById('bloqueio-dia-data').value = '';
                 document.getElementById('bloqueio-dia-motivo').value = '';
             });
@@ -1546,10 +1494,7 @@
             const data = document.getElementById('bloqueio-hora-data').value;
             const container = document.getElementById('horarios-para-bloquear');
             if (!container) return;
-            if (!data) {
-                container.innerHTML = '<p class="text-muted small">Selecione uma data para ver os horários.</p>';
-                return;
-            }
+            if (!data) { container.innerHTML = '<p class="text-muted small">Selecione uma data.</p>'; return; }
 
             const horarios = [];
             for (let h = 9; h < 20; h++) for (let m = 0; m < 60; m += 30) {
@@ -1562,14 +1507,14 @@
             ]).then(([snapHoras, snapDia]) => {
                 const jaBloqueados = snapHoras.val() || {};
                 if (snapDia.exists()) {
-                    container.innerHTML = '<p class="text-danger small"><i class="bi bi-exclamation-triangle"></i> Este dia já está bloqueado por completo.</p>';
+                    container.innerHTML = '<p class="text-danger small">⚠️ Dia já bloqueado.</p>';
                     return;
                 }
-                let html = '<p class="text-white small mb-2">Marque os horários que deseja bloquear:</p><div>';
+                let html = '<p class="text-white small mb-2">Marque os horários:</p><div>';
                 horarios.forEach(hora => {
-                    const marcado = jaBloqueados[hora] ? 'checked' : '';
-                    const classeMarcado = jaBloqueados[hora] ? 'marcado' : '';
-                    html += `<label class="horario-check ${classeMarcado}"><input type="checkbox" value="${hora}" ${marcado} onchange="toggleHorarioCheck(this)"> ${hora}</label>`;
+                    const m = jaBloqueados[hora] ? 'checked' : '';
+                    const cm = jaBloqueados[hora] ? 'marcado' : '';
+                    html += `<label class="horario-check ${cm}"><input type="checkbox" value="${hora}" ${m} onchange="toggleHorarioCheck(this)"> ${hora}</label>`;
                 });
                 html += '</div>';
                 container.innerHTML = html;
@@ -1587,17 +1532,15 @@
             if (!data) { alert('Selecione uma data!'); return; }
 
             const checkboxes = document.querySelectorAll('#horarios-para-bloquear input[type="checkbox"]');
-            if (checkboxes.length === 0) { alert('Nenhum horário disponível.'); return; }
-
             let selecionados = [];
             checkboxes.forEach(cb => { if (cb.checked) selecionados.push(cb.value); });
-            if (selecionados.length === 0) { alert('Selecione pelo menos um horário!'); return; }
+            if (selecionados.length === 0) { alert('Selecione horários!'); return; }
 
             const updates = {};
             selecionados.forEach(hora => { updates['bloqueios/' + data + '/' + hora] = motivo; });
 
             db.ref().update(updates).then(() => {
-                alert(`✅ ${selecionados.length} horário(s) bloqueado(s)!`);
+                alert(`✅ ${selecionados.length} bloqueado(s)!`);
                 document.getElementById('bloqueio-hora-motivo').value = '';
                 carregarHorariosParaBloquear();
             });
@@ -1618,7 +1561,7 @@
                 if (diasAtivos.length === 0) alert('✅ Nenhum dia bloqueado.');
                 else {
                     const nomes = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
-                    alert('✅ Bloqueado: ' + diasAtivos.map(d => nomes[d]).join(', '));
+                    alert('✅ ' + diasAtivos.map(d => nomes[d]).join(', '));
                 }
             });
         };
@@ -1646,21 +1589,19 @@
                 let html = '';
                 let temAlgo = false;
 
-                const datasDia = Object.keys(dias).sort();
-                if (datasDia.length > 0) {
+                if (Object.keys(dias).length > 0) {
                     temAlgo = true;
-                    html += '<h6 class="text-white mt-3 mb-2"><i class="bi bi-calendar-x text-danger"></i> Dias inteiros bloqueados:</h6>';
-                    datasDia.forEach(data => {
+                    html += '<h6 class="text-white mt-3 mb-2"><i class="bi bi-calendar-x text-danger"></i> Dias bloqueados:</h6>';
+                    Object.keys(dias).sort().forEach(data => {
                         const dataFmt = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR');
-                        html += `<div class="bloqueio-item dia-inteiro"><div><strong>${dataFmt}</strong><small class="d-block text-muted">${dias[data].motivo || 'Folga'}</small></div><button class="btn btn-sm btn-danger" onclick="desbloquearDiaInteiro('${data}')"><i class="bi bi-trash"></i> Remover</button></div>`;
+                        html += `<div class="bloqueio-item dia-inteiro"><div><strong>${dataFmt}</strong><small class="d-block text-muted">${dias[data].motivo || 'Folga'}</small></div><button class="btn btn-sm btn-danger" onclick="desbloquearDiaInteiro('${data}')"><i class="bi bi-trash"></i></button></div>`;
                     });
                 }
 
-                const datasHoras = Object.keys(horas).sort();
-                if (datasHoras.length > 0) {
+                if (Object.keys(horas).length > 0) {
                     temAlgo = true;
                     html += '<h6 class="text-white mt-4 mb-2"><i class="bi bi-clock-history text-warning"></i> Horários bloqueados:</h6>';
-                    datasHoras.forEach(data => {
+                    Object.keys(horas).sort().forEach(data => {
                         const horasDoDia = horas[data];
                         if (!horasDoDia || typeof horasDoDia !== 'object') return;
                         const dataFmt = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR');
@@ -1676,9 +1617,9 @@
                 if (diasSemana.length > 0) {
                     temAlgo = true;
                     const nomes = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
-                    html += '<h6 class="text-white mt-4 mb-2"><i class="bi bi-arrow-repeat text-info"></i> Dias da semana recorrentes:</h6>';
+                    html += '<h6 class="text-white mt-4 mb-2"><i class="bi bi-arrow-repeat text-info"></i> Dias recorrentes:</h6>';
                     diasSemana.forEach(dia => {
-                        html += `<div class="bloqueio-item recorrente"><div><strong>${nomes[dia]}s</strong> <small class="text-muted">(toda semana)</small></div><button class="btn btn-sm btn-danger" onclick="desbloquearDiaSemana(${dia})"><i class="bi bi-trash"></i> Remover</button></div>`;
+                        html += `<div class="bloqueio-item recorrente"><div><strong>${nomes[dia]}s</strong></div><button class="btn btn-sm btn-danger" onclick="desbloquearDiaSemana(${dia})"><i class="bi bi-trash"></i></button></div>`;
                     });
                 }
 
@@ -1687,18 +1628,11 @@
             });
         }
 
-        window.desbloquearDiaInteiro = function(data) {
-            if (confirm('Remover bloqueio?')) db.ref('bloqueios-dia/' + data).remove();
-        };
+        window.desbloquearDiaInteiro = function(data) { if (confirm('Remover?')) db.ref('bloqueios-dia/' + data).remove(); };
         window.desbloquearHorario = function(data, hora) { db.ref('bloqueios/' + data + '/' + hora).remove(); };
-        window.desbloquearDiaSemana = function(dia) {
-            const nomes = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
-            if (confirm('Remover todas as ' + nomes[dia] + 's?')) db.ref('bloqueios-semana/' + dia).remove();
-        };
+        window.desbloquearDiaSemana = function(dia) { if (confirm('Remover?')) db.ref('bloqueios-semana/' + dia).remove(); };
 
-        // ============================================
         // LISTA DE ESPERA
-        // ============================================
         function renderizarListaEspera() {
             const container = document.getElementById('lista-espera-admin');
             const badge = document.getElementById('badge-espera');
@@ -1708,7 +1642,7 @@
             let totalGeral = 0;
 
             if (datas.length === 0) {
-                container.innerHTML = '<p class="text-muted text-center py-4">📭 Nenhum cliente na lista de espera.</p>';
+                container.innerHTML = '<p class="text-muted text-center py-4">📭 Nenhum cliente.</p>';
                 if (badge) badge.style.display = 'none';
                 return;
             }
@@ -1728,7 +1662,7 @@
 
                 lista.forEach((item, index) => {
                     const horaEntrada = item.criadoEm ? new Date(item.criadoEm).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '';
-                    html += `<div class="espera-item"><div class="espera-item-info"><strong>${index + 1}º — ${item.nome || 'Sem nome'}</strong><small>📞 ${item.telefone || '-'} • 💈 ${item.servicoNome || '-'}${horaEntrada ? ` • 🕐 ${horaEntrada}` : ''}</small></div><div class="espera-item-actions"><button class="btn btn-sm btn-success" onclick="chamarEspera('${data}', '${item.id}')"><i class="bi bi-whatsapp"></i> Chamar</button><button class="btn btn-sm btn-primary" onclick="marcarConvertido('${data}', '${item.id}')"><i class="bi bi-check-circle"></i></button><button class="btn btn-sm btn-danger" onclick="removerEspera('${data}', '${item.id}')"><i class="bi bi-trash"></i></button></div></div>`;
+                    html += `<div class="espera-item"><div class="espera-item-info"><strong>${index + 1}º — ${item.nome || 'Sem nome'}</strong><small>📞 ${item.telefone || '-'} • 💈 ${item.servicoNome || '-'}${horaEntrada ? ` • 🕐 ${horaEntrada}` : ''}</small></div><div class="espera-item-actions"><button class="btn btn-sm btn-success" onclick="chamarEspera('${data}', '${item.id}')"><i class="bi bi-whatsapp"></i></button><button class="btn btn-sm btn-primary" onclick="marcarConvertido('${data}', '${item.id}')"><i class="bi bi-check-circle"></i></button><button class="btn btn-sm btn-danger" onclick="removerEspera('${data}', '${item.id}')"><i class="bi bi-trash"></i></button></div></div>`;
                 });
                 html += `</div>`;
             });
@@ -1749,7 +1683,7 @@
             if (!telLimpo) { alert('Sem telefone.'); return; }
             const primeiro = (item.nome || '').split(' ')[0] || 'tudo bem';
             const dataFmt = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
-            const msg = `Olá ${primeiro}! Aqui é o Seu Jorge. Vagou um horário no dia ${dataFmt}. Ainda tem interesse em agendar ${item.servicoNome || 'um corte'}? Me responde aqui rapidinho. 💈`;
+            const msg = `Olá ${primeiro}! Aqui é o Seu Jorge. Vagou um horário no dia ${dataFmt}. Ainda tem interesse? 💈`;
             window.open(`https://wa.me/55${telLimpo}?text=${encodeURIComponent(msg)}`, '_blank');
         };
 
@@ -1758,28 +1692,10 @@
             db.ref('lista-espera/' + data + '/' + id + '/status').set('convertido');
         };
         window.removerEspera = function(data, id) {
-            if (!confirm('Remover da lista?')) return;
+            if (!confirm('Remover?')) return;
             db.ref('lista-espera/' + data + '/' + id).remove();
         };
 
-        // ============================================
-        // SENHA
-        // ============================================
-        window.alterarSenha = function() {
-            const nova = document.getElementById('nova-senha').value;
-            if (!nova || nova.length < 4) { alert('Mínimo 4 caracteres.'); return; }
-            db.ref('config/admin/senha').set(nova.trim()).then(() => {
-                alert('Senha alterada!');
-                document.getElementById('nova-senha').value = '';
-            });
-        };
-
-        // ============================================
-        // INICIALIZAÇÃO
-        // ============================================
-        if (sessionStorage.getItem('logado') === 'true') {
-            window.abrirPainel();
-        }
     })();
     </script>
 </body>
