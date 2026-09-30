@@ -177,162 +177,146 @@
         .espera-item-actions { display: flex; gap: 5px; flex-wrap: wrap; }
 
         /* ============================================ */
-        /* CORREÇÕES DE CONTRASTE                       */
+        /* FATURAMENTO                                  */
         /* ============================================ */
+        .faturamento-card {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+            border-radius: 16px;
+            padding: 22px;
+            border-left: 5px solid var(--cor-primaria);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        .faturamento-card:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,.4); }
+        .faturamento-card.hoje { border-left-color: #ffc107; }
+        .faturamento-card.semana { border-left-color: #17a2b8; }
+        .faturamento-card.mes { border-left-color: #28a745; }
+        .faturamento-card.total { border-left-color: #7c3aed; }
 
-        /* Alertas com texto legível */
-        .alert {
-            color: #222 !important;
-            border: none;
+        .faturamento-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(220, 53, 69, 0.1) 0%, transparent 70%);
+            pointer-events: none;
         }
-        .alert-info {
-            background: #cfe8ff !important;
-            color: #0a3a6b !important;
-            border-left: 5px solid #0d6efd;
+        .faturamento-card.hoje::after { background: radial-gradient(circle, rgba(255, 199, 7, 0.1) 0%, transparent 70%); }
+        .faturamento-card.semana::after { background: radial-gradient(circle, rgba(23, 162, 184, 0.1) 0%, transparent 70%); }
+        .faturamento-card.mes::after { background: radial-gradient(circle, rgba(40, 167, 69, 0.1) 0%, transparent 70%); }
+        .faturamento-card.total::after { background: radial-gradient(circle, rgba(124, 58, 237, 0.15) 0%, transparent 70%); }
+
+        .faturamento-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #a8b2c1;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
+        .faturamento-label i { font-size: 1rem; }
+        .faturamento-card.hoje .faturamento-label i { color: #ffc107; }
+        .faturamento-card.semana .faturamento-label i { color: #17a2b8; }
+        .faturamento-card.mes .faturamento-label i { color: #28a745; }
+        .faturamento-card.total .faturamento-label i { color: #7c3aed; }
+
+        .faturamento-valor {
+            font-size: 1.9rem;
+            font-weight: 800;
+            color: #fff;
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 1px;
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+        .faturamento-card.hoje .faturamento-valor { color: #ffc107; }
+        .faturamento-card.semana .faturamento-valor { color: #4dd0e1; }
+        .faturamento-card.mes .faturamento-valor { color: #66bb6a; }
+        .faturamento-card.total .faturamento-valor { color: #a78bfa; }
+
+        .faturamento-qtd {
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .fat-item {
+            background: #fff; color: #333; border-radius: 12px; padding: 14px 18px;
+            margin-bottom: 8px; display: flex; justify-content: space-between;
+            align-items: center; gap: 15px; flex-wrap: wrap;
+            border-left: 4px solid var(--cor-sucesso);
+            transition: all 0.2s;
+        }
+        .fat-item:hover { transform: translateX(4px); box-shadow: 0 4px 12px rgba(0,0,0,.15); }
+        .fat-item-info { flex: 1; min-width: 220px; }
+        .fat-item-info strong { display: block; font-size: 1rem; color: #222; }
+        .fat-item-info small { color: #666; font-size: 0.85rem; }
+        .fat-item-valor {
+            font-size: 1.2rem; font-weight: 800; color: var(--cor-sucesso);
+            font-family: 'Bebas Neue', sans-serif; letter-spacing: 1px;
+        }
+
+        .fat-dia-titulo {
+            background: #1a1a1a; border-radius: 10px; padding: 12px 18px;
+            margin-top: 20px; margin-bottom: 10px;
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 10px;
+            border-left: 4px solid var(--cor-sucesso);
+        }
+        .fat-dia-titulo h6 { margin: 0; color: #fff; font-size: 1rem; }
+        .fat-dia-titulo .total { color: #66bb6a; font-weight: 800; font-size: 1.1rem; }
+
+        /* CORREÇÕES DE CONTRASTE */
+        .alert { color: #222 !important; border: none; }
+        .alert-info { background: #cfe8ff !important; color: #0a3a6b !important; border-left: 5px solid #0d6efd; }
         .alert-info strong { color: #084298 !important; }
         .alert-info i { color: #0d6efd !important; }
-
-        .alert-warning {
-            background: #fff3cd !important;
-            color: #664d03 !important;
-            border-left: 5px solid #ffc107;
-        }
+        .alert-warning { background: #fff3cd !important; color: #664d03 !important; border-left: 5px solid #ffc107; }
         .alert-warning strong { color: #664d03 !important; }
+        .alert-success { background: #d1e7dd !important; color: #0f5132 !important; border-left: 5px solid #198754; }
+        .alert-danger { background: #f8d7da !important; color: #842029 !important; border-left: 5px solid #dc3545; }
+        .alert-secondary { background: #e2e3e5 !important; color: #41464b !important; border-left: 5px solid #6c757d; }
 
-        .alert-success {
-            background: #d1e7dd !important;
-            color: #0f5132 !important;
-            border-left: 5px solid #198754;
-        }
-
-        .alert-danger {
-            background: #f8d7da !important;
-            color: #842029 !important;
-            border-left: 5px solid #dc3545;
-        }
-
-        .alert-secondary {
-            background: #e2e3e5 !important;
-            color: #41464b !important;
-            border-left: 5px solid #6c757d;
-        }
-
-        /* Texto muted mais legível em fundo escuro */
-        body .text-muted {
-            color: #a8b2c1 !important;
-        }
-        body .text-white-50 {
-            color: rgba(255, 255, 255, 0.75) !important;
-        }
-
-        /* Dentro de cards brancos, muted mais escuro */
-        .card .text-muted,
-        .agendamento-item .text-muted,
-        .servico-item .text-muted,
-        .espera-item .text-muted,
-        .bloqueio-item .text-muted,
-        .modal-content .text-muted {
+        body .text-muted { color: #a8b2c1 !important; }
+        body .text-white-50 { color: rgba(255, 255, 255, 0.75) !important; }
+        .card .text-muted, .agendamento-item .text-muted, .servico-item .text-muted,
+        .espera-item .text-muted, .bloqueio-item .text-muted, .modal-content .text-muted {
             color: #666 !important;
         }
 
-        /* Formulários legíveis */
-        .form-control {
-            color: #222 !important;
-            background: #fff !important;
-            border: 2px solid #dee2e6;
-        }
-        .form-control:focus {
-            border-color: var(--cor-primaria);
-            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2);
-        }
-        .form-control::placeholder {
-            color: #999 !important;
-        }
-
-        /* Labels em fundo escuro */
-        .form-label {
-            color: #e8edf7 !important;
-            font-weight: 600;
-        }
-        .bloqueio-section label.text-white,
-        .bloqueio-section .form-label,
-        label.text-white {
+        .form-control { color: #222 !important; background: #fff !important; border: 2px solid #dee2e6; }
+        .form-control:focus { border-color: var(--cor-primaria); box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2); }
+        .form-control::placeholder { color: #999 !important; }
+        .form-label { color: #e8edf7 !important; font-weight: 600; }
+        .bloqueio-section label.text-white, .bloqueio-section .form-label, label.text-white {
             color: #e8edf7 !important;
         }
+        .modal-content { color: #222; }
+        .modal-content .form-label { color: #222 !important; }
+        .modal-content .modal-title { color: #222 !important; }
+        .modal-content .modal-body { color: #222 !important; }
 
-        /* Modais */
-        .modal-content {
-            color: #222;
-        }
-        .modal-content .form-label {
-            color: #222 !important;
-        }
-        .modal-content .modal-title {
-            color: #222 !important;
-        }
+        .btn-outline-info { color: #4dd0e1 !important; border-color: #4dd0e1 !important; }
+        .btn-outline-info:hover { background: #4dd0e1 !important; color: #0a0a0a !important; }
+        .btn-outline-warning { color: #ffc107 !important; border-color: #ffc107 !important; }
+        .btn-outline-warning:hover { background: #ffc107 !important; color: #0a0a0a !important; }
+        .btn-outline-light { color: #fff !important; border-color: #fff !important; }
+        .btn-outline-light:hover { background: #fff !important; color: #0a0a0a !important; }
+        .btn-outline-success { color: #25d366 !important; border-color: #25d366 !important; }
+        .btn-outline-success:hover { background: #25d366 !important; color: #fff !important; }
 
-        /* Botões outline mais vivos */
-        .btn-outline-info {
-            color: #4dd0e1 !important;
-            border-color: #4dd0e1 !important;
-        }
-        .btn-outline-info:hover {
-            background: #4dd0e1 !important;
-            color: #0a0a0a !important;
-        }
-        .btn-outline-warning {
-            color: #ffc107 !important;
-            border-color: #ffc107 !important;
-        }
-        .btn-outline-warning:hover {
-            background: #ffc107 !important;
-            color: #0a0a0a !important;
-        }
-        .btn-outline-light {
-            color: #fff !important;
-            border-color: #fff !important;
-        }
-        .btn-outline-light:hover {
-            background: #fff !important;
-            color: #0a0a0a !important;
-        }
-
-        /* Pequenos textos nos bloqueios em fundo escuro */
-        .bloqueio-section .text-muted {
-            color: #a8b2c1 !important;
-        }
-
-        /* Placeholder dos inputs dentro de blocos escuros */
-        .bloqueio-section .form-control::placeholder {
-            color: #999 !important;
-        }
-
-        /* Texto do badge */
-        .badge.bg-secondary {
-            background: #495057 !important;
-            color: #fff !important;
-        }
-
-        /* Melhorar legibilidade dos números dos filtros */
-        .filtro-btn .contador {
-            background: rgba(255,255,255,.25);
-            color: #fff;
-        }
-        .filtro-btn.ativo .contador {
-            background: rgba(0,0,0,.35);
-            color: #fff;
-        }
-
-        /* Corrigir texto "ID: xxx" */
-        .servico-detalhes-lista .text-muted {
-            color: #888 !important;
-        }
-
-        /* Texto do card vazio (agendamento-vazio) */
-        .agendamento-vazio p {
-            color: #ccc !important;
-        }
+        .bloqueio-section .text-muted { color: #a8b2c1 !important; }
+        .bloqueio-section .form-control::placeholder { color: #999 !important; }
+        .badge.bg-secondary { background: #495057 !important; color: #fff !important; }
+        .filtro-btn .contador { background: rgba(255,255,255,.25); color: #fff; }
+        .filtro-btn.ativo .contador { background: rgba(0,0,0,.35); color: #fff; }
+        .agendamento-vazio p { color: #ccc !important; }
     </style>
 </head>
 <body>
@@ -379,6 +363,7 @@
                         <span class="badge bg-warning text-dark ms-1" id="badge-espera" style="display:none;">0</span>
                     </a>
                 </li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#aba-faturamento">💰 Faturamento</a></li>
                 <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#aba-config">⚙️ Config</a></li>
             </ul>
 
@@ -389,7 +374,10 @@
                             <h4 class="text-white mb-1">📅 Agendamentos</h4>
                             <p class="text-muted small mb-0">Todos os agendamentos ficam salvos aqui.</p>
                         </div>
-                        <div class="d-flex gap-2">
+                        <div class="d-flex gap-2 flex-wrap">
+                            <button class="btn btn-danger btn-sm fw-bold" onclick="abrirAvisarAmanha()">
+                                <i class="bi bi-megaphone-fill"></i> Avisar amanhã <span id="contador-amanha" class="badge bg-white text-danger ms-1">0</span>
+                            </button>
                             <button class="btn btn-outline-info btn-sm" onclick="recarregarAgendamentos()">
                                 <i class="bi bi-arrow-clockwise"></i> Atualizar
                             </button>
@@ -397,6 +385,16 @@
                                 <i class="bi bi-eraser"></i> Limpar antigos
                             </button>
                         </div>
+                    </div>
+
+                    <div id="aviso-notificacao" class="alert alert-warning d-flex align-items-center gap-2 small" role="alert" style="display: none !important;">
+                        <i class="bi bi-bell-slash fs-5"></i>
+                        <div class="flex-grow-1">
+                            <strong>Ative as notificações</strong> para receber avisos de lembretes no seu navegador.
+                        </div>
+                        <button class="btn btn-sm btn-dark fw-bold" onclick="ativarNotificacoesNavegador()">
+                            <i class="bi bi-bell"></i> Ativar
+                        </button>
                     </div>
 
                     <div class="filtros-agendamentos" id="filtros-agendamentos">
@@ -551,12 +549,112 @@
                     <div id="lista-espera-admin"></div>
                 </div>
 
+                <!-- ============================================ -->
+                <!-- ABA FATURAMENTO                              -->
+                <!-- ============================================ -->
+                <div class="tab-pane fade" id="aba-faturamento">
+                    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                        <div>
+                            <h4 class="text-white mb-1">💰 Faturamento</h4>
+                            <p class="text-muted small mb-0">Baseado apenas em agendamentos <strong class="text-success">concluídos</strong>.</p>
+                        </div>
+                        <button class="btn btn-outline-info btn-sm" onclick="recarregarFaturamento()">
+                            <i class="bi bi-arrow-clockwise"></i> Atualizar
+                        </button>
+                    </div>
+
+                    <!-- Cards de resumo -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6 col-lg-3">
+                            <div class="faturamento-card hoje">
+                                <div class="faturamento-label">
+                                    <i class="bi bi-sun-fill"></i> Hoje
+                                </div>
+                                <div class="faturamento-valor" id="fat-hoje">R$ 0,00</div>
+                                <div class="faturamento-qtd" id="fat-hoje-qtd">0 atendimentos</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-3">
+                            <div class="faturamento-card semana">
+                                <div class="faturamento-label">
+                                    <i class="bi bi-calendar-week"></i> Esta semana
+                                </div>
+                                <div class="faturamento-valor" id="fat-semana">R$ 0,00</div>
+                                <div class="faturamento-qtd" id="fat-semana-qtd">0 atendimentos</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-3">
+                            <div class="faturamento-card mes">
+                                <div class="faturamento-label">
+                                    <i class="bi bi-calendar-month"></i> Este mês
+                                </div>
+                                <div class="faturamento-valor" id="fat-mes">R$ 0,00</div>
+                                <div class="faturamento-qtd" id="fat-mes-qtd">0 atendimentos</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-3">
+                            <div class="faturamento-card total">
+                                <div class="faturamento-label">
+                                    <i class="bi bi-trophy-fill"></i> Total geral
+                                </div>
+                                <div class="faturamento-valor" id="fat-total">R$ 0,00</div>
+                                <div class="faturamento-qtd" id="fat-total-qtd">0 atendimentos</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filtros de período -->
+                    <h6 class="text-white mb-2"><i class="bi bi-funnel"></i> Detalhes por período</h6>
+                    <div class="filtros-agendamentos" id="filtros-faturamento">
+                        <button class="filtro-btn ativo" data-filtro-fat="hoje">
+                            <i class="bi bi-sun"></i> Hoje
+                        </button>
+                        <button class="filtro-btn" data-filtro-fat="semana">
+                            <i class="bi bi-calendar-week"></i> Esta semana
+                        </button>
+                        <button class="filtro-btn" data-filtro-fat="mes">
+                            <i class="bi bi-calendar-month"></i> Este mês
+                        </button>
+                        <button class="filtro-btn" data-filtro-fat="ano">
+                            <i class="bi bi-calendar"></i> Este ano
+                        </button>
+                        <button class="filtro-btn" data-filtro-fat="todos">
+                            <i class="bi bi-list-ul"></i> Todos
+                        </button>
+                    </div>
+
+                    <!-- Resumo do filtro ativo -->
+                    <div id="fat-resumo-filtro" class="alert alert-success d-flex justify-content-between align-items-center flex-wrap gap-2" role="alert">
+                        <div>
+                            <i class="bi bi-cash-coin fs-4"></i>
+                            <strong class="ms-2">Total no período:</strong>
+                        </div>
+                        <div class="fs-4 fw-bold" id="fat-filtro-total">R$ 0,00</div>
+                    </div>
+
+                    <!-- Lista detalhada -->
+                    <div id="lista-faturamento"></div>
+                </div>
+
                 <div class="tab-pane fade" id="aba-config">
                     <h4 class="text-white mb-3">⚙️ Configurações</h4>
                     <div class="card p-3 mb-3">
                         <label class="form-label">Alterar Senha</label>
                         <input type="password" id="nova-senha" class="form-control mb-2" placeholder="Nova senha">
                         <button class="btn btn-danger" onclick="alterarSenha()">Salvar Nova Senha</button>
+                    </div>
+                    <div class="card p-3 mb-3">
+                        <label class="form-label">Notificações do Navegador</label>
+                        <p class="small text-muted mb-2">Ative para receber lembretes dos agendamentos direto no seu celular/PC.</p>
+                        <button class="btn btn-primary" onclick="ativarNotificacoesNavegador()">
+                            <i class="bi bi-bell"></i> Ativar Notificações
+                        </button>
+                        <button class="btn btn-outline-primary mt-2" onclick="testarNotificacaoNavegador()">
+                            <i class="bi bi-send"></i> Testar Notificação
+                        </button>
                     </div>
                 </div>
             </div>
@@ -593,6 +691,29 @@
         </div>
     </div>
 
+    <div class="modal fade" id="modalAvisarAmanha" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">
+                        <i class="bi bi-megaphone-fill"></i> Avisar clientes de amanhã
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info small mb-3">
+                        <i class="bi bi-info-circle"></i>
+                        Clique em <strong>📲 WhatsApp</strong> para abrir a conversa com o cliente. A mensagem já vem pronta.
+                    </div>
+                    <div id="lista-avisar-amanha"></div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -619,6 +740,7 @@
         let listaEspera = {};
         let filtroAtivo = 'todos';
         let filtroServicos = 'todos';
+        let filtroFaturamento = 'hoje';
         let intervaloAgendamentos = null;
         let intervaloServicos = null;
 
@@ -631,13 +753,92 @@
 
         function getHojeStr() {
             const agora = new Date();
-            const ano = agora.getFullYear();
-            const mes = String(agora.getMonth() + 1).padStart(2, '0');
-            const dia = String(agora.getDate()).padStart(2, '0');
-            return `${ano}-${mes}-${dia}`;
+            return `${agora.getFullYear()}-${String(agora.getMonth()+1).padStart(2,'0')}-${String(agora.getDate()).padStart(2,'0')}`;
         }
 
-        // ============ LOGIN ============
+        function getAmanhaStr() {
+            const amanha = new Date();
+            amanha.setDate(amanha.getDate() + 1);
+            return `${amanha.getFullYear()}-${String(amanha.getMonth()+1).padStart(2,'0')}-${String(amanha.getDate()).padStart(2,'0')}`;
+        }
+
+        function formatBRL(v) {
+            return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        // Datas de referência para faturamento
+        function getInicioSemana() {
+            const d = new Date();
+            const dia = d.getDay(); // 0=Dom, 1=Seg...
+            const diff = dia === 0 ? 6 : dia - 1; // segunda é o início
+            d.setDate(d.getDate() - diff);
+            d.setHours(0, 0, 0, 0);
+            return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+        }
+
+        function getInicioMes() {
+            const d = new Date();
+            return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-01`;
+        }
+
+        function getInicioAno() {
+            const d = new Date();
+            return `${d.getFullYear()}-01-01`;
+        }
+
+        // ============================================
+        // NOTIFICAÇÕES DO NAVEGADOR
+        // ============================================
+        window.ativarNotificacoesNavegador = async function() {
+            if (!('Notification' in window)) {
+                alert('❌ Este navegador não suporta notificações.');
+                return;
+            }
+            try {
+                const permission = await Notification.requestPermission();
+                if (permission === 'granted') {
+                    mostrarAlertaAdmin('✅ Notificações ativadas!', 'success');
+                    new Notification('🔔 Notificações ativadas!', {
+                        body: 'Você vai receber avisos dos agendamentos aqui.',
+                        icon: 'seujorge.PNG'
+                    });
+                    atualizarAvisoNotificacao();
+                } else {
+                    alert('❌ Permissão negada. Verifique nas configurações do navegador.');
+                }
+            } catch (err) {
+                console.error('Erro:', err);
+            }
+        };
+
+        window.testarNotificacaoNavegador = function() {
+            if (Notification.permission === 'granted') {
+                new Notification('🔔 Teste de notificação', {
+                    body: 'Se você está vendo isso, está tudo funcionando!',
+                    icon: 'seujorge.PNG'
+                });
+            } else {
+                alert('⚠️ Ative as notificações primeiro.');
+            }
+        };
+
+        function atualizarAvisoNotificacao() {
+            const aviso = document.getElementById('aviso-notificacao');
+            if (!aviso) return;
+            if (!('Notification' in window)) {
+                aviso.style.display = 'none';
+                return;
+            }
+            if (Notification.permission === 'granted') {
+                aviso.style.display = 'none';
+            } else {
+                aviso.style.setProperty('display', 'flex', 'important');
+            }
+        }
+
+        // ============================================
+        // LOGIN
+        // ============================================
         window.fazerLogin = function() {
             const input = document.getElementById('senha-input');
             const erroEl = document.getElementById('login-erro');
@@ -675,29 +876,24 @@
             elLogin.style.setProperty('display', 'none', 'important');
             elPainel.style.display = 'block';
             carregarTudo();
+            atualizarAvisoNotificacao();
         };
 
-        // ============ CARREGAR SERVIÇOS VIA REST ============
+        // ============================================
+        // CARREGAR SERVIÇOS VIA REST
+        // ============================================
         async function carregarServicosREST() {
             try {
                 const resposta = await fetch(FIREBASE_URL + '/config/servicos.json');
-
-                if (!resposta.ok) {
-                    console.error('❌ Erro HTTP servicos:', resposta.status);
-                    return;
-                }
+                if (!resposta.ok) return;
 
                 const dados = await resposta.json();
-
                 servicos = [];
                 if (dados) {
                     Object.keys(dados).forEach(id => {
                         servicos.push({ id, ...dados[id] });
                     });
                 }
-
-                console.log('📋 Serviços carregados via REST:', servicos.length);
-
                 atualizarContadoresServicos();
                 renderizarServicos();
             } catch (err) {
@@ -705,18 +901,15 @@
             }
         }
 
-        // ============ CARREGAR AGENDAMENTOS VIA REST ============
+        // ============================================
+        // CARREGAR AGENDAMENTOS VIA REST
+        // ============================================
         async function carregarAgendamentosREST() {
             try {
                 const resposta = await fetch(FIREBASE_URL + '/agendamentos.json');
-
-                if (!resposta.ok) {
-                    console.error('❌ Erro HTTP agendamentos:', resposta.status);
-                    return;
-                }
+                if (!resposta.ok) return;
 
                 const dados = await resposta.json();
-
                 agendamentos = [];
                 if (dados) {
                     Object.keys(dados).forEach(id => {
@@ -724,16 +917,25 @@
                     });
                 }
 
-                console.log('📋 Agendamentos carregados via REST:', agendamentos.length);
-
                 atualizarContadores();
+                atualizarContadorAmanha();
                 renderizarAgendamentos();
+                renderizarFaturamento();
             } catch (err) {
                 console.error('❌ Erro REST agendamentos:', err);
             }
         }
 
-        // ============ CARREGAR TUDO ============
+        function atualizarContadorAmanha() {
+            const amanhaStr = getAmanhaStr();
+            const qtd = agendamentos.filter(a => a.data === amanhaStr && a.status !== 'cancelado').length;
+            const el = document.getElementById('contador-amanha');
+            if (el) el.textContent = qtd;
+        }
+
+        // ============================================
+        // CARREGAR TUDO
+        // ============================================
         function carregarTudo() {
             if (!db) return;
 
@@ -771,9 +973,17 @@
                     renderizarServicos();
                 });
             });
+
+            document.querySelectorAll('[data-filtro-fat]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('[data-filtro-fat]').forEach(b => b.classList.remove('ativo'));
+                    btn.classList.add('ativo');
+                    filtroFaturamento = btn.dataset.filtroFat;
+                    renderizarFaturamento();
+                });
+            });
         }
 
-        // ============ BOTÕES "ATUALIZAR" ============
         window.recarregarAgendamentos = function() {
             carregarAgendamentosREST().then(() => {
                 mostrarAlertaAdmin(`🔄 ${agendamentos.length} agendamento(s) carregado(s)`, 'info');
@@ -786,10 +996,17 @@
             });
         };
 
-        // ============ CONTADORES ============
+        window.recarregarFaturamento = function() {
+            carregarAgendamentosREST().then(() => {
+                mostrarAlertaAdmin(`💰 Faturamento atualizado`, 'info');
+            });
+        };
+
+        // ============================================
+        // CONTADORES
+        // ============================================
         function atualizarContadores() {
             const hojeStr = getHojeStr();
-
             const total = agendamentos.length;
             const hoje = agendamentos.filter(a => a.data === hojeStr).length;
             const proximos = agendamentos.filter(a => a.data > hojeStr).length;
@@ -798,11 +1015,7 @@
             const concluidos = agendamentos.filter(a => a.status === 'concluido').length;
             const cancelados = agendamentos.filter(a => a.status === 'cancelado').length;
 
-            const set = (id, val) => {
-                const el = document.getElementById(id);
-                if (el) el.textContent = val;
-            };
-
+            const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
             set('cnt-todos', total);
             set('cnt-hoje', hoje);
             set('cnt-proximos', proximos);
@@ -823,18 +1036,15 @@
             const total = servicos.length;
             const vazios = servicos.filter(s => s.preco === 0 || !s.nome || s.nome === 'NOVO SERVIÇO').length;
             const ok = total - vazios;
-
-            const set = (id, val) => {
-                const el = document.getElementById(id);
-                if (el) el.textContent = val;
-            };
-
+            const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
             set('cnt-serv-todos', total);
             set('cnt-serv-ok', ok);
             set('cnt-serv-vazios', vazios);
         }
 
-        // ============ RENDERIZAR AGENDAMENTOS ============
+        // ============================================
+        // RENDERIZAR AGENDAMENTOS
+        // ============================================
         function renderizarAgendamentos() {
             const container = document.getElementById('lista-agendamentos');
             if (!container) return;
@@ -842,19 +1052,12 @@
             const hojeStr = getHojeStr();
             let lista = [...agendamentos];
 
-            if (filtroAtivo === 'hoje') {
-                lista = lista.filter(a => a.data === hojeStr);
-            } else if (filtroAtivo === 'proximos') {
-                lista = lista.filter(a => a.data > hojeStr);
-            } else if (filtroAtivo === 'passados') {
-                lista = lista.filter(a => a.data < hojeStr);
-            } else if (filtroAtivo === 'pendentes') {
-                lista = lista.filter(a => (a.status || 'pendente') === 'pendente');
-            } else if (filtroAtivo === 'concluidos') {
-                lista = lista.filter(a => a.status === 'concluido');
-            } else if (filtroAtivo === 'cancelados') {
-                lista = lista.filter(a => a.status === 'cancelado');
-            }
+            if (filtroAtivo === 'hoje') lista = lista.filter(a => a.data === hojeStr);
+            else if (filtroAtivo === 'proximos') lista = lista.filter(a => a.data > hojeStr);
+            else if (filtroAtivo === 'passados') lista = lista.filter(a => a.data < hojeStr);
+            else if (filtroAtivo === 'pendentes') lista = lista.filter(a => (a.status || 'pendente') === 'pendente');
+            else if (filtroAtivo === 'concluidos') lista = lista.filter(a => a.status === 'concluido');
+            else if (filtroAtivo === 'cancelados') lista = lista.filter(a => a.status === 'cancelado');
 
             lista.sort((a, b) => {
                 const dataA = (a.data || '') + (a.horario || '');
@@ -870,8 +1073,7 @@
                     <div class="agendamento-vazio">
                         <i class="bi bi-calendar-x"></i>
                         <p class="mb-0">Nenhum agendamento ${filtroAtivo !== 'todos' ? 'neste filtro' : ''}.</p>
-                    </div>
-                `;
+                    </div>`;
                 return;
             }
 
@@ -885,12 +1087,8 @@
                     const htmlItem = montarItemAgendamento(ag, hojeStr);
                     const wrapper = document.createElement('div');
                     wrapper.innerHTML = htmlItem;
-                    while (wrapper.firstChild) {
-                        container.appendChild(wrapper.firstChild);
-                    }
-                } catch (err) {
-                    console.error('❌ Erro ao montar item:', ag, err);
-                }
+                    while (wrapper.firstChild) container.appendChild(wrapper.firstChild);
+                } catch (err) { console.error('❌ Erro:', err); }
             });
         }
 
@@ -908,15 +1106,11 @@
 
             const tel = (ag.clienteTelefone || '').replace(/\D/g, '');
             const preco = typeof ag.servicoPreco === 'number' ? ag.servicoPreco.toFixed(2).replace('.', ',') : '-';
-
-            const badgeClass = status === 'concluido' ? 'badge-concluido'
-                             : status === 'cancelado' ? 'badge-cancelado'
-                             : 'badge-pendente';
+            const badgeClass = status === 'concluido' ? 'badge-concluido' : status === 'cancelado' ? 'badge-cancelado' : 'badge-pendente';
 
             const temEspera = listaEspera[ag.data] && Object.keys(listaEspera[ag.data]).length > 0;
             const avisoEspera = temEspera && status !== 'cancelado'
-                ? `<span class="badge bg-info ms-1" title="Tem gente na lista de espera deste dia"><i class="bi bi-hourglass-split"></i> ${Object.keys(listaEspera[ag.data]).length} na fila</span>`
-                : '';
+                ? `<span class="badge bg-info ms-1"><i class="bi bi-hourglass-split"></i> ${Object.keys(listaEspera[ag.data]).length} na fila</span>` : '';
 
             return `
                 <div class="${classe}">
@@ -942,23 +1136,20 @@
                     </div>
                     <div class="agendamento-actions">
                         ${status !== 'concluido' && status !== 'cancelado' ? `
-                            <button class="btn btn-sm btn-warning" onclick="lembrarCliente('${ag.id}')" title="Lembrar no WhatsApp">
-                                <i class="bi bi-bell"></i>
-                            </button>
-                        ` : ''}
+                            <button class="btn btn-sm btn-warning" onclick="lembrarCliente('${ag.id}')" title="Enviar lembrete">
+                                <i class="bi bi-bell-fill"></i>
+                            </button>` : ''}
                         <a href="https://wa.me/55${tel}" target="_blank" class="btn btn-sm btn-success" title="Abrir WhatsApp">
                             <i class="bi bi-whatsapp"></i>
                         </a>
                         ${status !== 'concluido' ? `
                             <button class="btn btn-sm btn-primary" onclick="mudarStatus('${ag.id}', 'concluido')" title="Marcar como concluído">
                                 <i class="bi bi-check"></i>
-                            </button>
-                        ` : ''}
+                            </button>` : ''}
                         ${status !== 'cancelado' ? `
                             <button class="btn btn-sm btn-secondary" onclick="mudarStatus('${ag.id}', 'cancelado')" title="Cancelar">
                                 <i class="bi bi-x"></i>
-                            </button>
-                        ` : ''}
+                            </button>` : ''}
                         <button class="btn btn-sm btn-danger" onclick="excluirAgendamento('${ag.id}')" title="Excluir">
                             <i class="bi bi-trash"></i>
                         </button>
@@ -966,6 +1157,26 @@
                 </div>
             `;
         }
+
+        window.lembrarCliente = function(id) {
+            const ag = agendamentos.find(a => a.id === id);
+            if (!ag) return;
+            const primeiro = (ag.clienteNome || '').split(' ')[0] || 'Cliente';
+            const dataFmt = new Date(ag.data + 'T00:00:00').toLocaleDateString('pt-BR');
+
+            if ('Notification' in window && Notification.permission === 'granted') {
+                new Notification('🔔 Lembrete de agendamento', {
+                    body: `${primeiro} — ${dataFmt} às ${ag.horario} — ${ag.servicoNome}`,
+                    icon: 'seujorge.PNG',
+                    tag: 'lembrete-' + id,
+                    requireInteraction: true
+                });
+                mostrarAlertaAdmin(`🔔 Lembrete enviado: ${primeiro} às ${ag.horario}`, 'info');
+            } else {
+                alert(`🔔 Lembrete: ${primeiro} — ${dataFmt} às ${ag.horario}`);
+                if ('Notification' in window && Notification.permission !== 'denied') Notification.requestPermission();
+            }
+        };
 
         window.mudarStatus = function(id, status) {
             db.ref('agendamentos/' + id + '/status').set(status);
@@ -979,39 +1190,68 @@
             }
         };
 
-        window.lembrarCliente = function(id) {
-            const ag = agendamentos.find(a => a.id === id);
-            if (!ag) return;
-            const tel = (ag.clienteTelefone || '').replace(/\D/g, '');
-            if (!tel) { alert('Sem telefone cadastrado.'); return; }
-            const primeiro = (ag.clienteNome || '').split(' ')[0] || 'tudo bem';
-            const dataFmt = new Date(ag.data + 'T00:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
-            const msg = `Fala ${primeiro}! Passando pra confirmar seu horário: ${dataFmt} às ${ag.horario}, serviço ${ag.servicoNome}. Tá confirmado? 💈`;
-            window.open(`https://wa.me/55${tel}?text=${encodeURIComponent(msg)}`, '_blank');
+        // ============================================
+        // AVISAR AMANHÃ
+        // ============================================
+        window.abrirAvisarAmanha = function() {
+            const amanhaStr = getAmanhaStr();
+            const lista = agendamentos.filter(a => a.data === amanhaStr && a.status !== 'cancelado')
+                .sort((a, b) => (a.horario || '').localeCompare(b.horario || ''));
+
+            const container = document.getElementById('lista-avisar-amanha');
+            const dataFmt = new Date(amanhaStr + 'T00:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
+
+            if (lista.length === 0) {
+                container.innerHTML = `
+                    <div class="alert alert-warning text-center">
+                        <i class="bi bi-calendar-x fs-1 d-block mb-2"></i>
+                        <strong>Nenhum agendamento para amanhã (${dataFmt}).</strong>
+                    </div>`;
+                new bootstrap.Modal(document.getElementById('modalAvisarAmanha')).show();
+                return;
+            }
+
+            let html = `<h6 class="mb-3 text-dark"><i class="bi bi-calendar-event"></i> ${lista.length} agendamento(s) para amanhã — ${dataFmt}</h6>`;
+
+            lista.forEach(ag => {
+                const telLimpo = (ag.clienteTelefone || '').replace(/\D/g, '');
+                const primeiro = (ag.clienteNome || '').split(' ')[0] || 'Cliente';
+                const msg = `Olá ${primeiro}! Aqui é o Seu Jorge. Passando pra lembrar do seu horário amanhã (${dataFmt}) às ${ag.horario}, serviço ${ag.servicoNome}. Tá confirmado? 💈`;
+
+                html += `
+                    <div class="agendamento-item" style="margin-bottom: 8px;">
+                        <div class="agendamento-info">
+                            <strong>${ag.horario} — ${ag.clienteNome}</strong>
+                            <small class="d-block text-muted">💈 ${ag.servicoNome} • 📞 ${ag.clienteTelefone}</small>
+                        </div>
+                        <a href="https://wa.me/55${telLimpo}?text=${encodeURIComponent(msg)}" target="_blank" class="btn btn-sm btn-success fw-bold">
+                            <i class="bi bi-whatsapp"></i> Avisar
+                        </a>
+                    </div>`;
+            });
+
+            html += `<div class="alert alert-info mt-3 small"><i class="bi bi-lightbulb"></i> Abra cada WhatsApp e clique em enviar. São ${lista.length} cliente(s).</div>`;
+
+            container.innerHTML = html;
+            new bootstrap.Modal(document.getElementById('modalAvisarAmanha')).show();
         };
 
-        // ============ LIMPAR AGENDAMENTOS ANTIGOS ============
+        // ============================================
+        // LIMPAR AGENDAMENTOS ANTIGOS
+        // ============================================
         window.limparAgendamentosAntigos = function() {
             const hojeStr = getHojeStr();
-            const paraRemover = agendamentos.filter(a => {
-                const passado = a.data < hojeStr;
-                const concluidoOuCancelado = a.status === 'concluido' || a.status === 'cancelado';
-                return passado && concluidoOuCancelado;
-            });
+            const paraRemover = agendamentos.filter(a => a.data < hojeStr && (a.status === 'concluido' || a.status === 'cancelado'));
 
             if (paraRemover.length === 0) {
-                mostrarAlertaAdmin('✅ Nenhum agendamento antigo (concluído/cancelado) para limpar.', 'success');
+                mostrarAlertaAdmin('✅ Nenhum agendamento antigo para limpar.', 'success');
                 return;
             }
 
-            if (!confirm(`🧹 Encontrei ${paraRemover.length} agendamento(s) passado(s) que já estão concluídos ou cancelados.\n\nDeseja remover todos?`)) {
-                return;
-            }
+            if (!confirm(`🧹 Encontrei ${paraRemover.length} agendamento(s) passado(s) concluídos/cancelados.\n\nDeseja remover todos?`)) return;
 
             const updates = {};
-            paraRemover.forEach(a => {
-                updates['agendamentos/' + a.id] = null;
-            });
+            paraRemover.forEach(a => { updates['agendamentos/' + a.id] = null; });
 
             db.ref().update(updates).then(() => {
                 mostrarAlertaAdmin(`🧹 ${paraRemover.length} agendamento(s) removido(s)!`, 'success');
@@ -1019,40 +1259,27 @@
             });
         };
 
-        // ============ RENDERIZAR SERVIÇOS ============
+        // ============================================
+        // RENDERIZAR SERVIÇOS
+        // ============================================
         function renderizarServicos() {
             const container = document.getElementById('lista-servicos');
             if (!container) return;
 
             if (servicos.length === 0) {
-                container.innerHTML = `
-                    <div class="agendamento-vazio">
-                        <i class="bi bi-inbox"></i>
-                        <p class="mb-0">Nenhum serviço cadastrado. Clique em <strong>"Adicionar Serviço"</strong> para começar.</p>
-                    </div>
-                `;
+                container.innerHTML = `<div class="agendamento-vazio"><i class="bi bi-inbox"></i><p class="mb-0">Nenhum serviço cadastrado.</p></div>`;
                 return;
             }
 
             let lista = [...servicos];
-
-            if (filtroServicos === 'ok') {
-                lista = lista.filter(s => !(s.preco === 0 || !s.nome || s.nome === 'NOVO SERVIÇO'));
-            } else if (filtroServicos === 'vazios') {
-                lista = lista.filter(s => s.preco === 0 || !s.nome || s.nome === 'NOVO SERVIÇO');
-            }
+            if (filtroServicos === 'ok') lista = lista.filter(s => !(s.preco === 0 || !s.nome || s.nome === 'NOVO SERVIÇO'));
+            else if (filtroServicos === 'vazios') lista = lista.filter(s => s.preco === 0 || !s.nome || s.nome === 'NOVO SERVIÇO');
 
             lista.sort((a, b) => (a.nome || '').localeCompare(b.nome || ''));
-
             container.innerHTML = '';
 
             if (lista.length === 0) {
-                container.innerHTML = `
-                    <div class="agendamento-vazio">
-                        <i class="bi bi-inbox"></i>
-                        <p class="mb-0">Nenhum serviço ${filtroServicos !== 'todos' ? 'neste filtro' : ''}.</p>
-                    </div>
-                `;
+                container.innerHTML = `<div class="agendamento-vazio"><i class="bi bi-inbox"></i><p class="mb-0">Nenhum serviço neste filtro.</p></div>`;
                 return;
             }
 
@@ -1062,59 +1289,37 @@
             container.appendChild(contador);
 
             lista.forEach(s => {
-                try {
-                    const htmlItem = montarItemServico(s);
-                    const wrapper = document.createElement('div');
-                    wrapper.innerHTML = htmlItem;
-                    while (wrapper.firstChild) {
-                        container.appendChild(wrapper.firstChild);
-                    }
-                } catch (err) {
-                    console.error('❌ Erro ao montar serviço:', s, err);
-                }
+                const preco = typeof s.preco === 'number' ? s.preco.toFixed(2).replace('.', ',') : '0,00';
+                const vazio = (s.preco === 0 || !s.nome || s.nome === 'NOVO SERVIÇO');
+                const inativo = s.ativo === false;
+                let classe = 'servico-item';
+                if (vazio) classe += ' servico-vazio';
+                if (inativo) classe += ' servico-inativo';
+
+                const badgeHtml = vazio
+                    ? '<span class="badge bg-warning text-dark ms-2">não configurado</span>'
+                    : (inativo ? '<span class="badge bg-secondary ms-2">inativo</span>' : '<span class="badge bg-success ms-2">ativo</span>');
+
+                const wrapper = document.createElement('div');
+                wrapper.innerHTML = `
+                    <div class="${classe}">
+                        <div class="servico-info">
+                            <div class="servico-icone-lista"><i class="bi ${s.icone || 'bi-scissors'}"></i></div>
+                            <div class="servico-texto">
+                                <div class="servico-nome-lista">${s.nome || 'SEM NOME'}${badgeHtml}</div>
+                                <div class="servico-detalhes-lista">
+                                    <span><i class="bi bi-clock"></i> ${s.duracao || 30} min</span>
+                                    <span class="servico-preco-lista">R$ ${preco}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="servico-acoes">
+                            <button class="btn btn-sm btn-primary" onclick="editarServico('${s.id}')"><i class="bi bi-pencil"></i> Editar</button>
+                            <button class="btn btn-sm btn-danger" onclick="excluirServico('${s.id}')"><i class="bi bi-trash"></i></button>
+                        </div>
+                    </div>`;
+                while (wrapper.firstChild) container.appendChild(wrapper.firstChild);
             });
-        }
-
-        function montarItemServico(s) {
-            const preco = typeof s.preco === 'number' ? s.preco.toFixed(2).replace('.', ',') : '0,00';
-            const vazio = (s.preco === 0 || !s.nome || s.nome === 'NOVO SERVIÇO');
-            const inativo = s.ativo === false;
-
-            let classe = 'servico-item';
-            if (vazio) classe += ' servico-vazio';
-            if (inativo) classe += ' servico-inativo';
-
-            const badgeHtml = vazio
-                ? '<span class="badge bg-warning text-dark ms-2">não configurado</span>'
-                : (inativo ? '<span class="badge bg-secondary ms-2">inativo</span>' : '<span class="badge bg-success ms-2">ativo</span>');
-
-            return `
-                <div class="${classe}">
-                    <div class="servico-info">
-                        <div class="servico-icone-lista">
-                            <i class="bi ${s.icone || 'bi-scissors'}"></i>
-                        </div>
-                        <div class="servico-texto">
-                            <div class="servico-nome-lista">
-                                ${s.nome || 'SEM NOME'}
-                                ${badgeHtml}
-                            </div>
-                            <div class="servico-detalhes-lista">
-                                <span><i class="bi bi-clock"></i> ${s.duracao || 30} min</span>
-                                <span class="servico-preco-lista">R$ ${preco}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="servico-acoes">
-                        <button class="btn btn-sm btn-primary" onclick="editarServico('${s.id}')" title="Editar">
-                            <i class="bi bi-pencil"></i> Editar
-                        </button>
-                        <button class="btn btn-sm btn-danger" onclick="excluirServico('${s.id}')" title="Excluir">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </div>
-                </div>
-            `;
         }
 
         window.editarServico = function(id) {
@@ -1134,34 +1339,22 @@
             const duracao = parseInt(document.getElementById('edit-servico-duracao').value) || 30;
             const preco = parseFloat(document.getElementById('edit-servico-preco').value) || 0;
 
-            if (!nome) {
-                alert('⚠️ Digite um nome para o serviço!');
-                return;
-            }
+            if (!nome) { alert('⚠️ Digite um nome para o serviço!'); return; }
+            if (preco <= 0) { if (!confirm('⚠️ O preço está zerado. Salvar mesmo assim?')) return; }
 
-            if (preco <= 0) {
-                if (!confirm('⚠️ O preço está zerado. Deseja salvar mesmo assim?')) return;
-            }
-
-            const dados = {
-                nome: nome,
-                duracao: duracao,
-                preco: preco,
-                icone: 'bi-scissors',
-                ativo: true
-            };
+            const dados = { nome, duracao, preco, icone: 'bi-scissors', ativo: true };
 
             if (id) {
                 db.ref('config/servicos/' + id).update(dados).then(() => {
                     bootstrap.Modal.getInstance(document.getElementById('modalServico')).hide();
-                    mostrarAlertaAdmin('✅ Serviço atualizado com sucesso!', 'success');
+                    mostrarAlertaAdmin('✅ Serviço atualizado!', 'success');
                     setTimeout(carregarServicosREST, 500);
                 });
             } else {
                 const novoId = 's' + Date.now();
                 db.ref('config/servicos/' + novoId).set(dados).then(() => {
                     bootstrap.Modal.getInstance(document.getElementById('modalServico')).hide();
-                    mostrarAlertaAdmin('✅ Serviço criado com sucesso!', 'success');
+                    mostrarAlertaAdmin('✅ Serviço criado!', 'success');
                     setTimeout(carregarServicosREST, 500);
                 });
             }
@@ -1179,8 +1372,7 @@
         window.excluirServico = function(id) {
             const s = servicos.find(sv => sv.id === id);
             if (!s) return;
-
-            if (confirm(`🗑️ Excluir o serviço "${s.nome}"?\n\nEssa ação não pode ser desfeita.`)) {
+            if (confirm(`🗑️ Excluir o serviço "${s.nome}"?`)) {
                 db.ref('config/servicos/' + id).remove().then(() => {
                     mostrarAlertaAdmin('🗑️ Serviço removido.', 'warning');
                     setTimeout(carregarServicosREST, 500);
@@ -1189,28 +1381,18 @@
         };
 
         window.limparServicosVazios = function() {
-            const vazios = servicos.filter(s =>
-                s.preco === 0 || !s.nome || s.nome === 'NOVO SERVIÇO'
-            );
-
+            const vazios = servicos.filter(s => s.preco === 0 || !s.nome || s.nome === 'NOVO SERVIÇO');
             if (vazios.length === 0) {
-                mostrarAlertaAdmin('✅ Nenhum serviço vazio para limpar.', 'success');
+                mostrarAlertaAdmin('✅ Nenhum serviço vazio.', 'success');
                 return;
             }
-
-            if (!confirm(`🧹 Encontrei ${vazios.length} serviço(s) vazio(s):\n\n` +
-                         vazios.map(v => '• ' + (v.nome || 'SEM NOME')).join('\n') +
-                         `\n\nDeseja remover todos?`)) {
-                return;
-            }
+            if (!confirm(`🧹 Remover ${vazios.length} serviço(s) vazio(s)?`)) return;
 
             const updates = {};
-            vazios.forEach(v => {
-                updates['config/servicos/' + v.id] = null;
-            });
+            vazios.forEach(v => { updates['config/servicos/' + v.id] = null; });
 
             db.ref().update(updates).then(() => {
-                mostrarAlertaAdmin(`🧹 ${vazios.length} serviço(s) vazio(s) removido(s)!`, 'success');
+                mostrarAlertaAdmin(`🧹 ${vazios.length} removido(s)!`, 'success');
                 setTimeout(carregarServicosREST, 500);
             });
         };
@@ -1219,40 +1401,141 @@
             const anterior = document.getElementById('alerta-admin');
             if (anterior) anterior.remove();
 
-            const cores = {
-                success: 'alert-success',
-                info: 'alert-info',
-                warning: 'alert-warning',
-                danger: 'alert-danger'
-            };
+            const cores = { success: 'alert-success', info: 'alert-info', warning: 'alert-warning', danger: 'alert-danger' };
 
             const alerta = document.createElement('div');
             alerta.id = 'alerta-admin';
             alerta.className = `alert ${cores[tipo]} alert-dismissible fade show`;
             alerta.style.cssText = 'position: fixed; top: 80px; right: 20px; z-index: 9999; min-width: 300px; box-shadow: 0 4px 20px rgba(0,0,0,.3); font-weight: 600;';
-            alerta.innerHTML = `
-                ${mensagem}
-                <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
-            `;
-
+            alerta.innerHTML = `${mensagem}<button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>`;
             document.body.appendChild(alerta);
-
-            setTimeout(() => {
-                if (alerta.parentElement) alerta.remove();
-            }, 4000);
+            setTimeout(() => { if (alerta.parentElement) alerta.remove(); }, 4000);
         }
 
-        // ============ BLOQUEIOS ============
+        // ============================================
+        // FATURAMENTO
+        // ============================================
+        function renderizarFaturamento() {
+            // Apenas concluídos
+            const concluidos = agendamentos.filter(a => a.status === 'concluido');
+
+            const hojeStr = getHojeStr();
+            const inicioSemana = getInicioSemana();
+            const inicioMes = getInicioMes();
+            const inicioAno = getInicioAno();
+
+            // Totais
+            const hoje = concluidos.filter(a => a.data === hojeStr);
+            const semana = concluidos.filter(a => a.data >= inicioSemana && a.data <= hojeStr);
+            const mes = concluidos.filter(a => a.data >= inicioMes && a.data <= hojeStr);
+            const total = concluidos;
+
+            const soma = arr => arr.reduce((s, a) => s + (typeof a.servicoPreco === 'number' ? a.servicoPreco : 0), 0);
+
+            // Atualiza cards
+            const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+
+            set('fat-hoje', formatBRL(soma(hoje)));
+            set('fat-hoje-qtd', `${hoje.length} atendimento${hoje.length !== 1 ? 's' : ''}`);
+
+            set('fat-semana', formatBRL(soma(semana)));
+            set('fat-semana-qtd', `${semana.length} atendimento${semana.length !== 1 ? 's' : ''}`);
+
+            set('fat-mes', formatBRL(soma(mes)));
+            set('fat-mes-qtd', `${mes.length} atendimento${mes.length !== 1 ? 's' : ''}`);
+
+            set('fat-total', formatBRL(soma(total)));
+            set('fat-total-qtd', `${total.length} atendimento${total.length !== 1 ? 's' : ''}`);
+
+            // Filtro ativo para lista detalhada
+            let listaFiltrada = concluidos;
+            let titulo = 'Todos os concluídos';
+
+            if (filtroFaturamento === 'hoje') {
+                listaFiltrada = hoje;
+                titulo = 'Hoje';
+            } else if (filtroFaturamento === 'semana') {
+                listaFiltrada = semana;
+                titulo = 'Esta semana';
+            } else if (filtroFaturamento === 'mes') {
+                listaFiltrada = mes;
+                titulo = 'Este mês';
+            } else if (filtroFaturamento === 'ano') {
+                listaFiltrada = concluidos.filter(a => a.data >= inicioAno && a.data <= hojeStr);
+                titulo = 'Este ano';
+            }
+
+            set('fat-filtro-total', formatBRL(soma(listaFiltrada)));
+
+            // Ordena por data (mais recente primeiro)
+            listaFiltrada.sort((a, b) => {
+                const da = (a.data || '') + (a.horario || '');
+                const db_ = (b.data || '') + (b.horario || '');
+                return db_.localeCompare(da);
+            });
+
+            // Renderiza lista agrupada por dia
+            const container = document.getElementById('lista-faturamento');
+            if (!container) return;
+            container.innerHTML = '';
+
+            if (listaFiltrada.length === 0) {
+                container.innerHTML = `
+                    <div class="agendamento-vazio">
+                        <i class="bi bi-cash-stack"></i>
+                        <p class="mb-0">Nenhum atendimento concluído ${filtroFaturamento !== 'todos' ? 'neste período' : ''}.</p>
+                    </div>`;
+                return;
+            }
+
+            // Agrupa por data
+            const porDia = {};
+            listaFiltrada.forEach(a => {
+                if (!porDia[a.data]) porDia[a.data] = [];
+                porDia[a.data].push(a);
+            });
+
+            // Ordena dias (mais recente primeiro)
+            const diasOrdenados = Object.keys(porDia).sort().reverse();
+
+            diasOrdenados.forEach(data => {
+                const itens = porDia[data].sort((a, b) => (b.horario || '').localeCompare(a.horario || ''));
+                const totalDia = soma(itens);
+                const dataFmt = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR', {
+                    weekday: 'long', day: 'numeric', month: 'long'
+                });
+
+                const titulo = document.createElement('div');
+                titulo.className = 'fat-dia-titulo';
+                titulo.innerHTML = `
+                    <h6><i class="bi bi-calendar-check text-success"></i> ${dataFmt}</h6>
+                    <span class="total">${formatBRL(totalDia)} <small class="text-muted">(${itens.length} atend.)</small></span>
+                `;
+                container.appendChild(titulo);
+
+                itens.forEach(a => {
+                    const wrapper = document.createElement('div');
+                    wrapper.innerHTML = `
+                        <div class="fat-item">
+                            <div class="fat-item-info">
+                                <strong>${a.horario} — ${a.clienteNome || 'Sem nome'}</strong>
+                                <small>💈 ${a.servicoNome || '-'} • 📞 ${a.clienteTelefone || '-'}</small>
+                            </div>
+                            <div class="fat-item-valor">${formatBRL(a.servicoPreco || 0)}</div>
+                        </div>`;
+                    while (wrapper.firstChild) container.appendChild(wrapper.firstChild);
+                });
+            });
+        }
+
+        // ============================================
+        // BLOQUEIOS
+        // ============================================
         window.bloquearDiaInteiro = function() {
             const data = document.getElementById('bloqueio-dia-data').value;
             const motivo = document.getElementById('bloqueio-dia-motivo').value.trim() || 'Folga';
-
             if (!data) { alert('Selecione uma data!'); return; }
-
-            db.ref('bloqueios-dia/' + data).set({
-                motivo: motivo,
-                criadoEm: Date.now()
-            }).then(() => {
+            db.ref('bloqueios-dia/' + data).set({ motivo, criadoEm: Date.now() }).then(() => {
                 alert('✅ Dia ' + new Date(data + 'T00:00:00').toLocaleDateString('pt-BR') + ' bloqueado!');
                 document.getElementById('bloqueio-dia-data').value = '';
                 document.getElementById('bloqueio-dia-motivo').value = '';
@@ -1263,17 +1546,14 @@
             const data = document.getElementById('bloqueio-hora-data').value;
             const container = document.getElementById('horarios-para-bloquear');
             if (!container) return;
-
             if (!data) {
                 container.innerHTML = '<p class="text-muted small">Selecione uma data para ver os horários.</p>';
                 return;
             }
 
             const horarios = [];
-            for (let h = 9; h < 20; h++) {
-                for (let m = 0; m < 60; m += 30) {
-                    horarios.push(`${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`);
-                }
+            for (let h = 9; h < 20; h++) for (let m = 0; m < 60; m += 30) {
+                horarios.push(`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`);
             }
 
             Promise.all([
@@ -1281,23 +1561,15 @@
                 db.ref('bloqueios-dia/' + data).once('value')
             ]).then(([snapHoras, snapDia]) => {
                 const jaBloqueados = snapHoras.val() || {};
-                const diaInteiro = snapDia.exists();
-
-                if (diaInteiro) {
+                if (snapDia.exists()) {
                     container.innerHTML = '<p class="text-danger small"><i class="bi bi-exclamation-triangle"></i> Este dia já está bloqueado por completo.</p>';
                     return;
                 }
-
                 let html = '<p class="text-white small mb-2">Marque os horários que deseja bloquear:</p><div>';
                 horarios.forEach(hora => {
                     const marcado = jaBloqueados[hora] ? 'checked' : '';
                     const classeMarcado = jaBloqueados[hora] ? 'marcado' : '';
-                    html += `
-                        <label class="horario-check ${classeMarcado}" data-hora="${hora}">
-                            <input type="checkbox" value="${hora}" ${marcado} onchange="toggleHorarioCheck(this)">
-                            ${hora}
-                        </label>
-                    `;
+                    html += `<label class="horario-check ${classeMarcado}"><input type="checkbox" value="${hora}" ${marcado} onchange="toggleHorarioCheck(this)"> ${hora}</label>`;
                 });
                 html += '</div>';
                 container.innerHTML = html;
@@ -1306,36 +1578,23 @@
 
         window.toggleHorarioCheck = function(input) {
             const label = input.closest('.horario-check');
-            if (input.checked) label.classList.add('marcado');
-            else label.classList.remove('marcado');
+            if (input.checked) label.classList.add('marcado'); else label.classList.remove('marcado');
         };
 
         window.bloquearHorariosSelecionados = function() {
             const data = document.getElementById('bloqueio-hora-data').value;
             const motivo = document.getElementById('bloqueio-hora-motivo').value.trim() || 'Bloqueado';
-
             if (!data) { alert('Selecione uma data!'); return; }
 
             const checkboxes = document.querySelectorAll('#horarios-para-bloquear input[type="checkbox"]');
-            if (checkboxes.length === 0) {
-                alert('Nenhum horário disponível. Selecione uma data primeiro.');
-                return;
-            }
+            if (checkboxes.length === 0) { alert('Nenhum horário disponível.'); return; }
 
             let selecionados = [];
-            checkboxes.forEach(cb => {
-                if (cb.checked) selecionados.push(cb.value);
-            });
-
-            if (selecionados.length === 0) {
-                alert('Selecione pelo menos um horário!');
-                return;
-            }
+            checkboxes.forEach(cb => { if (cb.checked) selecionados.push(cb.value); });
+            if (selecionados.length === 0) { alert('Selecione pelo menos um horário!'); return; }
 
             const updates = {};
-            selecionados.forEach(hora => {
-                updates['bloqueios/' + data + '/' + hora] = motivo;
-            });
+            selecionados.forEach(hora => { updates['bloqueios/' + data + '/' + hora] = motivo; });
 
             db.ref().update(updates).then(() => {
                 alert(`✅ ${selecionados.length} horário(s) bloqueado(s)!`);
@@ -1344,44 +1603,30 @@
             });
         };
 
-        window.toggleDiaSemana = function(el) {
-            el.classList.toggle('ativo');
-        };
+        window.toggleDiaSemana = function(el) { el.classList.toggle('ativo'); };
 
         window.salvarDiasSemana = function() {
             const botoes = document.querySelectorAll('.dia-semana-btn');
             const diasAtivos = [];
-            botoes.forEach(btn => {
-                if (btn.classList.contains('ativo')) {
-                    diasAtivos.push(parseInt(btn.dataset.dia));
-                }
-            });
+            botoes.forEach(btn => { if (btn.classList.contains('ativo')) diasAtivos.push(parseInt(btn.dataset.dia)); });
 
             const updates = {};
-            for (let i = 0; i <= 6; i++) {
-                updates['bloqueios-semana/' + i] = null;
-            }
-            diasAtivos.forEach(dia => {
-                updates['bloqueios-semana/' + dia] = true;
-            });
+            for (let i = 0; i <= 6; i++) updates['bloqueios-semana/' + i] = null;
+            diasAtivos.forEach(dia => { updates['bloqueios-semana/' + dia] = true; });
 
             db.ref().update(updates).then(() => {
-                if (diasAtivos.length === 0) {
-                    alert('✅ Nenhum dia da semana bloqueado.');
-                } else {
-                    const nomes = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
-                    const nomesAtivos = diasAtivos.map(d => nomes[d]).join(', ');
-                    alert('✅ Bloqueado toda semana: ' + nomesAtivos);
+                if (diasAtivos.length === 0) alert('✅ Nenhum dia bloqueado.');
+                else {
+                    const nomes = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+                    alert('✅ Bloqueado: ' + diasAtivos.map(d => nomes[d]).join(', '));
                 }
             });
         };
 
         function carregarDiasSemana(bloqueios) {
-            const botoes = document.querySelectorAll('.dia-semana-btn');
-            botoes.forEach(btn => {
+            document.querySelectorAll('.dia-semana-btn').forEach(btn => {
                 const dia = parseInt(btn.dataset.dia);
-                if (bloqueios[dia]) btn.classList.add('ativo');
-                else btn.classList.remove('ativo');
+                if (bloqueios[dia]) btn.classList.add('ativo'); else btn.classList.remove('ativo');
             });
         }
 
@@ -1406,20 +1651,8 @@
                     temAlgo = true;
                     html += '<h6 class="text-white mt-3 mb-2"><i class="bi bi-calendar-x text-danger"></i> Dias inteiros bloqueados:</h6>';
                     datasDia.forEach(data => {
-                        const info = dias[data];
                         const dataFmt = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR');
-                        const motivo = info.motivo || 'Folga';
-                        html += `
-                            <div class="bloqueio-item dia-inteiro">
-                                <div>
-                                    <strong>${dataFmt}</strong>
-                                    <small class="d-block text-muted">${motivo}</small>
-                                </div>
-                                <button class="btn btn-sm btn-danger" onclick="desbloquearDiaInteiro('${data}')">
-                                    <i class="bi bi-trash"></i> Remover
-                                </button>
-                            </div>
-                        `;
+                        html += `<div class="bloqueio-item dia-inteiro"><div><strong>${dataFmt}</strong><small class="d-block text-muted">${dias[data].motivo || 'Folga'}</small></div><button class="btn btn-sm btn-danger" onclick="desbloquearDiaInteiro('${data}')"><i class="bi bi-trash"></i> Remover</button></div>`;
                     });
                 }
 
@@ -1433,12 +1666,8 @@
                         const dataFmt = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR');
                         const listaHoras = Object.keys(horasDoDia).sort();
                         if (listaHoras.length === 0) return;
-
-                        html += `<div class="bloqueio-item">`;
-                        html += `<div><strong>${dataFmt}</strong><div class="d-flex gap-1 flex-wrap mt-2">`;
-                        listaHoras.forEach(hora => {
-                            html += `<button class="btn btn-sm btn-outline-danger" onclick="desbloquearHorario('${data}', '${hora}')">${hora} ✕</button>`;
-                        });
+                        html += `<div class="bloqueio-item"><div><strong>${dataFmt}</strong><div class="d-flex gap-1 flex-wrap mt-2">`;
+                        listaHoras.forEach(hora => { html += `<button class="btn btn-sm btn-outline-danger" onclick="desbloquearHorario('${data}', '${hora}')">${hora} ✕</button>`; });
                         html += `</div></div></div>`;
                     });
                 }
@@ -1446,46 +1675,30 @@
                 const diasSemana = Object.keys(semana).filter(d => semana[d]);
                 if (diasSemana.length > 0) {
                     temAlgo = true;
-                    const nomes = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+                    const nomes = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
                     html += '<h6 class="text-white mt-4 mb-2"><i class="bi bi-arrow-repeat text-info"></i> Dias da semana recorrentes:</h6>';
                     diasSemana.forEach(dia => {
-                        html += `
-                            <div class="bloqueio-item recorrente">
-                                <div><strong>${nomes[dia]}s</strong> <small class="text-muted">(toda semana)</small></div>
-                                <button class="btn btn-sm btn-danger" onclick="desbloquearDiaSemana(${dia})">
-                                    <i class="bi bi-trash"></i> Remover
-                                </button>
-                            </div>
-                        `;
+                        html += `<div class="bloqueio-item recorrente"><div><strong>${nomes[dia]}s</strong> <small class="text-muted">(toda semana)</small></div><button class="btn btn-sm btn-danger" onclick="desbloquearDiaSemana(${dia})"><i class="bi bi-trash"></i> Remover</button></div>`;
                     });
                 }
 
-                if (!temAlgo) {
-                    html = '<p class="text-muted small">Nenhum bloqueio ativo no momento.</p>';
-                }
-
+                if (!temAlgo) html = '<p class="text-muted small">Nenhum bloqueio ativo.</p>';
                 container.innerHTML = html;
             });
         }
 
         window.desbloquearDiaInteiro = function(data) {
-            if (confirm('Remover bloqueio do dia ' + new Date(data + 'T00:00:00').toLocaleDateString('pt-BR') + '?')) {
-                db.ref('bloqueios-dia/' + data).remove();
-            }
+            if (confirm('Remover bloqueio?')) db.ref('bloqueios-dia/' + data).remove();
         };
-
-        window.desbloquearHorario = function(data, hora) {
-            db.ref('bloqueios/' + data + '/' + hora).remove();
-        };
-
+        window.desbloquearHorario = function(data, hora) { db.ref('bloqueios/' + data + '/' + hora).remove(); };
         window.desbloquearDiaSemana = function(dia) {
-            const nomes = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
-            if (confirm('Remover bloqueio de todas as ' + nomes[dia] + 's?')) {
-                db.ref('bloqueios-semana/' + dia).remove();
-            }
+            const nomes = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+            if (confirm('Remover todas as ' + nomes[dia] + 's?')) db.ref('bloqueios-semana/' + dia).remove();
         };
 
-        // ============ LISTA DE ESPERA ============
+        // ============================================
+        // LISTA DE ESPERA
+        // ============================================
         function renderizarListaEspera() {
             const container = document.getElementById('lista-espera-admin');
             const badge = document.getElementById('badge-espera');
@@ -1501,119 +1714,69 @@
             }
 
             let html = '';
-
             datas.forEach(data => {
                 const itens = listaEspera[data];
                 if (!itens) return;
-
-                const lista = Object.entries(itens)
-                    .map(([id, item]) => ({ id, ...item }))
+                const lista = Object.entries(itens).map(([id, item]) => ({ id, ...item }))
                     .filter(item => item.status !== 'convertido')
                     .sort((a, b) => (a.criadoEm || 0) - (b.criadoEm || 0));
-
                 if (lista.length === 0) return;
-
                 totalGeral += lista.length;
 
-                const dataFmt = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR', {
-                    weekday: 'long', day: 'numeric', month: 'long'
-                });
-
-                html += `
-                    <div class="espera-dia-bloco">
-                        <div class="espera-dia-titulo">
-                            <h6><i class="bi bi-calendar-event text-warning"></i> ${dataFmt}</h6>
-                            <span class="badge bg-warning text-dark">${lista.length} pessoa${lista.length > 1 ? 's' : ''}</span>
-                        </div>
-                `;
+                const dataFmt = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
+                html += `<div class="espera-dia-bloco"><div class="espera-dia-titulo"><h6><i class="bi bi-calendar-event text-warning"></i> ${dataFmt}</h6><span class="badge bg-warning text-dark">${lista.length} pessoa${lista.length > 1 ? 's' : ''}</span></div>`;
 
                 lista.forEach((item, index) => {
-                    const posicao = index + 1;
-                    const horaEntrada = item.criadoEm
-                        ? new Date(item.criadoEm).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
-                        : '';
-
-                    html += `
-                        <div class="espera-item">
-                            <div class="espera-item-info">
-                                <strong>${posicao}º — ${item.nome || 'Sem nome'}</strong>
-                                <small>
-                                    📞 ${item.telefone || '-'} • 
-                                    💈 ${item.servicoNome || '-'}
-                                    ${horaEntrada ? ` • 🕐 ${horaEntrada}` : ''}
-                                </small>
-                            </div>
-                            <div class="espera-item-actions">
-                                <button class="btn btn-sm btn-success" onclick="chamarEspera('${data}', '${item.id}')" title="Chamar no WhatsApp">
-                                    <i class="bi bi-whatsapp"></i> Chamar
-                                </button>
-                                <button class="btn btn-sm btn-primary" onclick="marcarConvertido('${data}', '${item.id}')" title="Marcar como atendido">
-                                    <i class="bi bi-check-circle"></i>
-                                </button>
-                                <button class="btn btn-sm btn-danger" onclick="removerEspera('${data}', '${item.id}')" title="Remover da lista">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                    `;
+                    const horaEntrada = item.criadoEm ? new Date(item.criadoEm).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '';
+                    html += `<div class="espera-item"><div class="espera-item-info"><strong>${index + 1}º — ${item.nome || 'Sem nome'}</strong><small>📞 ${item.telefone || '-'} • 💈 ${item.servicoNome || '-'}${horaEntrada ? ` • 🕐 ${horaEntrada}` : ''}</small></div><div class="espera-item-actions"><button class="btn btn-sm btn-success" onclick="chamarEspera('${data}', '${item.id}')"><i class="bi bi-whatsapp"></i> Chamar</button><button class="btn btn-sm btn-primary" onclick="marcarConvertido('${data}', '${item.id}')"><i class="bi bi-check-circle"></i></button><button class="btn btn-sm btn-danger" onclick="removerEspera('${data}', '${item.id}')"><i class="bi bi-trash"></i></button></div></div>`;
                 });
-
                 html += `</div>`;
             });
 
             if (!html) {
-                container.innerHTML = '<p class="text-muted text-center py-4">📭 Nenhum cliente na lista de espera.</p>';
+                container.innerHTML = '<p class="text-muted text-center py-4">📭 Nenhum cliente.</p>';
                 if (badge) badge.style.display = 'none';
                 return;
             }
-
             container.innerHTML = html;
-
-            if (badge) {
-                badge.textContent = totalGeral;
-                badge.style.display = totalGeral > 0 ? 'inline-block' : 'none';
-            }
+            if (badge) { badge.textContent = totalGeral; badge.style.display = totalGeral > 0 ? 'inline-block' : 'none'; }
         }
 
         window.chamarEspera = function(data, id) {
             const item = listaEspera[data] && listaEspera[data][id];
             if (!item) return;
-
             const telLimpo = (item.telefone || '').replace(/\D/g, '');
-            if (!telLimpo) { alert('Sem telefone cadastrado.'); return; }
-
+            if (!telLimpo) { alert('Sem telefone.'); return; }
             const primeiro = (item.nome || '').split(' ')[0] || 'tudo bem';
             const dataFmt = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
-
             const msg = `Olá ${primeiro}! Aqui é o Seu Jorge. Vagou um horário no dia ${dataFmt}. Ainda tem interesse em agendar ${item.servicoNome || 'um corte'}? Me responde aqui rapidinho. 💈`;
-
             window.open(`https://wa.me/55${telLimpo}?text=${encodeURIComponent(msg)}`, '_blank');
         };
 
         window.marcarConvertido = function(data, id) {
-            if (!confirm('Marcar como atendido? (vai sair da lista)')) return;
+            if (!confirm('Marcar como atendido?')) return;
             db.ref('lista-espera/' + data + '/' + id + '/status').set('convertido');
         };
-
         window.removerEspera = function(data, id) {
-            if (!confirm('Remover da lista de espera?')) return;
+            if (!confirm('Remover da lista?')) return;
             db.ref('lista-espera/' + data + '/' + id).remove();
         };
 
-        // ============ SENHA ============
+        // ============================================
+        // SENHA
+        // ============================================
         window.alterarSenha = function() {
             const nova = document.getElementById('nova-senha').value;
-            if (!nova || nova.length < 4) {
-                alert('A senha precisa ter pelo menos 4 caracteres.');
-                return;
-            }
+            if (!nova || nova.length < 4) { alert('Mínimo 4 caracteres.'); return; }
             db.ref('config/admin/senha').set(nova.trim()).then(() => {
-                alert('Senha alterada com sucesso!');
+                alert('Senha alterada!');
                 document.getElementById('nova-senha').value = '';
             });
         };
 
-        // ============ INICIALIZAÇÃO ============
+        // ============================================
+        // INICIALIZAÇÃO
+        // ============================================
         if (sessionStorage.getItem('logado') === 'true') {
             window.abrirPainel();
         }
