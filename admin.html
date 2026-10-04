@@ -10,11 +10,349 @@
     <link rel="stylesheet" href="style.css">
     <style>
         body { background: #0a0a0a !important; color: #fff; padding-top: 0 !important; }
-        .nav-pills .nav-link { color: #fff; border-radius: 10px; }
-        .nav-pills .nav-link.active { background: var(--cor-primaria); }
         .card { color: #333; }
 
-        .filtros-agendamentos { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+        /* ============ DASHBOARD ============ */
+        .dash-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #1a1a1a;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .dash-header h2 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin: 0;
+            color: #fff;
+        }
+        .dash-header .saudacao {
+            color: #888;
+            font-size: .9rem;
+        }
+
+        .btn-menu-abrir {
+            background: var(--cor-primaria);
+            color: #fff;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 12px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+            font-size: .95rem;
+        }
+        .btn-menu-abrir:hover {
+            background: #b91c2c;
+            transform: translateY(-2px);
+        }
+        .btn-menu-abrir i { font-size: 1.2rem; }
+
+        /* CARDS DE RESUMO */
+        .resumo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .resumo-card {
+            background: #1a1a1a;
+            border-radius: 14px;
+            padding: 18px;
+            border-left: 4px solid var(--cor-primaria);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .resumo-card.hoje { border-left-color: #ffc107; }
+        .resumo-card.amanha { border-left-color: #17a2b8; }
+        .resumo-card.semana { border-left-color: #28a745; }
+        .resumo-card.espera { border-left-color: #6f42c1; }
+        .resumo-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            font-size: 1.4rem;
+            background: rgba(220,53,69,.15);
+            flex-shrink: 0;
+        }
+        .resumo-card.hoje .resumo-icon { background: rgba(255,199,7,.15); }
+        .resumo-card.amanha .resumo-icon { background: rgba(23,162,184,.15); }
+        .resumo-card.semana .resumo-icon { background: rgba(40,167,69,.15); }
+        .resumo-card.espera .resumo-icon { background: rgba(111,66,193,.15); }
+        .resumo-info strong {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #fff;
+            line-height: 1;
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 1px;
+        }
+        .resumo-info span {
+            color: #888;
+            font-size: .8rem;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+
+        /* SEÇÃO DE AGENDAMENTOS */
+        .secao {
+            margin-bottom: 32px;
+        }
+        .secao-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .secao-titulo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #fff;
+            margin: 0;
+        }
+        .secao-titulo i { color: var(--cor-primaria); }
+        .secao-badge {
+            background: #fff;
+            color: #0a0a0a;
+            font-size: .75rem;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+        .secao-badge.hoje { background: #ffc107; }
+        .secao-badge.amanha { background: #17a2b8; color: #fff; }
+
+        /* CARD DE AGENDAMENTO SIMPLIFICADO */
+        .ag-simples {
+            background: #fff;
+            color: #333;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            border-left: 4px solid var(--cor-primaria);
+            transition: 0.2s;
+        }
+        .ag-simples:hover {
+            transform: translateX(3px);
+            box-shadow: 0 6px 18px rgba(0,0,0,.2);
+        }
+        .ag-simples.hj { border-left-color: #ffc107; background: #fffbf0; }
+        .ag-simples.concluido { border-left-color: #28a745; background: #f0fff4; opacity: .75; }
+        .ag-simples.cancelado { border-left-color: #6c757d; background: #f8f8f8; opacity: .6; text-decoration: line-through; }
+        .ag-hora {
+            background: var(--cor-primaria);
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 1px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            min-width: 62px;
+            text-align: center;
+        }
+        .ag-simples.hj .ag-hora { background: #ffc107; color: #333; }
+        .ag-simples.concluido .ag-hora { background: #28a745; }
+        .ag-simples.cancelado .ag-hora { background: #6c757d; }
+
+        .ag-info { flex: 1; min-width: 180px; }
+        .ag-info strong {
+            display: block;
+            font-size: 1rem;
+            color: #222;
+            margin-bottom: 2px;
+        }
+        .ag-info small {
+            color: #666;
+            font-size: .82rem;
+            display: block;
+        }
+        .ag-acoes {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .ag-acoes .btn { padding: 6px 10px; font-size: .85rem; }
+
+        .msg-vazia {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 30px 20px;
+            text-align: center;
+            color: #666;
+        }
+        .msg-vazia i {
+            font-size: 2.5rem;
+            color: #333;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* ============ MENU LATERAL (DRAWER) ============ */
+        .menu-drawer {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 340px;
+            max-width: 90vw;
+            height: 100vh;
+            background: #0f0f0f;
+            border-left: 2px solid var(--cor-primaria);
+            transform: translateX(100%);
+            transition: transform .3s cubic-bezier(.4,0,.2,1);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -10px 0 40px rgba(0,0,0,.6);
+        }
+        .menu-drawer.open { transform: translateX(0); }
+
+        .menu-header {
+            padding: 24px;
+            border-bottom: 1px solid #1a1a1a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .menu-header h3 {
+            margin: 0;
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 2px;
+            font-size: 1.4rem;
+            color: #fff;
+        }
+        .menu-header h3 i { color: var(--cor-primaria); }
+
+        .menu-fechar {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: #1a1a1a;
+            color: #fff;
+            border: none;
+            display: grid;
+            place-items: center;
+            transition: 0.2s;
+        }
+        .menu-fechar:hover { background: var(--cor-primaria); }
+
+        .menu-lista {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .menu-item {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 16px;
+            color: #fff;
+            border: none;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: 0.2s;
+            cursor: pointer;
+            width: 100%;
+        }
+        .menu-item:hover {
+            background: #252525;
+            transform: translateX(-4px);
+            border-left: 4px solid var(--cor-primaria);
+        }
+        .menu-item-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            background: rgba(220,53,69,.15);
+            display: grid;
+            place-items: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+        .menu-item-info { flex: 1; }
+        .menu-item-info strong { display: block; font-size: .95rem; }
+        .menu-item-info small { color: #888; font-size: .78rem; font-weight: 400; }
+        .menu-item .badge { font-size: .7rem; }
+
+        .overlay-menu {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.7);
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s;
+            z-index: 1999;
+        }
+        .overlay-menu.active { opacity: 1; visibility: visible; }
+
+        /* ============ VIEWS INTERNAS (as ferramentas) ============ */
+        .view {
+            display: none;
+        }
+        .view.active {
+            display: block;
+        }
+
+        .view-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #1a1a1a;
+            flex-wrap: wrap;
+        }
+        .btn-voltar {
+            background: #1a1a1a;
+            color: #fff;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+            font-size: .9rem;
+        }
+        .btn-voltar:hover { background: var(--cor-primaria); }
+        .view-header h2 {
+            margin: 0;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        /* Mantém os estilos antigos para as ferramentas */
+        .filtros-agendamentos {
+            display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;
+        }
         .filtro-btn {
             background: #1a1a1a; color: #fff; border: 2px solid #333;
             border-radius: 10px; padding: 8px 16px; font-weight: 600;
@@ -22,7 +360,9 @@
             display: flex; align-items: center; gap: 6px;
         }
         .filtro-btn:hover { border-color: var(--cor-primaria); }
-        .filtro-btn.ativo { background: var(--cor-primaria); border-color: var(--cor-primaria); color: #fff; }
+        .filtro-btn.ativo {
+            background: var(--cor-primaria); border-color: var(--cor-primaria); color: #fff;
+        }
         .filtro-btn .contador {
             background: rgba(255,255,255,.2); padding: 2px 8px;
             border-radius: 10px; font-size: 0.75rem;
@@ -35,9 +375,15 @@
             display: flex; justify-content: space-between; align-items: center;
             gap: 15px; flex-wrap: wrap; transition: all 0.2s;
         }
-        .agendamento-item:hover { transform: translateX(4px); box-shadow: 0 6px 18px rgba(0,0,0,.15); }
-        .agendamento-item.status-concluido { border-left-color: var(--cor-sucesso); background: #f0fff4; }
-        .agendamento-item.status-cancelado { border-left-color: #6c757d; background: #f8f8f8; opacity: 0.7; }
+        .agendamento-item:hover {
+            transform: translateX(4px); box-shadow: 0 6px 18px rgba(0,0,0,.15);
+        }
+        .agendamento-item.status-concluido {
+            border-left-color: var(--cor-sucesso); background: #f0fff4;
+        }
+        .agendamento-item.status-cancelado {
+            border-left-color: #6c757d; background: #f8f8f8; opacity: 0.7;
+        }
         .agendamento-item.status-passado { border-left-color: #adb5bd; }
         .agendamento-item.status-hoje { border-left-color: #ffc107; background: #fffbf0; }
 
@@ -61,7 +407,6 @@
             font-size: 0.9rem; color: #555;
         }
         .agendamento-detalhes span { display: inline-flex; align-items: center; gap: 4px; }
-
         .agendamento-actions { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
 
         .badge-status {
@@ -88,41 +433,30 @@
         .servico-item:hover { transform: translateX(4px); box-shadow: 0 6px 18px rgba(0,0,0,.15); }
         .servico-item.servico-vazio { border-left-color: #ffc107; background: #fffbf0; }
         .servico-item.servico-inativo { border-left-color: #6c757d; background: #f8f8f8; opacity: 0.7; }
-
-        .servico-info {
-            flex: 1; min-width: 250px;
-            display: flex; align-items: center; gap: 15px;
-        }
+        .servico-info { flex: 1; min-width: 250px; display: flex; align-items: center; gap: 15px; }
         .servico-icone-lista {
             width: 55px; height: 55px; border-radius: 50%;
             background: linear-gradient(135deg, var(--cor-primaria), var(--cor-primaria-escura));
             color: #fff; display: flex; align-items: center; justify-content: center;
             font-size: 1.6rem; flex-shrink: 0;
         }
-        .servico-item.servico-vazio .servico-icone-lista {
-            background: linear-gradient(135deg, #ffc107, #e0a800);
-        }
+        .servico-item.servico-vazio .servico-icone-lista { background: linear-gradient(135deg, #ffc107, #e0a800); }
         .servico-texto { flex: 1; }
         .servico-nome-lista {
             font-size: 1.1rem; font-weight: 700; margin-bottom: 4px;
             color: #222; text-transform: uppercase; letter-spacing: 0.5px;
         }
         .servico-detalhes-lista {
-            display: flex; flex-wrap: wrap; gap: 15px;
-            font-size: 0.9rem; color: #555;
+            display: flex; flex-wrap: wrap; gap: 15px; font-size: 0.9rem; color: #555;
         }
-        .servico-detalhes-lista span {
-            display: inline-flex; align-items: center; gap: 4px;
-        }
+        .servico-detalhes-lista span { display: inline-flex; align-items: center; gap: 4px; }
         .servico-preco-lista {
             font-weight: 700; color: var(--cor-primaria);
             font-size: 1.1rem; font-family: 'Bebas Neue', sans-serif;
             letter-spacing: 1px;
         }
         .servico-item.servico-vazio .servico-preco-lista { color: #856404; }
-        .servico-acoes {
-            display: flex; gap: 6px; flex-wrap: wrap; align-items: center;
-        }
+        .servico-acoes { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
 
         .bloqueio-section {
             background: #1a1a1a; border-radius: 12px; padding: 20px;
@@ -176,19 +510,16 @@
         .espera-item-info small { color: #666; font-size: 0.85rem; }
         .espera-item-actions { display: flex; gap: 5px; flex-wrap: wrap; }
 
-        /* FATURAMENTO */
         .faturamento-card {
             background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
             border-radius: 16px; padding: 22px;
             border-left: 5px solid var(--cor-primaria);
             position: relative; overflow: hidden; transition: all 0.3s;
         }
-        .faturamento-card:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,.4); }
         .faturamento-card.hoje { border-left-color: #ffc107; }
         .faturamento-card.semana { border-left-color: #17a2b8; }
         .faturamento-card.mes { border-left-color: #28a745; }
         .faturamento-card.total { border-left-color: #7c3aed; }
-
         .faturamento-label {
             font-size: 0.85rem; font-weight: 600; color: #a8b2c1;
             text-transform: uppercase; letter-spacing: 1.5px;
@@ -198,7 +529,6 @@
         .faturamento-card.semana .faturamento-label i { color: #17a2b8; }
         .faturamento-card.mes .faturamento-label i { color: #28a745; }
         .faturamento-card.total .faturamento-label i { color: #7c3aed; }
-
         .faturamento-valor {
             font-size: 1.9rem; font-weight: 800; color: #fff;
             font-family: 'Bebas Neue', sans-serif;
@@ -216,7 +546,6 @@
             align-items: center; gap: 15px; flex-wrap: wrap;
             border-left: 4px solid var(--cor-sucesso); transition: all 0.2s;
         }
-        .fat-item:hover { transform: translateX(4px); box-shadow: 0 4px 12px rgba(0,0,0,.15); }
         .fat-item-info { flex: 1; min-width: 220px; }
         .fat-item-info strong { display: block; font-size: 1rem; color: #222; }
         .fat-item-info small { color: #666; font-size: 0.85rem; }
@@ -247,16 +576,11 @@
         /* CORREÇÕES DE CONTRASTE */
         .alert { color: #222 !important; border: none; }
         .alert-info { background: #cfe8ff !important; color: #0a3a6b !important; border-left: 5px solid #0d6efd; }
-        .alert-info strong { color: #084298 !important; }
-        .alert-info i { color: #0d6efd !important; }
         .alert-warning { background: #fff3cd !important; color: #664d03 !important; border-left: 5px solid #ffc107; }
-        .alert-warning strong { color: #664d03 !important; }
         .alert-success { background: #d1e7dd !important; color: #0f5132 !important; border-left: 5px solid #198754; }
         .alert-danger { background: #f8d7da !important; color: #842029 !important; border-left: 5px solid #dc3545; }
-        .alert-secondary { background: #e2e3e5 !important; color: #41464b !important; border-left: 5px solid #6c757d; }
 
         body .text-muted { color: #a8b2c1 !important; }
-        body .text-white-50 { color: rgba(255, 255, 255, 0.75) !important; }
         .card .text-muted, .agendamento-item .text-muted, .servico-item .text-muted,
         .espera-item .text-muted, .bloqueio-item .text-muted, .modal-content .text-muted {
             color: #666 !important;
@@ -264,7 +588,6 @@
 
         .form-control { color: #222 !important; background: #fff !important; border: 2px solid #dee2e6; }
         .form-control:focus { border-color: var(--cor-primaria); box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2); }
-        .form-control::placeholder { color: #999 !important; }
         .form-label { color: #e8edf7 !important; font-weight: 600; }
         .bloqueio-section label.text-white, .bloqueio-section .form-label, label.text-white {
             color: #e8edf7 !important;
@@ -274,20 +597,18 @@
         .modal-content .modal-title { color: #222 !important; }
         .modal-content .modal-body { color: #222 !important; }
 
-        .btn-outline-info { color: #4dd0e1 !important; border-color: #4dd0e1 !important; }
-        .btn-outline-info:hover { background: #4dd0e1 !important; color: #0a0a0a !important; }
-        .btn-outline-warning { color: #ffc107 !important; border-color: #ffc107 !important; }
-        .btn-outline-warning:hover { background: #ffc107 !important; color: #0a0a0a !important; }
-        .btn-outline-light { color: #fff !important; border-color: #fff !important; }
-        .btn-outline-light:hover { background: #fff !important; color: #0a0a0a !important; }
-        .btn-outline-success { color: #25d366 !important; border-color: #25d366 !important; }
-        .btn-outline-success:hover { background: #25d366 !important; color: #fff !important; }
-
         .bloqueio-section .text-muted { color: #a8b2c1 !important; }
         .badge.bg-secondary { background: #495057 !important; color: #fff !important; }
-        .filtro-btn .contador { background: rgba(255,255,255,.25); color: #fff; }
-        .filtro-btn.ativo .contador { background: rgba(0,0,0,.35); color: #fff; }
-        .agendamento-vazio p { color: #ccc !important; }
+
+        @media (max-width: 600px) {
+            .dash-header h2 { font-size: 1.3rem; }
+            .btn-menu-abrir { padding: 10px 16px; font-size: .85rem; }
+            .resumo-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .resumo-card { padding: 14px; }
+            .resumo-info strong { font-size: 1.2rem; }
+            .ag-simples { padding: 12px; }
+            .ag-info strong { font-size: .9rem; }
+        }
     </style>
 </head>
 <body>
@@ -330,13 +651,11 @@
         </div>
     </div>
 
+    <!-- ============ PAINEL ============ -->
     <div id="tela-painel" style="display: none;">
         <nav class="navbar navbar-dark bg-black border-bottom border-danger">
             <div class="container">
-                <span class="navbar-brand fw-bold">
-                    <i class="bi bi-scissors"></i> PAINEL
-                    <small class="text-muted ms-2" id="user-email" style="font-size: 0.7rem;"></small>
-                </span>
+                <span class="navbar-brand fw-bold"><i class="bi bi-scissors"></i> PAINEL</span>
                 <button class="btn btn-outline-light btn-sm" onclick="fazerLogout()">
                     <i class="bi bi-box-arrow-right"></i> Sair
                 </button>
@@ -344,307 +663,422 @@
         </nav>
 
         <div class="container py-4">
-            <ul class="nav nav-pills mb-4 flex-wrap">
-                <li class="nav-item">
-                    <a class="nav-link active" data-bs-toggle="pill" href="#aba-agendamentos">
-                        📅 Agendamentos
-                        <span class="badge bg-warning text-dark ms-1" id="badge-agendamentos" style="display:none;">0</span>
-                    </a>
-                </li>
-                <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#aba-servicos">✂️ Serviços</a></li>
-                <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#aba-bloqueios">🚫 Folgas</a></li>
-                <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="pill" href="#aba-espera" id="tab-espera">
-                        ⏳ Lista de Espera
-                        <span class="badge bg-warning text-dark ms-1" id="badge-espera" style="display:none;">0</span>
-                    </a>
-                </li>
-                <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#aba-faturamento">💰 Faturamento</a></li>
-                <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#aba-config">⚙️ Config</a></li>
-            </ul>
 
-            <div class="tab-content">
-                <div class="tab-pane fade show active" id="aba-agendamentos">
-                    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                        <div>
-                            <h4 class="text-white mb-1">📅 Agendamentos</h4>
-                            <p class="text-muted small mb-0">Todos os agendamentos ficam salvos aqui.</p>
-                        </div>
-                        <div class="d-flex gap-2 flex-wrap">
-                            <button class="btn btn-danger btn-sm fw-bold" onclick="abrirAvisarAmanha()">
-                                <i class="bi bi-megaphone-fill"></i> Avisar amanhã <span id="contador-amanha" class="badge bg-white text-danger ms-1">0</span>
-                            </button>
-                            <button class="btn btn-outline-info btn-sm" onclick="recarregarAgendamentos()">
-                                <i class="bi bi-arrow-clockwise"></i> Atualizar
-                            </button>
-                            <button class="btn btn-outline-warning btn-sm" onclick="limparAgendamentosAntigos()">
-                                <i class="bi bi-eraser"></i> Limpar antigos
-                            </button>
-                        </div>
+            <!-- ============ VIEW: DASHBOARD (INICIAL) ============ -->
+            <div class="view active" id="view-dashboard">
+
+                <div class="dash-header">
+                    <div>
+                        <h2>Olá, Seu Jorge! 👋</h2>
+                        <p class="saudacao mb-0" id="saudacao-data">Carregando...</p>
                     </div>
-
-                    <div id="aviso-notificacao" class="alert alert-warning d-flex align-items-center gap-2 small" role="alert" style="display: none !important;">
-                        <i class="bi bi-bell-slash fs-5"></i>
-                        <div class="flex-grow-1">
-                            <strong>Ative as notificações</strong> para receber avisos de lembretes no seu navegador.
-                        </div>
-                        <button class="btn btn-sm btn-dark fw-bold" onclick="ativarNotificacoesNavegador()">
-                            <i class="bi bi-bell"></i> Ativar
-                        </button>
-                    </div>
-
-                    <div class="filtros-agendamentos" id="filtros-agendamentos">
-                        <button class="filtro-btn ativo" data-filtro="todos">
-                            <i class="bi bi-list-ul"></i> Todos
-                            <span class="contador" id="cnt-todos">0</span>
-                        </button>
-                        <button class="filtro-btn" data-filtro="hoje">
-                            <i class="bi bi-calendar-day"></i> Hoje
-                            <span class="contador" id="cnt-hoje">0</span>
-                        </button>
-                        <button class="filtro-btn" data-filtro="proximos">
-                            <i class="bi bi-calendar-week"></i> Próximos
-                            <span class="contador" id="cnt-proximos">0</span>
-                        </button>
-                        <button class="filtro-btn" data-filtro="passados">
-                            <i class="bi bi-calendar-x"></i> Passados
-                            <span class="contador" id="cnt-passados">0</span>
-                        </button>
-                        <button class="filtro-btn" data-filtro="pendentes">
-                            <i class="bi bi-hourglass"></i> Pendentes
-                            <span class="contador" id="cnt-pendentes">0</span>
-                        </button>
-                        <button class="filtro-btn" data-filtro="concluidos">
-                            <i class="bi bi-check-circle"></i> Concluídos
-                            <span class="contador" id="cnt-concluidos">0</span>
-                        </button>
-                        <button class="filtro-btn" data-filtro="cancelados">
-                            <i class="bi bi-x-circle"></i> Cancelados
-                            <span class="contador" id="cnt-cancelados">0</span>
-                        </button>
-                    </div>
-
-                    <div id="lista-agendamentos"></div>
+                    <button class="btn-menu-abrir" onclick="abrirMenu()">
+                        <i class="bi bi-grid-3x3-gap-fill"></i>
+                        Mais ferramentas
+                    </button>
                 </div>
 
-                <div class="tab-pane fade" id="aba-servicos">
-                    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                        <div>
-                            <h4 class="text-white mb-1">✂️ Serviços</h4>
-                            <p class="text-muted small mb-0">Gerencie os serviços que aparecem no site do cliente.</p>
-                        </div>
-                        <div class="d-flex gap-2">
-                            <button class="btn btn-outline-info btn-sm" onclick="recarregarServicos()">
-                                <i class="bi bi-arrow-clockwise"></i> Atualizar
-                            </button>
-                            <button class="btn btn-outline-warning btn-sm" onclick="limparServicosVazios()">
-                                <i class="bi bi-eraser"></i> Limpar vazios
-                            </button>
-                            <button class="btn btn-danger" onclick="adicionarServico()">
-                                <i class="bi bi-plus-circle"></i> Adicionar Serviço
-                            </button>
+                <!-- Cards de resumo -->
+                <div class="resumo-grid">
+                    <div class="resumo-card hoje">
+                        <div class="resumo-icon">📅</div>
+                        <div class="resumo-info">
+                            <strong id="res-hoje">0</strong>
+                            <span>Hoje</span>
                         </div>
                     </div>
-
-                    <div class="alert alert-info d-flex align-items-center gap-2 small" role="alert">
-                        <i class="bi bi-info-circle fs-5"></i>
-                        <div>
-                            Estes são os serviços que aparecem no site do cliente. Clique em <strong>✏️</strong> para editar ou <strong>🗑️</strong> para remover.
+                    <div class="resumo-card amanha">
+                        <div class="resumo-icon">⏭️</div>
+                        <div class="resumo-info">
+                            <strong id="res-amanha">0</strong>
+                            <span>Amanhã</span>
                         </div>
                     </div>
-
-                    <div class="filtros-agendamentos" id="filtros-servicos">
-                        <button class="filtro-btn ativo" data-filtro-serv="todos">
-                            <i class="bi bi-list-ul"></i> Todos
-                            <span class="contador" id="cnt-serv-todos">0</span>
-                        </button>
-                        <button class="filtro-btn" data-filtro-serv="ok">
-                            <i class="bi bi-check-circle"></i> Configurados
-                            <span class="contador" id="cnt-serv-ok">0</span>
-                        </button>
-                        <button class="filtro-btn" data-filtro-serv="vazios">
-                            <i class="bi bi-exclamation-triangle"></i> Não configurados
-                            <span class="contador" id="cnt-serv-vazios">0</span>
-                        </button>
-                    </div>
-
-                    <div id="lista-servicos"></div>
-                </div>
-
-                <div class="tab-pane fade" id="aba-bloqueios">
-                    <h4 class="text-white mb-4">🚫 Folgas & Bloqueios</h4>
-                    <p class="text-muted small mb-4">Configure os dias e horários que você não vai atender.</p>
-
-                    <div class="bloqueio-section">
-                        <h6><i class="bi bi-calendar-x text-danger"></i> 1. Bloquear dia inteiro</h6>
-                        <p class="text-muted small mb-3">Ex: feriado, folga, viagem...</p>
-                        <div class="row g-2">
-                            <div class="col-md-5">
-                                <input type="date" id="bloqueio-dia-data" class="form-control">
-                            </div>
-                            <div class="col-md-5">
-                                <input type="text" id="bloqueio-dia-motivo" class="form-control" placeholder="Motivo (opcional)">
-                            </div>
-                            <div class="col-md-2">
-                                <button class="btn btn-danger w-100" onclick="bloquearDiaInteiro()">
-                                    <i class="bi bi-lock-fill"></i> Bloquear
-                                </button>
-                            </div>
+                    <div class="resumo-card semana">
+                        <div class="resumo-icon">📊</div>
+                        <div class="resumo-info">
+                            <strong id="res-semana">0</strong>
+                            <span>Próximos 7 dias</span>
                         </div>
                     </div>
-
-                    <div class="bloqueio-section">
-                        <h6><i class="bi bi-clock-history text-warning"></i> 2. Bloquear horários específicos</h6>
-                        <p class="text-muted small mb-3">Ex: almoço, compromisso, dentista...</p>
-                        <div class="row g-2 mb-3">
-                            <div class="col-md-6">
-                                <label class="text-white small">Data</label>
-                                <input type="date" id="bloqueio-hora-data" class="form-control" onchange="carregarHorariosParaBloquear()">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="text-white small">Motivo (opcional)</label>
-                                <input type="text" id="bloqueio-hora-motivo" class="form-control" placeholder="Ex: Almoço">
-                            </div>
+                    <div class="resumo-card espera">
+                        <div class="resumo-icon">⏳</div>
+                        <div class="resumo-info">
+                            <strong id="res-espera">0</strong>
+                            <span>Na fila</span>
                         </div>
-                        <div id="horarios-para-bloquear" class="mb-3">
-                            <p class="text-muted small">Selecione uma data para ver os horários.</p>
-                        </div>
-                        <button class="btn btn-warning w-100" onclick="bloquearHorariosSelecionados()">
-                            <i class="bi bi-lock-fill"></i> Bloquear horários selecionados
-                        </button>
-                    </div>
-
-                    <div class="bloqueio-section">
-                        <h6><i class="bi bi-arrow-repeat text-info"></i> 3. Bloquear dia da semana</h6>
-                        <p class="text-muted small mb-3">Ex: toda segunda-feira você não trabalha.</p>
-                        <div class="dias-semana-grid">
-                            <div class="dia-semana-btn" data-dia="0" onclick="toggleDiaSemana(this, 0)">Dom</div>
-                            <div class="dia-semana-btn" data-dia="1" onclick="toggleDiaSemana(this, 1)">Seg</div>
-                            <div class="dia-semana-btn" data-dia="2" onclick="toggleDiaSemana(this, 2)">Ter</div>
-                            <div class="dia-semana-btn" data-dia="3" onclick="toggleDiaSemana(this, 3)">Qua</div>
-                            <div class="dia-semana-btn" data-dia="4" onclick="toggleDiaSemana(this, 4)">Qui</div>
-                            <div class="dia-semana-btn" data-dia="5" onclick="toggleDiaSemana(this, 5)">Sex</div>
-                            <div class="dia-semana-btn" data-dia="6" onclick="toggleDiaSemana(this, 6)">Sáb</div>
-                        </div>
-                        <button class="btn btn-info w-100 mt-3" onclick="salvarDiasSemana()">
-                            <i class="bi bi-save"></i> Salvar dias da semana
-                        </button>
-                    </div>
-
-                    <div class="bloqueio-section">
-                        <h6><i class="bi bi-list-check text-success"></i> 4. Bloqueios ativos</h6>
-                        <div id="lista-bloqueios"></div>
                     </div>
                 </div>
 
-                <div class="tab-pane fade" id="aba-espera">
-                    <h4 class="text-white mb-3">⏳ Lista de Espera</h4>
-                    <p class="text-muted small mb-4">
-                        Clientes que entraram na fila quando o dia estava lotado.
-                    </p>
-                    <div id="lista-espera-admin"></div>
+                <!-- Agendamentos de HOJE -->
+                <div class="secao">
+                    <div class="secao-header">
+                        <h3 class="secao-titulo">
+                            <i class="bi bi-fire"></i>
+                            Agendamentos de Hoje
+                            <span class="secao-badge hoje" id="badge-hoje">0</span>
+                        </h3>
+                        <button class="btn btn-sm btn-outline-light" onclick="abrirFerramenta('agendamentos')">
+                            Ver todos <i class="bi bi-arrow-right"></i>
+                        </button>
+                    </div>
+                    <div id="lista-hoje"></div>
                 </div>
 
-                <div class="tab-pane fade" id="aba-faturamento">
-                    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                        <div>
-                            <h4 class="text-white mb-1">💰 Faturamento</h4>
-                            <p class="text-muted small mb-0">Baseado apenas em agendamentos <strong class="text-success">concluídos</strong>.</p>
-                        </div>
-                        <button class="btn btn-outline-info btn-sm" onclick="recarregarFaturamento()">
+                <!-- Agendamentos de AMANHÃ -->
+                <div class="secao">
+                    <div class="secao-header">
+                        <h3 class="secao-titulo">
+                            <i class="bi bi-calendar-event"></i>
+                            Amanhã
+                            <span class="secao-badge amanha" id="badge-amanha">0</span>
+                        </h3>
+                    </div>
+                    <div id="lista-amanha"></div>
+                </div>
+
+            </div>
+
+            <!-- ============ VIEW: AGENDAMENTOS ============ -->
+            <div class="view" id="view-agendamentos">
+                <div class="view-header">
+                    <button class="btn-voltar" onclick="voltarDashboard()">
+                        <i class="bi bi-arrow-left"></i> Voltar
+                    </button>
+                    <h2>📅 Todos os Agendamentos</h2>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                    <p class="text-muted small mb-0">Todos os agendamentos ficam salvos aqui.</p>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <button class="btn btn-danger btn-sm fw-bold" onclick="abrirAvisarAmanha()">
+                            <i class="bi bi-megaphone-fill"></i> Avisar amanhã
+                        </button>
+                        <button class="btn btn-outline-info btn-sm" onclick="recarregarAgendamentos()">
                             <i class="bi bi-arrow-clockwise"></i> Atualizar
                         </button>
+                        <button class="btn btn-outline-warning btn-sm" onclick="limparAgendamentosAntigos()">
+                            <i class="bi bi-eraser"></i> Limpar antigos
+                        </button>
                     </div>
-
-                    <div class="row g-3 mb-4">
-                        <div class="col-md-6 col-lg-3">
-                            <div class="faturamento-card hoje">
-                                <div class="faturamento-label"><i class="bi bi-sun-fill"></i> Hoje</div>
-                                <div class="faturamento-valor" id="fat-hoje">R$ 0,00</div>
-                                <div class="faturamento-qtd" id="fat-hoje-qtd">0 atendimentos</div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-lg-3">
-                            <div class="faturamento-card semana">
-                                <div class="faturamento-label"><i class="bi bi-calendar-week"></i> Esta semana</div>
-                                <div class="faturamento-valor" id="fat-semana">R$ 0,00</div>
-                                <div class="faturamento-qtd" id="fat-semana-qtd">0 atendimentos</div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-lg-3">
-                            <div class="faturamento-card mes">
-                                <div class="faturamento-label"><i class="bi bi-calendar-month"></i> Este mês</div>
-                                <div class="faturamento-valor" id="fat-mes">R$ 0,00</div>
-                                <div class="faturamento-qtd" id="fat-mes-qtd">0 atendimentos</div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-lg-3">
-                            <div class="faturamento-card total">
-                                <div class="faturamento-label"><i class="bi bi-trophy-fill"></i> Total geral</div>
-                                <div class="faturamento-valor" id="fat-total">R$ 0,00</div>
-                                <div class="faturamento-qtd" id="fat-total-qtd">0 atendimentos</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <h6 class="text-white mb-2"><i class="bi bi-funnel"></i> Detalhes por período</h6>
-                    <div class="filtros-agendamentos" id="filtros-faturamento">
-                        <button class="filtro-btn ativo" data-filtro-fat="hoje"><i class="bi bi-sun"></i> Hoje</button>
-                        <button class="filtro-btn" data-filtro-fat="semana"><i class="bi bi-calendar-week"></i> Esta semana</button>
-                        <button class="filtro-btn" data-filtro-fat="mes"><i class="bi bi-calendar-month"></i> Este mês</button>
-                        <button class="filtro-btn" data-filtro-fat="ano"><i class="bi bi-calendar"></i> Este ano</button>
-                        <button class="filtro-btn" data-filtro-fat="todos"><i class="bi bi-list-ul"></i> Todos</button>
-                    </div>
-
-                    <div id="fat-resumo-filtro" class="alert alert-success d-flex justify-content-between align-items-center flex-wrap gap-2" role="alert">
-                        <div>
-                            <i class="bi bi-cash-coin fs-4"></i>
-                            <strong class="ms-2">Total no período:</strong>
-                        </div>
-                        <div class="fs-4 fw-bold" id="fat-filtro-total">R$ 0,00</div>
-                    </div>
-
-                    <div id="lista-faturamento"></div>
                 </div>
 
-                <div class="tab-pane fade" id="aba-config">
-                    <h4 class="text-white mb-3">⚙️ Configurações</h4>
+                <div class="filtros-agendamentos">
+                    <button class="filtro-btn ativo" data-filtro="todos">
+                        <i class="bi bi-list-ul"></i> Todos <span class="contador" id="cnt-todos">0</span>
+                    </button>
+                    <button class="filtro-btn" data-filtro="hoje">
+                        <i class="bi bi-calendar-day"></i> Hoje <span class="contador" id="cnt-hoje">0</span>
+                    </button>
+                    <button class="filtro-btn" data-filtro="proximos">
+                        <i class="bi bi-calendar-week"></i> Próximos <span class="contador" id="cnt-proximos">0</span>
+                    </button>
+                    <button class="filtro-btn" data-filtro="passados">
+                        <i class="bi bi-calendar-x"></i> Passados <span class="contador" id="cnt-passados">0</span>
+                    </button>
+                    <button class="filtro-btn" data-filtro="pendentes">
+                        <i class="bi bi-hourglass"></i> Pendentes <span class="contador" id="cnt-pendentes">0</span>
+                    </button>
+                    <button class="filtro-btn" data-filtro="concluidos">
+                        <i class="bi bi-check-circle"></i> Concluídos <span class="contador" id="cnt-concluidos">0</span>
+                    </button>
+                    <button class="filtro-btn" data-filtro="cancelados">
+                        <i class="bi bi-x-circle"></i> Cancelados <span class="contador" id="cnt-cancelados">0</span>
+                    </button>
+                </div>
 
-                    <div class="card p-3 mb-3">
-                        <h6><i class="bi bi-shield-lock-fill text-danger"></i> Conta</h6>
-                        <p class="small text-muted mb-2">
-                            Você está logado como: <strong id="config-email">-</strong>
-                        </p>
-                        <button class="btn btn-outline-danger" onclick="fazerLogout()">
-                            <i class="bi bi-box-arrow-right"></i> Sair da conta
+                <div id="lista-agendamentos"></div>
+            </div>
+
+            <!-- ============ VIEW: SERVIÇOS ============ -->
+            <div class="view" id="view-servicos">
+                <div class="view-header">
+                    <button class="btn-voltar" onclick="voltarDashboard()">
+                        <i class="bi bi-arrow-left"></i> Voltar
+                    </button>
+                    <h2>✂️ Serviços</h2>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                    <p class="text-muted small mb-0">Serviços que aparecem no site do cliente.</p>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-outline-info btn-sm" onclick="recarregarServicos()">
+                            <i class="bi bi-arrow-clockwise"></i> Atualizar
+                        </button>
+                        <button class="btn btn-outline-warning btn-sm" onclick="limparServicosVazios()">
+                            <i class="bi bi-eraser"></i> Limpar vazios
+                        </button>
+                        <button class="btn btn-danger" onclick="adicionarServico()">
+                            <i class="bi bi-plus-circle"></i> Adicionar
                         </button>
                     </div>
+                </div>
 
-                    <div class="card p-3 mb-3">
-                        <h6><i class="bi bi-key-fill text-danger"></i> Alterar senha</h6>
-                        <p class="small text-muted mb-2">
-                            Enviaremos um link para o seu email. Clique no link para criar uma nova senha.
-                        </p>
-                        <button class="btn btn-danger" onclick="esqueceuSenha()">
-                            <i class="bi bi-envelope"></i> Enviar link de alteração
-                        </button>
-                    </div>
+                <div class="filtros-agendamentos">
+                    <button class="filtro-btn ativo" data-filtro-serv="todos">
+                        <i class="bi bi-list-ul"></i> Todos <span class="contador" id="cnt-serv-todos">0</span>
+                    </button>
+                    <button class="filtro-btn" data-filtro-serv="ok">
+                        <i class="bi bi-check-circle"></i> Configurados <span class="contador" id="cnt-serv-ok">0</span>
+                    </button>
+                    <button class="filtro-btn" data-filtro-serv="vazios">
+                        <i class="bi bi-exclamation-triangle"></i> Vazios <span class="contador" id="cnt-serv-vazios">0</span>
+                    </button>
+                </div>
 
-                    <div class="card p-3 mb-3">
-                        <label class="form-label">Notificações do Navegador</label>
-                        <p class="small text-muted mb-2">Ative para receber lembretes dos agendamentos.</p>
-                        <button class="btn btn-primary" onclick="ativarNotificacoesNavegador()">
-                            <i class="bi bi-bell"></i> Ativar Notificações
-                        </button>
-                        <button class="btn btn-outline-primary mt-2" onclick="testarNotificacaoNavegador()">
-                            <i class="bi bi-send"></i> Testar Notificação
-                        </button>
+                <div id="lista-servicos"></div>
+            </div>
+
+            <!-- ============ VIEW: FOLGAS ============ -->
+            <div class="view" id="view-bloqueios">
+                <div class="view-header">
+                    <button class="btn-voltar" onclick="voltarDashboard()">
+                        <i class="bi bi-arrow-left"></i> Voltar
+                    </button>
+                    <h2>🚫 Folgas & Bloqueios</h2>
+                </div>
+
+                <div class="bloqueio-section">
+                    <h6><i class="bi bi-calendar-x text-danger"></i> 1. Bloquear dia inteiro</h6>
+                    <p class="text-muted small mb-3">Ex: feriado, folga, viagem...</p>
+                    <div class="row g-2">
+                        <div class="col-md-5">
+                            <input type="date" id="bloqueio-dia-data" class="form-control">
+                        </div>
+                        <div class="col-md-5">
+                            <input type="text" id="bloqueio-dia-motivo" class="form-control" placeholder="Motivo (opcional)">
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-danger w-100" onclick="bloquearDiaInteiro()">
+                                <i class="bi bi-lock-fill"></i> Bloquear
+                            </button>
+                        </div>
                     </div>
+                </div>
+
+                <div class="bloqueio-section">
+                    <h6><i class="bi bi-clock-history text-warning"></i> 2. Bloquear horários específicos</h6>
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-6">
+                            <label class="text-white small">Data</label>
+                            <input type="date" id="bloqueio-hora-data" class="form-control" onchange="carregarHorariosParaBloquear()">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-white small">Motivo (opcional)</label>
+                            <input type="text" id="bloqueio-hora-motivo" class="form-control" placeholder="Ex: Almoço">
+                        </div>
+                    </div>
+                    <div id="horarios-para-bloquear" class="mb-3">
+                        <p class="text-muted small">Selecione uma data para ver os horários.</p>
+                    </div>
+                    <button class="btn btn-warning w-100" onclick="bloquearHorariosSelecionados()">
+                        <i class="bi bi-lock-fill"></i> Bloquear horários selecionados
+                    </button>
+                </div>
+
+                <div class="bloqueio-section">
+                    <h6><i class="bi bi-arrow-repeat text-info"></i> 3. Bloquear dia da semana</h6>
+                    <p class="text-muted small mb-3">Ex: toda segunda-feira você não trabalha.</p>
+                    <div class="dias-semana-grid">
+                        <div class="dia-semana-btn" data-dia="0" onclick="toggleDiaSemana(this, 0)">Dom</div>
+                        <div class="dia-semana-btn" data-dia="1" onclick="toggleDiaSemana(this, 1)">Seg</div>
+                        <div class="dia-semana-btn" data-dia="2" onclick="toggleDiaSemana(this, 2)">Ter</div>
+                        <div class="dia-semana-btn" data-dia="3" onclick="toggleDiaSemana(this, 3)">Qua</div>
+                        <div class="dia-semana-btn" data-dia="4" onclick="toggleDiaSemana(this, 4)">Qui</div>
+                        <div class="dia-semana-btn" data-dia="5" onclick="toggleDiaSemana(this, 5)">Sex</div>
+                        <div class="dia-semana-btn" data-dia="6" onclick="toggleDiaSemana(this, 6)">Sáb</div>
+                    </div>
+                    <button class="btn btn-info w-100 mt-3" onclick="salvarDiasSemana()">
+                        <i class="bi bi-save"></i> Salvar dias da semana
+                    </button>
+                </div>
+
+                <div class="bloqueio-section">
+                    <h6><i class="bi bi-list-check text-success"></i> 4. Bloqueios ativos</h6>
+                    <div id="lista-bloqueios"></div>
                 </div>
             </div>
+
+            <!-- ============ VIEW: LISTA DE ESPERA ============ -->
+            <div class="view" id="view-espera">
+                <div class="view-header">
+                    <button class="btn-voltar" onclick="voltarDashboard()">
+                        <i class="bi bi-arrow-left"></i> Voltar
+                    </button>
+                    <h2>⏳ Lista de Espera</h2>
+                </div>
+                <p class="text-muted small mb-4">
+                    Clientes que entraram na fila quando o dia estava lotado.
+                </p>
+                <div id="lista-espera-admin"></div>
+            </div>
+
+            <!-- ============ VIEW: FATURAMENTO ============ -->
+            <div class="view" id="view-faturamento">
+                <div class="view-header">
+                    <button class="btn-voltar" onclick="voltarDashboard()">
+                        <i class="bi bi-arrow-left"></i> Voltar
+                    </button>
+                    <h2>💰 Faturamento</h2>
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6 col-lg-3">
+                        <div class="faturamento-card hoje">
+                            <div class="faturamento-label"><i class="bi bi-sun-fill"></i> Hoje</div>
+                            <div class="faturamento-valor" id="fat-hoje">R$ 0,00</div>
+                            <div class="faturamento-qtd" id="fat-hoje-qtd">0 atendimentos</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="faturamento-card semana">
+                            <div class="faturamento-label"><i class="bi bi-calendar-week"></i> Esta semana</div>
+                            <div class="faturamento-valor" id="fat-semana">R$ 0,00</div>
+                            <div class="faturamento-qtd" id="fat-semana-qtd">0 atendimentos</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="faturamento-card mes">
+                            <div class="faturamento-label"><i class="bi bi-calendar-month"></i> Este mês</div>
+                            <div class="faturamento-valor" id="fat-mes">R$ 0,00</div>
+                            <div class="faturamento-qtd" id="fat-mes-qtd">0 atendimentos</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="faturamento-card total">
+                            <div class="faturamento-label"><i class="bi bi-trophy-fill"></i> Total geral</div>
+                            <div class="faturamento-valor" id="fat-total">R$ 0,00</div>
+                            <div class="faturamento-qtd" id="fat-total-qtd">0 atendimentos</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h6 class="text-white mb-2"><i class="bi bi-funnel"></i> Detalhes por período</h6>
+                <div class="filtros-agendamentos">
+                    <button class="filtro-btn ativo" data-filtro-fat="hoje"><i class="bi bi-sun"></i> Hoje</button>
+                    <button class="filtro-btn" data-filtro-fat="semana"><i class="bi bi-calendar-week"></i> Esta semana</button>
+                    <button class="filtro-btn" data-filtro-fat="mes"><i class="bi bi-calendar-month"></i> Este mês</button>
+                    <button class="filtro-btn" data-filtro-fat="ano"><i class="bi bi-calendar"></i> Este ano</button>
+                    <button class="filtro-btn" data-filtro-fat="todos"><i class="bi bi-list-ul"></i> Todos</button>
+                </div>
+
+                <div class="alert alert-success d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <div>
+                        <i class="bi bi-cash-coin fs-4"></i>
+                        <strong class="ms-2">Total no período:</strong>
+                    </div>
+                    <div class="fs-4 fw-bold" id="fat-filtro-total">R$ 0,00</div>
+                </div>
+
+                <div id="lista-faturamento"></div>
+            </div>
+
+            <!-- ============ VIEW: CONFIG ============ -->
+            <div class="view" id="view-config">
+                <div class="view-header">
+                    <button class="btn-voltar" onclick="voltarDashboard()">
+                        <i class="bi bi-arrow-left"></i> Voltar
+                    </button>
+                    <h2>⚙️ Configurações</h2>
+                </div>
+
+                <div class="card p-3 mb-3">
+                    <h6><i class="bi bi-shield-lock-fill text-danger"></i> Conta</h6>
+                    <p class="small text-muted mb-2">
+                        Logado como: <strong id="config-email">-</strong>
+                    </p>
+                    <button class="btn btn-outline-danger" onclick="fazerLogout()">
+                        <i class="bi bi-box-arrow-right"></i> Sair da conta
+                    </button>
+                </div>
+
+                <div class="card p-3 mb-3">
+                    <h6><i class="bi bi-key-fill text-danger"></i> Alterar senha</h6>
+                    <p class="small text-muted mb-2">
+                        Enviaremos um link para o seu email.
+                    </p>
+                    <button class="btn btn-danger" onclick="esqueceuSenha()">
+                        <i class="bi bi-envelope"></i> Enviar link
+                    </button>
+                </div>
+
+                <div class="card p-3 mb-3">
+                    <label class="form-label">Notificações do Navegador</label>
+                    <p class="small text-muted mb-2">Ative para receber lembretes.</p>
+                    <button class="btn btn-primary" onclick="ativarNotificacoesNavegador()">
+                        <i class="bi bi-bell"></i> Ativar Notificações
+                    </button>
+                    <button class="btn btn-outline-primary mt-2" onclick="testarNotificacaoNavegador()">
+                        <i class="bi bi-send"></i> Testar
+                    </button>
+                </div>
+            </div>
+
         </div>
     </div>
 
+    <!-- ============ MENU LATERAL ============ -->
+    <div class="overlay-menu" id="overlay-menu" onclick="fecharMenu()"></div>
+    <aside class="menu-drawer" id="menuDrawer">
+        <div class="menu-header">
+            <h3><i class="bi bi-tools"></i> Ferramentas</h3>
+            <button class="menu-fechar" onclick="fecharMenu()">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+        <div class="menu-lista">
+            <button class="menu-item" onclick="abrirFerramenta('agendamentos')">
+                <div class="menu-item-icon">📅</div>
+                <div class="menu-item-info">
+                    <strong>Agendamentos</strong>
+                    <small>Ver todos, filtros e histórico</small>
+                </div>
+            </button>
+
+            <button class="menu-item" onclick="abrirFerramenta('servicos')">
+                <div class="menu-item-icon">✂️</div>
+                <div class="menu-item-info">
+                    <strong>Serviços</strong>
+                    <small>Editar preços e nomes</small>
+                </div>
+            </button>
+
+            <button class="menu-item" onclick="abrirFerramenta('bloqueios')">
+                <div class="menu-item-icon">🚫</div>
+                <div class="menu-item-info">
+                    <strong>Folgas & Bloqueios</strong>
+                    <small>Bloquear dias e horários</small>
+                </div>
+            </button>
+
+            <button class="menu-item" onclick="abrirFerramenta('espera')">
+                <div class="menu-item-icon">⏳</div>
+                <div class="menu-item-info">
+                    <strong>Lista de Espera</strong>
+                    <small>Clientes na fila</small>
+                </div>
+                <span class="badge bg-warning text-dark" id="menu-badge-espera" style="display:none;">0</span>
+            </button>
+
+            <button class="menu-item" onclick="abrirFerramenta('faturamento')">
+                <div class="menu-item-icon">💰</div>
+                <div class="menu-item-info">
+                    <strong>Faturamento</strong>
+                    <small>Relatório de ganhos</small>
+                </div>
+            </button>
+
+            <button class="menu-item" onclick="abrirFerramenta('config')">
+                <div class="menu-item-icon">⚙️</div>
+                <div class="menu-item-info">
+                    <strong>Configurações</strong>
+                    <small>Conta e notificações</small>
+                </div>
+            </button>
+        </div>
+    </aside>
+
+    <!-- ============ MODAL SERVIÇO ============ -->
     <div class="modal fade" id="modalServico" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -675,6 +1109,7 @@
         </div>
     </div>
 
+    <!-- ============ MODAL AVISAR AMANHÃ ============ -->
     <div class="modal fade" id="modalAvisarAmanha" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -767,7 +1202,142 @@
         }
 
         // ============================================
-        // LOGIN VIA FIREBASE AUTH
+        // NAVEGAÇÃO ENTRE VIEWS
+        // ============================================
+        window.abrirMenu = function() {
+            document.getElementById('menuDrawer').classList.add('open');
+            document.getElementById('overlay-menu').classList.add('active');
+        };
+
+        window.fecharMenu = function() {
+            document.getElementById('menuDrawer').classList.remove('open');
+            document.getElementById('overlay-menu').classList.remove('active');
+        };
+
+        window.abrirFerramenta = function(nome) {
+            fecharMenu();
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            const view = document.getElementById('view-' + nome);
+            if (view) view.classList.add('active');
+            window.scrollTo(0, 0);
+
+            // Re-renderiza dados da view aberta
+            if (nome === 'agendamentos') renderizarAgendamentos();
+            if (nome === 'servicos') renderizarServicos();
+            if (nome === 'espera') renderizarListaEspera();
+            if (nome === 'faturamento') renderizarFaturamento();
+            if (nome === 'bloqueios') renderizarListaCompleta();
+        };
+
+        window.voltarDashboard = function() {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById('view-dashboard').classList.add('active');
+            window.scrollTo(0, 0);
+            renderizarDashboard();
+        };
+
+        // ============================================
+        // DASHBOARD
+        // ============================================
+        function renderizarDashboard() {
+            const hojeStr = getHojeStr();
+            const amanhaStr = getAmanhaStr();
+
+            // Data por extenso
+            const agora = new Date();
+            const dataFmt = agora.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
+            const el = document.getElementById('saudacao-data');
+            if (el) el.textContent = dataFmt.charAt(0).toUpperCase() + dataFmt.slice(1);
+
+            // Filtra
+            const hoje = agendamentos.filter(a => a.data === hojeStr)
+                .sort((a, b) => (a.horario || '').localeCompare(b.horario || ''));
+            const amanha = agendamentos.filter(a => a.data === amanhaStr)
+                .sort((a, b) => (a.horario || '').localeCompare(b.horario || ''));
+            const proximos7 = agendamentos.filter(a => a.data >= hojeStr && a.data <= getProximos7())
+                .filter(a => a.status !== 'cancelado');
+
+            // Contadores
+            const set = (id, val) => { const e = document.getElementById(id); if (e) e.textContent = val; };
+            set('res-hoje', hoje.filter(a => a.status !== 'cancelado').length);
+            set('res-amanha', amanha.filter(a => a.status !== 'cancelado').length);
+            set('res-semana', proximos7.length);
+            set('res-espera', contarListaEspera());
+            set('badge-hoje', hoje.filter(a => a.status !== 'cancelado').length);
+            set('badge-amanha', amanha.filter(a => a.status !== 'cancelado').length);
+
+            // Renderiza listas
+            renderizarListaSimples('lista-hoje', hoje, true);
+            renderizarListaSimples('lista-amanha', amanha, false);
+        }
+
+        function getProximos7() {
+            const d = new Date();
+            d.setDate(d.getDate() + 7);
+            return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+        }
+
+        function contarListaEspera() {
+            let total = 0;
+            Object.keys(listaEspera).forEach(data => {
+                const itens = listaEspera[data];
+                if (!itens) return;
+                Object.keys(itens).forEach(id => {
+                    if (itens[id].status !== 'convertido') total++;
+                });
+            });
+            return total;
+        }
+
+        function renderizarListaSimples(containerId, lista, ehHoje) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            if (lista.length === 0) {
+                container.innerHTML = `
+                    <div class="msg-vazia">
+                        <i class="bi bi-calendar-x"></i>
+                        <p class="mb-0">Nenhum agendamento ${ehHoje ? 'para hoje' : 'para amanhã'}.</p>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = lista.map(ag => {
+                const status = ag.status || 'pendente';
+                let classe = 'ag-simples';
+                if (ehHoje) classe += ' hj';
+                if (status === 'concluido') classe += ' concluido';
+                if (status === 'cancelado') classe += ' cancelado';
+
+                const tel = (ag.clienteTelefone || '').replace(/\D/g, '');
+
+                return `
+                    <div class="${classe}">
+                        <div class="ag-hora">${ag.horario || '--:--'}</div>
+                        <div class="ag-info">
+                            <strong>${ag.clienteNome || 'Sem nome'}</strong>
+                            <small>💈 ${ag.servicoNome || '-'} • 📞 ${ag.clienteTelefone || '-'}</small>
+                        </div>
+                        <div class="ag-acoes">
+                            <a href="https://wa.me/55${tel}" target="_blank" class="btn btn-sm btn-success" title="WhatsApp">
+                                <i class="bi bi-whatsapp"></i>
+                            </a>
+                            ${status === 'pendente' ? `
+                                <button class="btn btn-sm btn-primary" onclick="mudarStatus('${ag.id}', 'concluido')" title="Concluir">
+                                    <i class="bi bi-check"></i>
+                                </button>
+                                <button class="btn btn-sm btn-secondary" onclick="mudarStatus('${ag.id}', 'cancelado')" title="Cancelar">
+                                    <i class="bi bi-x"></i>
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ============================================
+        // LOGIN
         // ============================================
         window.fazerLogin = async function() {
             const emailInput = document.getElementById('email-input');
@@ -777,7 +1347,6 @@
 
             const email = (emailInput.value || '').trim();
             const senha = senhaInput.value || '';
-
             erroEl.textContent = '';
 
             if (!email || !senha) {
@@ -790,7 +1359,6 @@
 
             try {
                 await auth.signInWithEmailAndPassword(email, senha);
-                // onAuthStateChanged vai cuidar do resto
             } catch (err) {
                 console.error('Erro login:', err);
                 btn.disabled = false;
@@ -821,158 +1389,97 @@
         window.esqueceuSenha = async function() {
             const emailInput = document.getElementById('email-input');
             let email = (emailInput.value || '').trim();
-
-            if (!email && usuarioLogado) {
-                email = usuarioLogado.email;
-            }
+            if (!email && usuarioLogado) email = usuarioLogado.email;
 
             if (!email) {
                 email = prompt('Digite o email da conta admin:');
                 if (!email) return;
             }
 
-            if (!confirm(`Enviar link de redefinição de senha para:\n\n${email}\n\nConfirma?`)) return;
+            if (!confirm(`Enviar link de redefinição para:\n\n${email}\n\nConfirma?`)) return;
 
             try {
                 await auth.sendPasswordResetEmail(email);
-                alert('✅ Link enviado! Verifique sua caixa de entrada e o spam.\n\nO link abre uma página do Google para você criar uma nova senha.');
+                alert('✅ Link enviado! Verifique sua caixa de entrada e o spam.');
             } catch (err) {
-                console.error('Erro reset:', err);
-                alert('❌ Erro ao enviar: ' + err.message);
+                alert('❌ Erro: ' + err.message);
             }
         };
 
-        // ============================================
-        // LISTENER DE AUTENTICAÇÃO
-        // ============================================
         auth.onAuthStateChanged((user) => {
             const elLogin = document.getElementById('tela-login');
             const elPainel = document.getElementById('tela-painel');
 
             if (user) {
-                // Logado
                 usuarioLogado = user;
                 elLogin.style.setProperty('display', 'none', 'important');
                 elPainel.style.display = 'block';
-
-                const userEmailEl = document.getElementById('user-email');
-                if (userEmailEl) userEmailEl.textContent = `(${user.email})`;
-
                 const configEmail = document.getElementById('config-email');
                 if (configEmail) configEmail.textContent = user.email;
-
                 carregarTudo();
-                atualizarAvisoNotificacao();
             } else {
-                // Deslogado
                 usuarioLogado = null;
                 elLogin.style.display = 'flex';
                 elPainel.style.display = 'none';
-
                 if (intervaloAgendamentos) clearInterval(intervaloAgendamentos);
                 if (intervaloServicos) clearInterval(intervaloServicos);
             }
         });
 
         // ============================================
-        // NOTIFICAÇÕES DO NAVEGADOR
+        // NOTIFICAÇÕES
         // ============================================
         window.ativarNotificacoesNavegador = async function() {
-            if (!('Notification' in window)) {
-                alert('❌ Este navegador não suporta notificações.');
-                return;
-            }
+            if (!('Notification' in window)) { alert('❌ Navegador não suporta.'); return; }
             try {
                 const permission = await Notification.requestPermission();
                 if (permission === 'granted') {
                     mostrarAlertaAdmin('✅ Notificações ativadas!', 'success');
                     new Notification('🔔 Notificações ativadas!', {
-                        body: 'Você vai receber avisos dos agendamentos aqui.',
+                        body: 'Você vai receber avisos dos agendamentos.',
                         icon: 'seujorge.PNG'
                     });
-                    atualizarAvisoNotificacao();
                 } else {
-                    alert('❌ Permissão negada. Verifique nas configurações do navegador.');
+                    alert('❌ Permissão negada.');
                 }
-            } catch (err) {
-                console.error('Erro:', err);
-            }
+            } catch (err) { console.error(err); }
         };
 
         window.testarNotificacaoNavegador = function() {
             if (Notification.permission === 'granted') {
-                new Notification('🔔 Teste de notificação', {
-                    body: 'Se você está vendo isso, está tudo funcionando!',
-                    icon: 'seujorge.PNG'
-                });
+                new Notification('🔔 Teste', { body: 'Tudo funcionando!', icon: 'seujorge.PNG' });
             } else {
                 alert('⚠️ Ative as notificações primeiro.');
             }
         };
-
-        function atualizarAvisoNotificacao() {
-            const aviso = document.getElementById('aviso-notificacao');
-            if (!aviso) return;
-            if (!('Notification' in window)) {
-                aviso.style.display = 'none';
-                return;
-            }
-            if (Notification.permission === 'granted') {
-                aviso.style.display = 'none';
-            } else {
-                aviso.style.setProperty('display', 'flex', 'important');
-            }
-        }
 
         // ============================================
         // CARREGAR DADOS
         // ============================================
         async function carregarServicosREST() {
             try {
-                const resposta = await fetch(FIREBASE_URL + '/config/servicos.json');
-                if (!resposta.ok) return;
-
-                const dados = await resposta.json();
+                const r = await fetch(FIREBASE_URL + '/config/servicos.json');
+                if (!r.ok) return;
+                const dados = await r.json();
                 servicos = [];
-                if (dados) {
-                    Object.keys(dados).forEach(id => {
-                        servicos.push({ id, ...dados[id] });
-                    });
-                }
+                if (dados) Object.keys(dados).forEach(id => servicos.push({ id, ...dados[id] }));
                 atualizarContadoresServicos();
                 renderizarServicos();
-            } catch (err) {
-                console.error('❌ Erro REST servicos:', err);
-            }
+            } catch (err) { console.error('Erro serviços:', err); }
         }
 
         async function carregarAgendamentosREST() {
             try {
-                const resposta = await fetch(FIREBASE_URL + '/agendamentos.json');
-                if (!resposta.ok) return;
-
-                const dados = await resposta.json();
+                const r = await fetch(FIREBASE_URL + '/agendamentos.json');
+                if (!r.ok) return;
+                const dados = await r.json();
                 agendamentos = [];
-                if (dados) {
-                    Object.keys(dados).forEach(id => {
-                        agendamentos.push({ id, ...dados[id] });
-                    });
-                }
-
+                if (dados) Object.keys(dados).forEach(id => agendamentos.push({ id, ...dados[id] }));
                 atualizarContadores();
-                atualizarContadorAmanha();
                 renderizarAgendamentos();
                 renderizarFaturamento();
-            } catch (err) {
-                console.error('❌ Erro REST agendamentos:', err);
-            }
-        }
-
-        function atualizarContadorAmanha() {
-            const amanhaStr = getAmanhaStr();
-            const qtd = agendamentos.filter(a => a.data === amanhaStr && a.status !== 'cancelado').length;
-            const el = document.getElementById('contador-amanha');
-            if (el) el.textContent = qtd;
+                renderizarDashboard();
+            } catch (err) { console.error('Erro agendamentos:', err); }
         }
 
         function carregarTudo() {
@@ -993,6 +1500,8 @@
             db.ref('lista-espera').on('value', snap => {
                 listaEspera = snap.val() || {};
                 renderizarListaEspera();
+                renderizarDashboard();
+                atualizarBadgeEsperaMenu();
             });
 
             document.querySelectorAll('[data-filtro]').forEach(btn => {
@@ -1023,63 +1532,49 @@
             });
         }
 
+        function atualizarBadgeEsperaMenu() {
+            const badge = document.getElementById('menu-badge-espera');
+            const total = contarListaEspera();
+            if (badge) {
+                badge.textContent = total;
+                badge.style.display = total > 0 ? 'inline-block' : 'none';
+            }
+        }
+
         window.recarregarAgendamentos = function() {
-            carregarAgendamentosREST().then(() => {
-                mostrarAlertaAdmin(`🔄 ${agendamentos.length} agendamento(s)`, 'info');
-            });
+            carregarAgendamentosREST().then(() => mostrarAlertaAdmin(`🔄 ${agendamentos.length} agendamento(s)`, 'info'));
         };
-
         window.recarregarServicos = function() {
-            carregarServicosREST().then(() => {
-                mostrarAlertaAdmin(`🔄 ${servicos.length} serviço(s)`, 'info');
-            });
+            carregarServicosREST().then(() => mostrarAlertaAdmin(`🔄 ${servicos.length} serviço(s)`, 'info'));
         };
 
-        window.recarregarFaturamento = function() {
-            carregarAgendamentosREST().then(() => {
-                mostrarAlertaAdmin(`💰 Faturamento atualizado`, 'info');
-            });
-        };
-
+        // ============================================
         // CONTADORES
+        // ============================================
         function atualizarContadores() {
             const hojeStr = getHojeStr();
-            const total = agendamentos.length;
-            const hoje = agendamentos.filter(a => a.data === hojeStr).length;
-            const proximos = agendamentos.filter(a => a.data > hojeStr).length;
-            const passados = agendamentos.filter(a => a.data < hojeStr).length;
-            const pendentes = agendamentos.filter(a => (a.status || 'pendente') === 'pendente').length;
-            const concluidos = agendamentos.filter(a => a.status === 'concluido').length;
-            const cancelados = agendamentos.filter(a => a.status === 'cancelado').length;
-
-            const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
-            set('cnt-todos', total);
-            set('cnt-hoje', hoje);
-            set('cnt-proximos', proximos);
-            set('cnt-passados', passados);
-            set('cnt-pendentes', pendentes);
-            set('cnt-concluidos', concluidos);
-            set('cnt-cancelados', cancelados);
-
-            const badge = document.getElementById('badge-agendamentos');
-            const naoConcluidos = agendamentos.filter(a => (a.status || 'pendente') === 'pendente' && a.data >= hojeStr).length;
-            if (badge) {
-                badge.textContent = naoConcluidos;
-                badge.style.display = naoConcluidos > 0 ? 'inline-block' : 'none';
-            }
+            const set = (id, val) => { const e = document.getElementById(id); if (e) e.textContent = val; };
+            set('cnt-todos', agendamentos.length);
+            set('cnt-hoje', agendamentos.filter(a => a.data === hojeStr).length);
+            set('cnt-proximos', agendamentos.filter(a => a.data > hojeStr).length);
+            set('cnt-passados', agendamentos.filter(a => a.data < hojeStr).length);
+            set('cnt-pendentes', agendamentos.filter(a => (a.status || 'pendente') === 'pendente').length);
+            set('cnt-concluidos', agendamentos.filter(a => a.status === 'concluido').length);
+            set('cnt-cancelados', agendamentos.filter(a => a.status === 'cancelado').length);
         }
 
         function atualizarContadoresServicos() {
             const total = servicos.length;
             const vazios = servicos.filter(s => s.preco === 0 || !s.nome || s.nome === 'NOVO SERVIÇO').length;
-            const ok = total - vazios;
-            const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+            const set = (id, val) => { const e = document.getElementById(id); if (e) e.textContent = val; };
             set('cnt-serv-todos', total);
-            set('cnt-serv-ok', ok);
+            set('cnt-serv-ok', total - vazios);
             set('cnt-serv-vazios', vazios);
         }
 
-        // RENDERIZAR AGENDAMENTOS
+        // ============================================
+        // RENDERIZAR AGENDAMENTOS (view completa)
+        // ============================================
         function renderizarAgendamentos() {
             const container = document.getElementById('lista-agendamentos');
             if (!container) return;
@@ -1095,31 +1590,27 @@
             else if (filtroAtivo === 'cancelados') lista = lista.filter(a => a.status === 'cancelado');
 
             lista.sort((a, b) => {
-                const dataA = (a.data || '') + (a.horario || '');
-                const dataB = (b.data || '') + (b.horario || '');
-                if (filtroAtivo === 'passados') return dataB.localeCompare(dataA);
-                return dataA.localeCompare(dataB);
+                const dA = (a.data || '') + (a.horario || '');
+                const dB = (b.data || '') + (b.horario || '');
+                if (filtroAtivo === 'passados') return dB.localeCompare(dA);
+                return dA.localeCompare(dB);
             });
 
             container.innerHTML = '';
-
             if (lista.length === 0) {
                 container.innerHTML = `<div class="agendamento-vazio"><i class="bi bi-calendar-x"></i><p class="mb-0">Nenhum agendamento ${filtroAtivo !== 'todos' ? 'neste filtro' : ''}.</p></div>`;
                 return;
             }
 
-            const contador = document.createElement('div');
-            contador.className = 'mb-3';
-            contador.innerHTML = `<span class="badge bg-secondary">${lista.length} agendamento${lista.length > 1 ? 's' : ''}</span>`;
-            container.appendChild(contador);
+            const cont = document.createElement('div');
+            cont.className = 'mb-3';
+            cont.innerHTML = `<span class="badge bg-secondary">${lista.length} agendamento${lista.length > 1 ? 's' : ''}</span>`;
+            container.appendChild(cont);
 
             lista.forEach(ag => {
-                try {
-                    const htmlItem = montarItemAgendamento(ag, hojeStr);
-                    const wrapper = document.createElement('div');
-                    wrapper.innerHTML = htmlItem;
-                    while (wrapper.firstChild) container.appendChild(wrapper.firstChild);
-                } catch (err) { console.error('❌', err); }
+                const wrapper = document.createElement('div');
+                wrapper.innerHTML = montarItemAgendamento(ag, hojeStr);
+                while (wrapper.firstChild) container.appendChild(wrapper.firstChild);
             });
         }
 
@@ -1139,10 +1630,6 @@
             const preco = typeof ag.servicoPreco === 'number' ? ag.servicoPreco.toFixed(2).replace('.', ',') : '-';
             const badgeClass = status === 'concluido' ? 'badge-concluido' : status === 'cancelado' ? 'badge-cancelado' : 'badge-pendente';
 
-            const temEspera = listaEspera[ag.data] && Object.keys(listaEspera[ag.data]).length > 0;
-            const avisoEspera = temEspera && status !== 'cancelado'
-                ? `<span class="badge bg-info ms-1"><i class="bi bi-hourglass-split"></i> ${Object.keys(listaEspera[ag.data]).length} na fila</span>` : '';
-
             return `
                 <div class="${classe}">
                     <div class="agendamento-info">
@@ -1157,19 +1644,16 @@
                             <span>📞 ${ag.clienteTelefone || '-'}</span>
                             ${ag.observacoes ? `<span>📝 ${ag.observacoes}</span>` : ''}
                         </div>
-                        <div class="mt-2">
-                            <span class="badge-status ${badgeClass}">${status}</span>${avisoEspera}
-                        </div>
+                        <div class="mt-2"><span class="badge-status ${badgeClass}">${status}</span></div>
                     </div>
                     <div class="agendamento-actions">
-                        ${status !== 'concluido' && status !== 'cancelado' ? `<button class="btn btn-sm btn-warning" onclick="lembrarCliente('${ag.id}')" title="Enviar lembrete"><i class="bi bi-bell-fill"></i></button>` : ''}
-                        <a href="https://wa.me/55${tel}" target="_blank" class="btn btn-sm btn-success" title="Abrir WhatsApp"><i class="bi bi-whatsapp"></i></a>
-                        ${status !== 'concluido' ? `<button class="btn btn-sm btn-primary" onclick="mudarStatus('${ag.id}', 'concluido')" title="Concluir"><i class="bi bi-check"></i></button>` : ''}
-                        ${status !== 'cancelado' ? `<button class="btn btn-sm btn-secondary" onclick="mudarStatus('${ag.id}', 'cancelado')" title="Cancelar"><i class="bi bi-x"></i></button>` : ''}
-                        <button class="btn btn-sm btn-danger" onclick="excluirAgendamento('${ag.id}')" title="Excluir"><i class="bi bi-trash"></i></button>
+                        ${status !== 'concluido' && status !== 'cancelado' ? `<button class="btn btn-sm btn-warning" onclick="lembrarCliente('${ag.id}')"><i class="bi bi-bell-fill"></i></button>` : ''}
+                        <a href="https://wa.me/55${tel}" target="_blank" class="btn btn-sm btn-success"><i class="bi bi-whatsapp"></i></a>
+                        ${status !== 'concluido' ? `<button class="btn btn-sm btn-primary" onclick="mudarStatus('${ag.id}', 'concluido')"><i class="bi bi-check"></i></button>` : ''}
+                        ${status !== 'cancelado' ? `<button class="btn btn-sm btn-secondary" onclick="mudarStatus('${ag.id}', 'cancelado')"><i class="bi bi-x"></i></button>` : ''}
+                        <button class="btn btn-sm btn-danger" onclick="excluirAgendamento('${ag.id}')"><i class="bi bi-trash"></i></button>
                     </div>
-                </div>
-            `;
+                </div>`;
         }
 
         window.lembrarCliente = function(id) {
@@ -1177,12 +1661,8 @@
             if (!ag) return;
             const primeiro = (ag.clienteNome || '').split(' ')[0] || 'Cliente';
             const dataFmt = new Date(ag.data + 'T00:00:00').toLocaleDateString('pt-BR');
-
             if ('Notification' in window && Notification.permission === 'granted') {
-                new Notification('🔔 Lembrete', {
-                    body: `${primeiro} — ${dataFmt} às ${ag.horario} — ${ag.servicoNome}`,
-                    icon: 'seujorge.PNG', tag: 'lembrete-' + id, requireInteraction: true
-                });
+                new Notification('🔔 Lembrete', { body: `${primeiro} — ${dataFmt} às ${ag.horario}`, icon: 'seujorge.PNG' });
                 mostrarAlertaAdmin(`🔔 ${primeiro} às ${ag.horario}`, 'info');
             } else {
                 alert(`🔔 ${primeiro} — ${dataFmt} às ${ag.horario}`);
@@ -1201,72 +1681,25 @@
             }
         };
 
-        window.abrirAvisarAmanha = function() {
-            const amanhaStr = getAmanhaStr();
-            const lista = agendamentos.filter(a => a.data === amanhaStr && a.status !== 'cancelado')
-                .sort((a, b) => (a.horario || '').localeCompare(b.horario || ''));
-
-            const container = document.getElementById('lista-avisar-amanha');
-            const dataFmt = new Date(amanhaStr + 'T00:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
-
-            if (lista.length === 0) {
-                container.innerHTML = `<div class="alert alert-warning text-center"><i class="bi bi-calendar-x fs-1 d-block mb-2"></i><strong>Nenhum agendamento para amanhã (${dataFmt}).</strong></div>`;
-                new bootstrap.Modal(document.getElementById('modalAvisarAmanha')).show();
-                return;
-            }
-
-            let html = `<h6 class="mb-3 text-dark"><i class="bi bi-calendar-event"></i> ${lista.length} agendamento(s) — ${dataFmt}</h6>`;
-
-            lista.forEach(ag => {
-                const telLimpo = (ag.clienteTelefone || '').replace(/\D/g, '');
-                const primeiro = (ag.clienteNome || '').split(' ')[0] || 'Cliente';
-                const msg = `Olá ${primeiro}! Aqui é o Seu Jorge. Passando pra lembrar do seu horário amanhã (${dataFmt}) às ${ag.horario}, serviço ${ag.servicoNome}. Tá confirmado? 💈`;
-
-                html += `
-                    <div class="agendamento-item" style="margin-bottom: 8px;">
-                        <div class="agendamento-info">
-                            <strong>${ag.horario} — ${ag.clienteNome}</strong>
-                            <small class="d-block text-muted">💈 ${ag.servicoNome} • 📞 ${ag.clienteTelefone}</small>
-                        </div>
-                        <a href="https://wa.me/55${telLimpo}?text=${encodeURIComponent(msg)}" target="_blank" class="btn btn-sm btn-success fw-bold"><i class="bi bi-whatsapp"></i> Avisar</a>
-                    </div>`;
-            });
-
-            html += `<div class="alert alert-info mt-3 small"><i class="bi bi-lightbulb"></i> Abra cada WhatsApp e clique em enviar. São ${lista.length} cliente(s).</div>`;
-
-            container.innerHTML = html;
-            new bootstrap.Modal(document.getElementById('modalAvisarAmanha')).show();
-        };
-
         window.limparAgendamentosAntigos = function() {
             const hojeStr = getHojeStr();
             const paraRemover = agendamentos.filter(a => a.data < hojeStr && (a.status === 'concluido' || a.status === 'cancelado'));
-
-            if (paraRemover.length === 0) {
-                mostrarAlertaAdmin('✅ Nada para limpar.', 'success');
-                return;
-            }
-
-            if (!confirm(`🧹 Remover ${paraRemover.length} agendamento(s) antigo(s)?`)) return;
-
+            if (paraRemover.length === 0) { mostrarAlertaAdmin('✅ Nada para limpar.', 'success'); return; }
+            if (!confirm(`🧹 Remover ${paraRemover.length} agendamento(s)?`)) return;
             const updates = {};
             paraRemover.forEach(a => { updates['agendamentos/' + a.id] = null; });
-
             db.ref().update(updates).then(() => {
                 mostrarAlertaAdmin(`🧹 ${paraRemover.length} removido(s)!`, 'success');
                 setTimeout(carregarAgendamentosREST, 500);
             });
         };
 
+        // ============================================
         // SERVIÇOS
+        // ============================================
         function renderizarServicos() {
             const container = document.getElementById('lista-servicos');
             if (!container) return;
-
-            if (servicos.length === 0) {
-                container.innerHTML = `<div class="agendamento-vazio"><i class="bi bi-inbox"></i><p class="mb-0">Nenhum serviço cadastrado.</p></div>`;
-                return;
-            }
 
             let lista = [...servicos];
             if (filtroServicos === 'ok') lista = lista.filter(s => !(s.preco === 0 || !s.nome || s.nome === 'NOVO SERVIÇO'));
@@ -1276,14 +1709,9 @@
             container.innerHTML = '';
 
             if (lista.length === 0) {
-                container.innerHTML = `<div class="agendamento-vazio"><i class="bi bi-inbox"></i><p class="mb-0">Nenhum serviço neste filtro.</p></div>`;
+                container.innerHTML = `<div class="agendamento-vazio"><i class="bi bi-inbox"></i><p class="mb-0">Nenhum serviço.</p></div>`;
                 return;
             }
-
-            const contador = document.createElement('div');
-            contador.className = 'mb-3';
-            contador.innerHTML = `<span class="badge bg-secondary">${lista.length} serviço${lista.length > 1 ? 's' : ''}</span>`;
-            container.appendChild(contador);
 
             lista.forEach(s => {
                 const preco = typeof s.preco === 'number' ? s.preco.toFixed(2).replace('.', ',') : '0,00';
@@ -1292,9 +1720,7 @@
                 let classe = 'servico-item';
                 if (vazio) classe += ' servico-vazio';
                 if (inativo) classe += ' servico-inativo';
-
-                const badgeHtml = vazio
-                    ? '<span class="badge bg-warning text-dark ms-2">não configurado</span>'
+                const badgeHtml = vazio ? '<span class="badge bg-warning text-dark ms-2">não configurado</span>'
                     : (inativo ? '<span class="badge bg-secondary ms-2">inativo</span>' : '<span class="badge bg-success ms-2">ativo</span>');
 
                 const wrapper = document.createElement('div');
@@ -1335,12 +1761,10 @@
             const nome = document.getElementById('edit-servico-nome').value.trim().toUpperCase();
             const duracao = parseInt(document.getElementById('edit-servico-duracao').value) || 30;
             const preco = parseFloat(document.getElementById('edit-servico-preco').value) || 0;
-
             if (!nome) { alert('⚠️ Digite um nome!'); return; }
-            if (preco <= 0) { if (!confirm('⚠️ Preço zerado. Salvar?')) return; }
+            if (preco <= 0 && !confirm('⚠️ Preço zerado. Salvar?')) return;
 
             const dados = { nome, duracao, preco, icone: 'bi-scissors', ativo: true };
-
             if (id) {
                 db.ref('config/servicos/' + id).update(dados).then(() => {
                     bootstrap.Modal.getInstance(document.getElementById('modalServico')).hide();
@@ -1381,104 +1805,17 @@
             const vazios = servicos.filter(s => s.preco === 0 || !s.nome || s.nome === 'NOVO SERVIÇO');
             if (vazios.length === 0) { mostrarAlertaAdmin('✅ Nada para limpar.', 'success'); return; }
             if (!confirm(`🧹 Remover ${vazios.length} serviço(s) vazio(s)?`)) return;
-
             const updates = {};
             vazios.forEach(v => { updates['config/servicos/' + v.id] = null; });
-
             db.ref().update(updates).then(() => {
                 mostrarAlertaAdmin(`🧹 ${vazios.length} removido(s)!`, 'success');
                 setTimeout(carregarServicosREST, 500);
             });
         };
 
-        function mostrarAlertaAdmin(mensagem, tipo = 'success') {
-            const anterior = document.getElementById('alerta-admin');
-            if (anterior) anterior.remove();
-            const cores = { success: 'alert-success', info: 'alert-info', warning: 'alert-warning', danger: 'alert-danger' };
-            const alerta = document.createElement('div');
-            alerta.id = 'alerta-admin';
-            alerta.className = `alert ${cores[tipo]} alert-dismissible fade show`;
-            alerta.style.cssText = 'position: fixed; top: 80px; right: 20px; z-index: 9999; min-width: 300px; box-shadow: 0 4px 20px rgba(0,0,0,.3); font-weight: 600;';
-            alerta.innerHTML = `${mensagem}<button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>`;
-            document.body.appendChild(alerta);
-            setTimeout(() => { if (alerta.parentElement) alerta.remove(); }, 4000);
-        }
-
-        // FATURAMENTO
-        function renderizarFaturamento() {
-            const concluidos = agendamentos.filter(a => a.status === 'concluido');
-            const hojeStr = getHojeStr();
-            const inicioSemana = getInicioSemana();
-            const inicioMes = getInicioMes();
-            const inicioAno = getInicioAno();
-
-            const hoje = concluidos.filter(a => a.data === hojeStr);
-            const semana = concluidos.filter(a => a.data >= inicioSemana && a.data <= hojeStr);
-            const mes = concluidos.filter(a => a.data >= inicioMes && a.data <= hojeStr);
-
-            const soma = arr => arr.reduce((s, a) => s + (typeof a.servicoPreco === 'number' ? a.servicoPreco : 0), 0);
-            const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
-
-            set('fat-hoje', formatBRL(soma(hoje)));
-            set('fat-hoje-qtd', `${hoje.length} atendimento${hoje.length !== 1 ? 's' : ''}`);
-            set('fat-semana', formatBRL(soma(semana)));
-            set('fat-semana-qtd', `${semana.length} atendimento${semana.length !== 1 ? 's' : ''}`);
-            set('fat-mes', formatBRL(soma(mes)));
-            set('fat-mes-qtd', `${mes.length} atendimento${mes.length !== 1 ? 's' : ''}`);
-            set('fat-total', formatBRL(soma(concluidos)));
-            set('fat-total-qtd', `${concluidos.length} atendimento${concluidos.length !== 1 ? 's' : ''}`);
-
-            let listaFiltrada = concluidos;
-            if (filtroFaturamento === 'hoje') listaFiltrada = hoje;
-            else if (filtroFaturamento === 'semana') listaFiltrada = semana;
-            else if (filtroFaturamento === 'mes') listaFiltrada = mes;
-            else if (filtroFaturamento === 'ano') listaFiltrada = concluidos.filter(a => a.data >= inicioAno && a.data <= hojeStr);
-
-            set('fat-filtro-total', formatBRL(soma(listaFiltrada)));
-
-            listaFiltrada.sort((a, b) => {
-                const da = (a.data || '') + (a.horario || '');
-                const db_ = (b.data || '') + (b.horario || '');
-                return db_.localeCompare(da);
-            });
-
-            const container = document.getElementById('lista-faturamento');
-            if (!container) return;
-            container.innerHTML = '';
-
-            if (listaFiltrada.length === 0) {
-                container.innerHTML = `<div class="agendamento-vazio"><i class="bi bi-cash-stack"></i><p class="mb-0">Nenhum atendimento concluído ${filtroFaturamento !== 'todos' ? 'neste período' : ''}.</p></div>`;
-                return;
-            }
-
-            const porDia = {};
-            listaFiltrada.forEach(a => { if (!porDia[a.data]) porDia[a.data] = []; porDia[a.data].push(a); });
-
-            Object.keys(porDia).sort().reverse().forEach(data => {
-                const itens = porDia[data].sort((a, b) => (b.horario || '').localeCompare(a.horario || ''));
-                const dataFmt = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
-
-                const titulo = document.createElement('div');
-                titulo.className = 'fat-dia-titulo';
-                titulo.innerHTML = `<h6><i class="bi bi-calendar-check text-success"></i> ${dataFmt}</h6><span class="total">${formatBRL(soma(itens))} <small class="text-muted">(${itens.length} atend.)</small></span>`;
-                container.appendChild(titulo);
-
-                itens.forEach(a => {
-                    const wrapper = document.createElement('div');
-                    wrapper.innerHTML = `
-                        <div class="fat-item">
-                            <div class="fat-item-info">
-                                <strong>${a.horario} — ${a.clienteNome || 'Sem nome'}</strong>
-                                <small>💈 ${a.servicoNome || '-'} • 📞 ${a.clienteTelefone || '-'}</small>
-                            </div>
-                            <div class="fat-item-valor">${formatBRL(a.servicoPreco || 0)}</div>
-                        </div>`;
-                    while (wrapper.firstChild) container.appendChild(wrapper.firstChild);
-                });
-            });
-        }
-
+        // ============================================
         // BLOQUEIOS
+        // ============================================
         window.bloquearDiaInteiro = function() {
             const data = document.getElementById('bloqueio-dia-data').value;
             const motivo = document.getElementById('bloqueio-dia-motivo').value.trim() || 'Folga';
@@ -1504,17 +1841,12 @@
             Promise.all([
                 db.ref('bloqueios/' + data).once('value'),
                 db.ref('bloqueios-dia/' + data).once('value')
-            ]).then(([snapHoras, snapDia]) => {
-                const jaBloqueados = snapHoras.val() || {};
-                if (snapDia.exists()) {
-                    container.innerHTML = '<p class="text-danger small">⚠️ Dia já bloqueado.</p>';
-                    return;
-                }
+            ]).then(([snapH, snapD]) => {
+                const jb = snapH.val() || {};
+                if (snapD.exists()) { container.innerHTML = '<p class="text-danger small">⚠️ Dia já bloqueado.</p>'; return; }
                 let html = '<p class="text-white small mb-2">Marque os horários:</p><div>';
-                horarios.forEach(hora => {
-                    const m = jaBloqueados[hora] ? 'checked' : '';
-                    const cm = jaBloqueados[hora] ? 'marcado' : '';
-                    html += `<label class="horario-check ${cm}"><input type="checkbox" value="${hora}" ${m} onchange="toggleHorarioCheck(this)"> ${hora}</label>`;
+                horarios.forEach(h => {
+                    html += `<label class="horario-check ${jb[h] ? 'marcado' : ''}"><input type="checkbox" value="${h}" ${jb[h] ? 'checked' : ''} onchange="toggleHorarioCheck(this)"> ${h}</label>`;
                 });
                 html += '</div>';
                 container.innerHTML = html;
@@ -1530,17 +1862,14 @@
             const data = document.getElementById('bloqueio-hora-data').value;
             const motivo = document.getElementById('bloqueio-hora-motivo').value.trim() || 'Bloqueado';
             if (!data) { alert('Selecione uma data!'); return; }
-
-            const checkboxes = document.querySelectorAll('#horarios-para-bloquear input[type="checkbox"]');
-            let selecionados = [];
-            checkboxes.forEach(cb => { if (cb.checked) selecionados.push(cb.value); });
-            if (selecionados.length === 0) { alert('Selecione horários!'); return; }
-
+            const cbs = document.querySelectorAll('#horarios-para-bloquear input[type="checkbox"]');
+            let sel = [];
+            cbs.forEach(cb => { if (cb.checked) sel.push(cb.value); });
+            if (sel.length === 0) { alert('Selecione horários!'); return; }
             const updates = {};
-            selecionados.forEach(hora => { updates['bloqueios/' + data + '/' + hora] = motivo; });
-
+            sel.forEach(h => { updates['bloqueios/' + data + '/' + h] = motivo; });
             db.ref().update(updates).then(() => {
-                alert(`✅ ${selecionados.length} bloqueado(s)!`);
+                alert(`✅ ${sel.length} bloqueado(s)!`);
                 document.getElementById('bloqueio-hora-motivo').value = '';
                 carregarHorariosParaBloquear();
             });
@@ -1550,26 +1879,24 @@
 
         window.salvarDiasSemana = function() {
             const botoes = document.querySelectorAll('.dia-semana-btn');
-            const diasAtivos = [];
-            botoes.forEach(btn => { if (btn.classList.contains('ativo')) diasAtivos.push(parseInt(btn.dataset.dia)); });
-
+            const ativos = [];
+            botoes.forEach(b => { if (b.classList.contains('ativo')) ativos.push(parseInt(b.dataset.dia)); });
             const updates = {};
             for (let i = 0; i <= 6; i++) updates['bloqueios-semana/' + i] = null;
-            diasAtivos.forEach(dia => { updates['bloqueios-semana/' + dia] = true; });
-
+            ativos.forEach(d => { updates['bloqueios-semana/' + d] = true; });
             db.ref().update(updates).then(() => {
-                if (diasAtivos.length === 0) alert('✅ Nenhum dia bloqueado.');
+                if (ativos.length === 0) alert('✅ Nenhum dia bloqueado.');
                 else {
                     const nomes = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
-                    alert('✅ ' + diasAtivos.map(d => nomes[d]).join(', '));
+                    alert('✅ ' + ativos.map(d => nomes[d]).join(', '));
                 }
             });
         };
 
-        function carregarDiasSemana(bloqueios) {
+        function carregarDiasSemana(b) {
             document.querySelectorAll('.dia-semana-btn').forEach(btn => {
                 const dia = parseInt(btn.dataset.dia);
-                if (bloqueios[dia]) btn.classList.add('ativo'); else btn.classList.remove('ativo');
+                if (b[dia]) btn.classList.add('ativo'); else btn.classList.remove('ativo');
             });
         }
 
@@ -1581,69 +1908,62 @@
                 db.ref('bloqueios').once('value'),
                 db.ref('bloqueios-dia').once('value'),
                 db.ref('bloqueios-semana').once('value')
-            ]).then(([snapHoras, snapDia, snapSemana]) => {
-                const horas = snapHoras.val() || {};
-                const dias = snapDia.val() || {};
-                const semana = snapSemana.val() || {};
-
-                let html = '';
-                let temAlgo = false;
+            ]).then(([snapH, snapD, snapS]) => {
+                const horas = snapH.val() || {};
+                const dias = snapD.val() || {};
+                const semana = snapS.val() || {};
+                let html = ''; let tem = false;
 
                 if (Object.keys(dias).length > 0) {
-                    temAlgo = true;
+                    tem = true;
                     html += '<h6 class="text-white mt-3 mb-2"><i class="bi bi-calendar-x text-danger"></i> Dias bloqueados:</h6>';
                     Object.keys(dias).sort().forEach(data => {
-                        const dataFmt = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR');
-                        html += `<div class="bloqueio-item dia-inteiro"><div><strong>${dataFmt}</strong><small class="d-block text-muted">${dias[data].motivo || 'Folga'}</small></div><button class="btn btn-sm btn-danger" onclick="desbloquearDiaInteiro('${data}')"><i class="bi bi-trash"></i></button></div>`;
+                        const df = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR');
+                        html += `<div class="bloqueio-item dia-inteiro"><div><strong>${df}</strong><small class="d-block text-muted">${dias[data].motivo || 'Folga'}</small></div><button class="btn btn-sm btn-danger" onclick="desbloquearDiaInteiro('${data}')"><i class="bi bi-trash"></i></button></div>`;
                     });
                 }
-
                 if (Object.keys(horas).length > 0) {
-                    temAlgo = true;
+                    tem = true;
                     html += '<h6 class="text-white mt-4 mb-2"><i class="bi bi-clock-history text-warning"></i> Horários bloqueados:</h6>';
                     Object.keys(horas).sort().forEach(data => {
-                        const horasDoDia = horas[data];
-                        if (!horasDoDia || typeof horasDoDia !== 'object') return;
-                        const dataFmt = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR');
-                        const listaHoras = Object.keys(horasDoDia).sort();
-                        if (listaHoras.length === 0) return;
-                        html += `<div class="bloqueio-item"><div><strong>${dataFmt}</strong><div class="d-flex gap-1 flex-wrap mt-2">`;
-                        listaHoras.forEach(hora => { html += `<button class="btn btn-sm btn-outline-danger" onclick="desbloquearHorario('${data}', '${hora}')">${hora} ✕</button>`; });
+                        const hd = horas[data];
+                        if (!hd || typeof hd !== 'object') return;
+                        const df = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR');
+                        const lh = Object.keys(hd).sort();
+                        if (lh.length === 0) return;
+                        html += `<div class="bloqueio-item"><div><strong>${df}</strong><div class="d-flex gap-1 flex-wrap mt-2">`;
+                        lh.forEach(h => { html += `<button class="btn btn-sm btn-outline-danger" onclick="desbloquearHorario('${data}', '${h}')">${h} ✕</button>`; });
                         html += `</div></div></div>`;
                     });
                 }
-
-                const diasSemana = Object.keys(semana).filter(d => semana[d]);
-                if (diasSemana.length > 0) {
-                    temAlgo = true;
+                const ds = Object.keys(semana).filter(d => semana[d]);
+                if (ds.length > 0) {
+                    tem = true;
                     const nomes = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
                     html += '<h6 class="text-white mt-4 mb-2"><i class="bi bi-arrow-repeat text-info"></i> Dias recorrentes:</h6>';
-                    diasSemana.forEach(dia => {
-                        html += `<div class="bloqueio-item recorrente"><div><strong>${nomes[dia]}s</strong></div><button class="btn btn-sm btn-danger" onclick="desbloquearDiaSemana(${dia})"><i class="bi bi-trash"></i></button></div>`;
+                    ds.forEach(d => {
+                        html += `<div class="bloqueio-item recorrente"><div><strong>${nomes[d]}s</strong></div><button class="btn btn-sm btn-danger" onclick="desbloquearDiaSemana(${d})"><i class="bi bi-trash"></i></button></div>`;
                     });
                 }
-
-                if (!temAlgo) html = '<p class="text-muted small">Nenhum bloqueio ativo.</p>';
+                if (!tem) html = '<p class="text-muted small">Nenhum bloqueio ativo.</p>';
                 container.innerHTML = html;
             });
         }
 
         window.desbloquearDiaInteiro = function(data) { if (confirm('Remover?')) db.ref('bloqueios-dia/' + data).remove(); };
-        window.desbloquearHorario = function(data, hora) { db.ref('bloqueios/' + data + '/' + hora).remove(); };
-        window.desbloquearDiaSemana = function(dia) { if (confirm('Remover?')) db.ref('bloqueios-semana/' + dia).remove(); };
+        window.desbloquearHorario = function(data, h) { db.ref('bloqueios/' + data + '/' + h).remove(); };
+        window.desbloquearDiaSemana = function(d) { if (confirm('Remover?')) db.ref('bloqueios-semana/' + d).remove(); };
 
+        // ============================================
         // LISTA DE ESPERA
+        // ============================================
         function renderizarListaEspera() {
             const container = document.getElementById('lista-espera-admin');
-            const badge = document.getElementById('badge-espera');
             if (!container) return;
 
             const datas = Object.keys(listaEspera).sort();
-            let totalGeral = 0;
-
             if (datas.length === 0) {
                 container.innerHTML = '<p class="text-muted text-center py-4">📭 Nenhum cliente.</p>';
-                if (badge) badge.style.display = 'none';
                 return;
             }
 
@@ -1652,49 +1972,141 @@
                 const itens = listaEspera[data];
                 if (!itens) return;
                 const lista = Object.entries(itens).map(([id, item]) => ({ id, ...item }))
-                    .filter(item => item.status !== 'convertido')
+                    .filter(i => i.status !== 'convertido')
                     .sort((a, b) => (a.criadoEm || 0) - (b.criadoEm || 0));
                 if (lista.length === 0) return;
-                totalGeral += lista.length;
 
-                const dataFmt = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
-                html += `<div class="espera-dia-bloco"><div class="espera-dia-titulo"><h6><i class="bi bi-calendar-event text-warning"></i> ${dataFmt}</h6><span class="badge bg-warning text-dark">${lista.length} pessoa${lista.length > 1 ? 's' : ''}</span></div>`;
-
-                lista.forEach((item, index) => {
-                    const horaEntrada = item.criadoEm ? new Date(item.criadoEm).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '';
-                    html += `<div class="espera-item"><div class="espera-item-info"><strong>${index + 1}º — ${item.nome || 'Sem nome'}</strong><small>📞 ${item.telefone || '-'} • 💈 ${item.servicoNome || '-'}${horaEntrada ? ` • 🕐 ${horaEntrada}` : ''}</small></div><div class="espera-item-actions"><button class="btn btn-sm btn-success" onclick="chamarEspera('${data}', '${item.id}')"><i class="bi bi-whatsapp"></i></button><button class="btn btn-sm btn-primary" onclick="marcarConvertido('${data}', '${item.id}')"><i class="bi bi-check-circle"></i></button><button class="btn btn-sm btn-danger" onclick="removerEspera('${data}', '${item.id}')"><i class="bi bi-trash"></i></button></div></div>`;
+                const df = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
+                html += `<div class="espera-dia-bloco"><div class="espera-dia-titulo"><h6><i class="bi bi-calendar-event text-warning"></i> ${df}</h6><span class="badge bg-warning text-dark">${lista.length}</span></div>`;
+                lista.forEach((item, i) => {
+                    const he = item.criadoEm ? new Date(item.criadoEm).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '';
+                    html += `<div class="espera-item"><div class="espera-item-info"><strong>${i+1}º — ${item.nome || 'Sem nome'}</strong><small>📞 ${item.telefone || '-'} • 💈 ${item.servicoNome || '-'}${he ? ` • 🕐 ${he}` : ''}</small></div><div class="espera-item-actions"><button class="btn btn-sm btn-success" onclick="chamarEspera('${data}', '${item.id}')"><i class="bi bi-whatsapp"></i></button><button class="btn btn-sm btn-primary" onclick="marcarConvertido('${data}', '${item.id}')"><i class="bi bi-check-circle"></i></button><button class="btn btn-sm btn-danger" onclick="removerEspera('${data}', '${item.id}')"><i class="bi bi-trash"></i></button></div></div>`;
                 });
                 html += `</div>`;
             });
-
-            if (!html) {
-                container.innerHTML = '<p class="text-muted text-center py-4">📭 Nenhum cliente.</p>';
-                if (badge) badge.style.display = 'none';
-                return;
-            }
-            container.innerHTML = html;
-            if (badge) { badge.textContent = totalGeral; badge.style.display = totalGeral > 0 ? 'inline-block' : 'none'; }
+            container.innerHTML = html || '<p class="text-muted text-center py-4">📭 Nenhum cliente.</p>';
         }
 
         window.chamarEspera = function(data, id) {
             const item = listaEspera[data] && listaEspera[data][id];
             if (!item) return;
-            const telLimpo = (item.telefone || '').replace(/\D/g, '');
-            if (!telLimpo) { alert('Sem telefone.'); return; }
+            const tel = (item.telefone || '').replace(/\D/g, '');
+            if (!tel) { alert('Sem telefone.'); return; }
             const primeiro = (item.nome || '').split(' ')[0] || 'tudo bem';
-            const dataFmt = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
-            const msg = `Olá ${primeiro}! Aqui é o Seu Jorge. Vagou um horário no dia ${dataFmt}. Ainda tem interesse? 💈`;
-            window.open(`https://wa.me/55${telLimpo}?text=${encodeURIComponent(msg)}`, '_blank');
+            const df = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
+            const msg = `Olá ${primeiro}! Aqui é o Seu Jorge. Vagou um horário no dia ${df}. Ainda tem interesse? 💈`;
+            window.open(`https://wa.me/55${tel}?text=${encodeURIComponent(msg)}`, '_blank');
         };
 
-        window.marcarConvertido = function(data, id) {
-            if (!confirm('Marcar como atendido?')) return;
-            db.ref('lista-espera/' + data + '/' + id + '/status').set('convertido');
+        window.marcarConvertido = function(data, id) { if (confirm('Marcar como atendido?')) db.ref('lista-espera/' + data + '/' + id + '/status').set('convertido'); };
+        window.removerEspera = function(data, id) { if (confirm('Remover?')) db.ref('lista-espera/' + data + '/' + id).remove(); };
+
+        // ============================================
+        // FATURAMENTO
+        // ============================================
+        function renderizarFaturamento() {
+            const concluidos = agendamentos.filter(a => a.status === 'concluido');
+            const hojeStr = getHojeStr();
+            const iSem = getInicioSemana();
+            const iMes = getInicioMes();
+            const iAno = getInicioAno();
+
+            const hoje = concluidos.filter(a => a.data === hojeStr);
+            const semana = concluidos.filter(a => a.data >= iSem && a.data <= hojeStr);
+            const mes = concluidos.filter(a => a.data >= iMes && a.data <= hojeStr);
+            const soma = arr => arr.reduce((s, a) => s + (typeof a.servicoPreco === 'number' ? a.servicoPreco : 0), 0);
+            const set = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+
+            set('fat-hoje', formatBRL(soma(hoje)));
+            set('fat-hoje-qtd', `${hoje.length} atendimento${hoje.length !== 1 ? 's' : ''}`);
+            set('fat-semana', formatBRL(soma(semana)));
+            set('fat-semana-qtd', `${semana.length} atendimento${semana.length !== 1 ? 's' : ''}`);
+            set('fat-mes', formatBRL(soma(mes)));
+            set('fat-mes-qtd', `${mes.length} atendimento${mes.length !== 1 ? 's' : ''}`);
+            set('fat-total', formatBRL(soma(concluidos)));
+            set('fat-total-qtd', `${concluidos.length} atendimento${concluidos.length !== 1 ? 's' : ''}`);
+
+            let lf = concluidos;
+            if (filtroFaturamento === 'hoje') lf = hoje;
+            else if (filtroFaturamento === 'semana') lf = semana;
+            else if (filtroFaturamento === 'mes') lf = mes;
+            else if (filtroFaturamento === 'ano') lf = concluidos.filter(a => a.data >= iAno && a.data <= hojeStr);
+
+            set('fat-filtro-total', formatBRL(soma(lf)));
+
+            lf.sort((a, b) => ((b.data || '') + (b.horario || '')).localeCompare((a.data || '') + (a.horario || '')));
+
+            const container = document.getElementById('lista-faturamento');
+            if (!container) return;
+            container.innerHTML = '';
+
+            if (lf.length === 0) {
+                container.innerHTML = `<div class="agendamento-vazio"><i class="bi bi-cash-stack"></i><p class="mb-0">Nenhum atendimento concluído.</p></div>`;
+                return;
+            }
+
+            const porDia = {};
+            lf.forEach(a => { if (!porDia[a.data]) porDia[a.data] = []; porDia[a.data].push(a); });
+
+            Object.keys(porDia).sort().reverse().forEach(data => {
+                const itens = porDia[data].sort((a, b) => (b.horario || '').localeCompare(a.horario || ''));
+                const df = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
+                const titulo = document.createElement('div');
+                titulo.className = 'fat-dia-titulo';
+                titulo.innerHTML = `<h6><i class="bi bi-calendar-check text-success"></i> ${df}</h6><span class="total">${formatBRL(soma(itens))} <small class="text-muted">(${itens.length})</small></span>`;
+                container.appendChild(titulo);
+
+                itens.forEach(a => {
+                    const w = document.createElement('div');
+                    w.innerHTML = `<div class="fat-item"><div class="fat-item-info"><strong>${a.horario} — ${a.clienteNome || 'Sem nome'}</strong><small>💈 ${a.servicoNome || '-'}</small></div><div class="fat-item-valor">${formatBRL(a.servicoPreco || 0)}</div></div>`;
+                    while (w.firstChild) container.appendChild(w.firstChild);
+                });
+            });
+        }
+
+        // ============================================
+        // AVISAR AMANHÃ
+        // ============================================
+        window.abrirAvisarAmanha = function() {
+            const amanhaStr = getAmanhaStr();
+            const lista = agendamentos.filter(a => a.data === amanhaStr && a.status !== 'cancelado')
+                .sort((a, b) => (a.horario || '').localeCompare(b.horario || ''));
+
+            const container = document.getElementById('lista-avisar-amanha');
+            const df = new Date(amanhaStr + 'T00:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
+
+            if (lista.length === 0) {
+                container.innerHTML = `<div class="alert alert-warning text-center"><i class="bi bi-calendar-x fs-1 d-block mb-2"></i><strong>Nenhum agendamento para amanhã.</strong></div>`;
+                new bootstrap.Modal(document.getElementById('modalAvisarAmanha')).show();
+                return;
+            }
+
+            let html = `<h6 class="mb-3 text-dark"><i class="bi bi-calendar-event"></i> ${lista.length} agendamento(s) — ${df}</h6>`;
+            lista.forEach(ag => {
+                const tel = (ag.clienteTelefone || '').replace(/\D/g, '');
+                const primeiro = (ag.clienteNome || '').split(' ')[0] || 'Cliente';
+                const msg = `Olá ${primeiro}! Aqui é o Seu Jorge. Passando pra lembrar do seu horário amanhã (${df}) às ${ag.horario}, serviço ${ag.servicoNome}. Tá confirmado? 💈`;
+                html += `<div class="agendamento-item" style="margin-bottom:8px;"><div class="agendamento-info"><strong>${ag.horario} — ${ag.clienteNome}</strong><small class="d-block text-muted">💈 ${ag.servicoNome} • 📞 ${ag.clienteTelefone}</small></div><a href="https://wa.me/55${tel}?text=${encodeURIComponent(msg)}" target="_blank" class="btn btn-sm btn-success fw-bold"><i class="bi bi-whatsapp"></i> Avisar</a></div>`;
+            });
+            container.innerHTML = html;
+            new bootstrap.Modal(document.getElementById('modalAvisarAmanha')).show();
         };
-        window.removerEspera = function(data, id) {
-            if (!confirm('Remover?')) return;
-            db.ref('lista-espera/' + data + '/' + id).remove();
-        };
+
+        // ============================================
+        // ALERTA ADMIN
+        // ============================================
+        function mostrarAlertaAdmin(m, tipo = 'success') {
+            const ant = document.getElementById('alerta-admin');
+            if (ant) ant.remove();
+            const cores = { success: 'alert-success', info: 'alert-info', warning: 'alert-warning', danger: 'alert-danger' };
+            const a = document.createElement('div');
+            a.id = 'alerta-admin';
+            a.className = `alert ${cores[tipo]} alert-dismissible fade show`;
+            a.style.cssText = 'position:fixed;top:80px;right:20px;z-index:9999;min-width:280px;box-shadow:0 4px 20px rgba(0,0,0,.3);font-weight:600;';
+            a.innerHTML = `${m}<button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>`;
+            document.body.appendChild(a);
+            setTimeout(() => { if (a.parentElement) a.remove(); }, 4000);
+        }
 
     })();
     </script>
