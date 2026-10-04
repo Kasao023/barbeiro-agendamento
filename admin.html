@@ -56,40 +56,36 @@
         /* CARDS DE RESUMO */
         .resumo-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 12px;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
             margin-bottom: 24px;
         }
         .resumo-card {
             background: #1a1a1a;
             border-radius: 14px;
-            padding: 18px;
-            border-left: 4px solid var(--cor-primaria);
+            padding: 20px;
+            border-left: 5px solid var(--cor-primaria);
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 16px;
         }
         .resumo-card.hoje { border-left-color: #ffc107; }
         .resumo-card.amanha { border-left-color: #17a2b8; }
-        .resumo-card.semana { border-left-color: #28a745; }
-        .resumo-card.espera { border-left-color: #6f42c1; }
         .resumo-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
             display: grid;
             place-items: center;
-            font-size: 1.4rem;
+            font-size: 1.6rem;
             background: rgba(220,53,69,.15);
             flex-shrink: 0;
         }
         .resumo-card.hoje .resumo-icon { background: rgba(255,199,7,.15); }
         .resumo-card.amanha .resumo-icon { background: rgba(23,162,184,.15); }
-        .resumo-card.semana .resumo-icon { background: rgba(40,167,69,.15); }
-        .resumo-card.espera .resumo-icon { background: rgba(111,66,193,.15); }
         .resumo-info strong {
             display: block;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: 800;
             color: #fff;
             line-height: 1;
@@ -98,7 +94,7 @@
         }
         .resumo-info span {
             color: #888;
-            font-size: .8rem;
+            font-size: .82rem;
             text-transform: uppercase;
             letter-spacing: .5px;
         }
@@ -311,13 +307,9 @@
         }
         .overlay-menu.active { opacity: 1; visibility: visible; }
 
-        /* ============ VIEWS INTERNAS (as ferramentas) ============ */
-        .view {
-            display: none;
-        }
-        .view.active {
-            display: block;
-        }
+        /* ============ VIEWS INTERNAS ============ */
+        .view { display: none; }
+        .view.active { display: block; }
 
         .view-header {
             display: flex;
@@ -349,7 +341,7 @@
             color: #fff;
         }
 
-        /* Mantém os estilos antigos para as ferramentas */
+        /* Estilos antigos mantidos */
         .filtros-agendamentos {
             display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;
         }
@@ -378,12 +370,8 @@
         .agendamento-item:hover {
             transform: translateX(4px); box-shadow: 0 6px 18px rgba(0,0,0,.15);
         }
-        .agendamento-item.status-concluido {
-            border-left-color: var(--cor-sucesso); background: #f0fff4;
-        }
-        .agendamento-item.status-cancelado {
-            border-left-color: #6c757d; background: #f8f8f8; opacity: 0.7;
-        }
+        .agendamento-item.status-concluido { border-left-color: var(--cor-sucesso); background: #f0fff4; }
+        .agendamento-item.status-cancelado { border-left-color: #6c757d; background: #f8f8f8; opacity: 0.7; }
         .agendamento-item.status-passado { border-left-color: #adb5bd; }
         .agendamento-item.status-hoje { border-left-color: #ffc107; background: #fffbf0; }
 
@@ -603,9 +591,9 @@
         @media (max-width: 600px) {
             .dash-header h2 { font-size: 1.3rem; }
             .btn-menu-abrir { padding: 10px 16px; font-size: .85rem; }
-            .resumo-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
-            .resumo-card { padding: 14px; }
-            .resumo-info strong { font-size: 1.2rem; }
+            .resumo-card { padding: 16px; gap: 12px; }
+            .resumo-icon { width: 44px; height: 44px; font-size: 1.3rem; }
+            .resumo-info strong { font-size: 1.5rem; }
             .ag-simples { padding: 12px; }
             .ag-info strong { font-size: .9rem; }
         }
@@ -664,7 +652,7 @@
 
         <div class="container py-4">
 
-            <!-- ============ VIEW: DASHBOARD (INICIAL) ============ -->
+            <!-- ============ VIEW: DASHBOARD ============ -->
             <div class="view active" id="view-dashboard">
 
                 <div class="dash-header">
@@ -678,7 +666,7 @@
                     </button>
                 </div>
 
-                <!-- Cards de resumo -->
+                <!-- Cards: só Hoje e Amanhã -->
                 <div class="resumo-grid">
                     <div class="resumo-card hoje">
                         <div class="resumo-icon">📅</div>
@@ -692,20 +680,6 @@
                         <div class="resumo-info">
                             <strong id="res-amanha">0</strong>
                             <span>Amanhã</span>
-                        </div>
-                    </div>
-                    <div class="resumo-card semana">
-                        <div class="resumo-icon">📊</div>
-                        <div class="resumo-info">
-                            <strong id="res-semana">0</strong>
-                            <span>Próximos 7 dias</span>
-                        </div>
-                    </div>
-                    <div class="resumo-card espera">
-                        <div class="resumo-icon">⏳</div>
-                        <div class="resumo-info">
-                            <strong id="res-espera">0</strong>
-                            <span>Na fila</span>
                         </div>
                     </div>
                 </div>
@@ -1202,7 +1176,7 @@
         }
 
         // ============================================
-        // NAVEGAÇÃO ENTRE VIEWS
+        // NAVEGAÇÃO
         // ============================================
         window.abrirMenu = function() {
             document.getElementById('menuDrawer').classList.add('open');
@@ -1221,7 +1195,6 @@
             if (view) view.classList.add('active');
             window.scrollTo(0, 0);
 
-            // Re-renderiza dados da view aberta
             if (nome === 'agendamentos') renderizarAgendamentos();
             if (nome === 'servicos') renderizarServicos();
             if (nome === 'espera') renderizarListaEspera();
@@ -1243,50 +1216,24 @@
             const hojeStr = getHojeStr();
             const amanhaStr = getAmanhaStr();
 
-            // Data por extenso
             const agora = new Date();
             const dataFmt = agora.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
             const el = document.getElementById('saudacao-data');
             if (el) el.textContent = dataFmt.charAt(0).toUpperCase() + dataFmt.slice(1);
 
-            // Filtra
             const hoje = agendamentos.filter(a => a.data === hojeStr)
                 .sort((a, b) => (a.horario || '').localeCompare(b.horario || ''));
             const amanha = agendamentos.filter(a => a.data === amanhaStr)
                 .sort((a, b) => (a.horario || '').localeCompare(b.horario || ''));
-            const proximos7 = agendamentos.filter(a => a.data >= hojeStr && a.data <= getProximos7())
-                .filter(a => a.status !== 'cancelado');
 
-            // Contadores
             const set = (id, val) => { const e = document.getElementById(id); if (e) e.textContent = val; };
             set('res-hoje', hoje.filter(a => a.status !== 'cancelado').length);
             set('res-amanha', amanha.filter(a => a.status !== 'cancelado').length);
-            set('res-semana', proximos7.length);
-            set('res-espera', contarListaEspera());
             set('badge-hoje', hoje.filter(a => a.status !== 'cancelado').length);
             set('badge-amanha', amanha.filter(a => a.status !== 'cancelado').length);
 
-            // Renderiza listas
             renderizarListaSimples('lista-hoje', hoje, true);
             renderizarListaSimples('lista-amanha', amanha, false);
-        }
-
-        function getProximos7() {
-            const d = new Date();
-            d.setDate(d.getDate() + 7);
-            return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-        }
-
-        function contarListaEspera() {
-            let total = 0;
-            Object.keys(listaEspera).forEach(data => {
-                const itens = listaEspera[data];
-                if (!itens) return;
-                Object.keys(itens).forEach(id => {
-                    if (itens[id].status !== 'convertido') total++;
-                });
-            });
-            return total;
         }
 
         function renderizarListaSimples(containerId, lista, ehHoje) {
@@ -1378,26 +1325,19 @@
 
         window.fazerLogout = async function() {
             if (!confirm('Deseja sair do painel?')) return;
-            try {
-                await auth.signOut();
-                location.reload();
-            } catch (err) {
-                console.error('Erro logout:', err);
-            }
+            try { await auth.signOut(); location.reload(); }
+            catch (err) { console.error('Erro logout:', err); }
         };
 
         window.esqueceuSenha = async function() {
             const emailInput = document.getElementById('email-input');
             let email = (emailInput.value || '').trim();
             if (!email && usuarioLogado) email = usuarioLogado.email;
-
             if (!email) {
                 email = prompt('Digite o email da conta admin:');
                 if (!email) return;
             }
-
             if (!confirm(`Enviar link de redefinição para:\n\n${email}\n\nConfirma?`)) return;
-
             try {
                 await auth.sendPasswordResetEmail(email);
                 alert('✅ Link enviado! Verifique sua caixa de entrada e o spam.');
@@ -1439,18 +1379,14 @@
                         body: 'Você vai receber avisos dos agendamentos.',
                         icon: 'seujorge.PNG'
                     });
-                } else {
-                    alert('❌ Permissão negada.');
-                }
+                } else { alert('❌ Permissão negada.'); }
             } catch (err) { console.error(err); }
         };
 
         window.testarNotificacaoNavegador = function() {
             if (Notification.permission === 'granted') {
                 new Notification('🔔 Teste', { body: 'Tudo funcionando!', icon: 'seujorge.PNG' });
-            } else {
-                alert('⚠️ Ative as notificações primeiro.');
-            }
+            } else { alert('⚠️ Ative as notificações primeiro.'); }
         };
 
         // ============================================
@@ -1534,7 +1470,14 @@
 
         function atualizarBadgeEsperaMenu() {
             const badge = document.getElementById('menu-badge-espera');
-            const total = contarListaEspera();
+            let total = 0;
+            Object.keys(listaEspera).forEach(data => {
+                const itens = listaEspera[data];
+                if (!itens) return;
+                Object.keys(itens).forEach(id => {
+                    if (itens[id].status !== 'convertido') total++;
+                });
+            });
             if (badge) {
                 badge.textContent = total;
                 badge.style.display = total > 0 ? 'inline-block' : 'none';
@@ -1573,7 +1516,7 @@
         }
 
         // ============================================
-        // RENDERIZAR AGENDAMENTOS (view completa)
+        // AGENDAMENTOS (view completa)
         // ============================================
         function renderizarAgendamentos() {
             const container = document.getElementById('lista-agendamentos');
@@ -1598,7 +1541,7 @@
 
             container.innerHTML = '';
             if (lista.length === 0) {
-                container.innerHTML = `<div class="agendamento-vazio"><i class="bi bi-calendar-x"></i><p class="mb-0">Nenhum agendamento ${filtroAtivo !== 'todos' ? 'neste filtro' : ''}.</p></div>`;
+                container.innerHTML = `<div class="agendamento-vazio"><i class="bi bi-calendar-x"></i><p class="mb-0">Nenhum agendamento.</p></div>`;
                 return;
             }
 
