@@ -54,21 +54,36 @@ let diasInteirosBloqueados = {};
 let diaEstaCheio = false;
 
 // ============================================
+// 🔽 ROLAGEM AUTOMÁTICA ENTRE OS PASSOS
+// ============================================
+function scrollParaPasso(idPasso) {
+    // Pequeno delay para garantir que o passo já esteja visível (display != none)
+    setTimeout(() => {
+        const el = document.getElementById(idPasso);
+        if (!el) return;
+        if (el.style.display === 'none') return;
+
+        const offsetNavbar = 100; // ajusta se a navbar for maior/menor
+        const y = el.getBoundingClientRect().top + window.pageYOffset - offsetNavbar;
+
+        window.scrollTo({ top: y, behavior: 'smooth' });
+    }, 220);
+}
+
+// ============================================
 // CARREGAR SERVIÇOS DO FIREBASE
 // ============================================
 function carregarServicosDoFirebase() {
     db.ref('config/servicos').on('value', snap => {
-        // Primeira vez? Popula com os serviços padrão
         if (!snap.exists()) {
             console.log('📦 Primeira vez: salvando serviços padrão no Firebase...');
             SERVICOS_PADRAO.forEach((s, i) => {
                 const id = 's' + (Date.now() + i);
                 db.ref('config/servicos/' + id).set(s);
             });
-            return; // o listener dispara de novo quando salvar
+            return;
         }
 
-        // Converte snapshot em array
         servicos = [];
         snap.forEach(child => {
             const val = child.val();
@@ -85,20 +100,17 @@ function carregarServicosDoFirebase() {
 
         console.log('✅ Serviços carregados do Firebase:', servicos.length);
 
-        // Se o serviço selecionado existia, reencontra pelo ID
         if (agendamento.servico) {
             const reencontrado = servicos.find(s => s.id === agendamento.servico.id);
             if (reencontrado) {
                 agendamento.servico = reencontrado;
             } else {
-                // Foi removido do painel
                 agendamento.servico = null;
                 agendamento.data = null;
                 agendamento.horario = null;
             }
         }
 
-        // Re-renderiza tudo
         renderizarServicos();
         renderizarAgendamento();
     });
@@ -135,6 +147,10 @@ function renderizarServicos() {
     container.innerHTML = html;
 }
 
+// ============================================
+// 🔽 CLIQUE EM SERVIÇO NO SHOWCASE
+// Rola até o #agendar, seleciona e DEPOIS desce pro calendário
+// ============================================
 function selecionarServicoRapido(id) {
     agendamento.servico = servicos.find(s => s.id === id);
     agendamento.data = null;
@@ -144,6 +160,9 @@ function selecionarServicoRapido(id) {
     if (secao) secao.scrollIntoView({ behavior: 'smooth' });
 
     renderizarAgendamento();
+
+    // Depois de renderizar, desce direto pro calendário
+    scrollParaPasso('passo-2');
 }
 
 function renderizarAgendamento() {
@@ -201,11 +220,18 @@ function renderizarAgendamento() {
     }
 }
 
+// ============================================
+// 🔽 CLIQUE EM SERVIÇO NA LISTA DE SELEÇÃO
+// Rola pro calendário automaticamente
+// ============================================
 function selecionarServico(id) {
     agendamento.servico = servicos.find(s => s.id === id);
     agendamento.data = null;
     agendamento.horario = null;
     renderizarAgendamento();
+
+    // Desce pro próximo passo (calendário)
+    scrollParaPasso('passo-2');
 }
 
 function mudarMes(delta) {
@@ -306,10 +332,17 @@ function renderizarCalendario() {
     grade.innerHTML = html;
 }
 
+// ============================================
+// 🔽 CLIQUE NA DATA
+// Rola automaticamente pros horários
+// ============================================
 function selecionarData(dataStr) {
     agendamento.data = dataStr;
     agendamento.horario = null;
     renderizarAgendamento();
+
+    // Desce pros horários
+    scrollParaPasso('passo-3');
 }
 
 function carregarHorariosOcupados() {
@@ -405,9 +438,16 @@ function gerarSlotsHorarios() {
     return slots;
 }
 
+// ============================================
+// 🔽 CLIQUE NO HORÁRIO
+// Rola automaticamente pro formulário de dados
+// ============================================
 function selecionarHorario(hora) {
     agendamento.horario = hora;
     renderizarAgendamento();
+
+    // Desce pro formulário de dados
+    scrollParaPasso('passo-4');
 }
 
 function renderizarResumo() {
@@ -428,11 +468,25 @@ function renderizarResumo() {
     document.getElementById('resumo-agendamento').style.display = 'block';
 }
 
+// ============================================
+// 🔽 BOTÃO VOLTAR TAMBÉM ROLA SUAVEMENTE
+// ============================================
 function voltarPasso() {
-    if (agendamento.horario) agendamento.horario = null;
-    else if (agendamento.data) agendamento.data = null;
-    else if (agendamento.servico) agendamento.servico = null;
-    renderizarAgendamento();
+    if (agendamento.horario) {
+        agendamento.horario = null;
+        renderizarAgendamento();
+        scrollParaPasso('passo-3');
+    }
+    else if (agendamento.data) {
+        agendamento.data = null;
+        renderizarAgendamento();
+        scrollParaPasso('passo-2');
+    }
+    else if (agendamento.servico) {
+        agendamento.servico = null;
+        renderizarAgendamento();
+        scrollParaPasso('passo-1');
+    }
 }
 
 // ============================================
@@ -552,6 +606,7 @@ function confirmarAgendamento() {
                 alert('Ops! Esse horário acabou de ser agendado por outra pessoa. Escolha outro.');
                 agendamento.horario = null;
                 carregarHorariosOcupados();
+                scrollParaPasso('passo-3');
                 return null;
             }
 
@@ -639,10 +694,8 @@ document.addEventListener('input', function(e) {
 // INICIALIZAÇÃO
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
-    // Primeiro carrega os serviços do Firebase
     carregarServicosDoFirebase();
 
-    // Depois os bloqueios
     db.ref('bloqueios-semana').on('value', snap => {
         diasSemanaBloqueados = snap.val() || {};
         if (agendamento.servico) renderizarCalendario();
