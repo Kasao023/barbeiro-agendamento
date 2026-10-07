@@ -1,0 +1,15 @@
+{
+  "rules": {
+    "agendamentos": {
+      ".read": true,
+      ".write": true,
+      ".indexOn": ["data"]
+    },
+    "config": { ".read": true, ".write": true },
+    "bloqueios": { ".read": true, ".write": true },
+    "bloqueios-dia": { ".read": true, ".write": true },
+    "bloqueios-semana": { ".read": true, ".write": true },
+    "lista-espera": { ".read": true, ".write": true },
+    "tokens": { ".read": true, ".write": true }
+  }
+}

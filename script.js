@@ -25,7 +25,6 @@ const CONFIG = {
     mesesAFrente: 12
 };
 
-// Serviços padrão - usados apenas na primeira vez (para popular o Firebase)
 const SERVICOS_PADRAO = [
     { nome: "CORTE CLÁSSICO", duracao: 30, preco: 35.00, icone: "bi-scissors", ativo: true },
     { nome: "BARBA NA NAVALHA", duracao: 20, preco: 25.00, icone: "bi-brush", ativo: true },
@@ -35,7 +34,6 @@ const SERVICOS_PADRAO = [
     { nome: "COMBO COMPLETO", duracao: 60, preco: 75.00, icone: "bi-trophy", ativo: true }
 ];
 
-// Será preenchido do Firebase
 let servicos = [];
 
 let agendamento = {
@@ -57,13 +55,12 @@ let diaEstaCheio = false;
 // 🔽 ROLAGEM AUTOMÁTICA ENTRE OS PASSOS
 // ============================================
 function scrollParaPasso(idPasso) {
-    // Pequeno delay para garantir que o passo já esteja visível (display != none)
     setTimeout(() => {
         const el = document.getElementById(idPasso);
         if (!el) return;
         if (el.style.display === 'none') return;
 
-        const offsetNavbar = 100; // ajusta se a navbar for maior/menor
+        const offsetNavbar = 100;
         const y = el.getBoundingClientRect().top + window.pageYOffset - offsetNavbar;
 
         window.scrollTo({ top: y, behavior: 'smooth' });
@@ -147,10 +144,6 @@ function renderizarServicos() {
     container.innerHTML = html;
 }
 
-// ============================================
-// 🔽 CLIQUE EM SERVIÇO NO SHOWCASE
-// Rola até o #agendar, seleciona e DEPOIS desce pro calendário
-// ============================================
 function selecionarServicoRapido(id) {
     agendamento.servico = servicos.find(s => s.id === id);
     agendamento.data = null;
@@ -160,8 +153,6 @@ function selecionarServicoRapido(id) {
     if (secao) secao.scrollIntoView({ behavior: 'smooth' });
 
     renderizarAgendamento();
-
-    // Depois de renderizar, desce direto pro calendário
     scrollParaPasso('passo-2');
 }
 
@@ -220,17 +211,11 @@ function renderizarAgendamento() {
     }
 }
 
-// ============================================
-// 🔽 CLIQUE EM SERVIÇO NA LISTA DE SELEÇÃO
-// Rola pro calendário automaticamente
-// ============================================
 function selecionarServico(id) {
     agendamento.servico = servicos.find(s => s.id === id);
     agendamento.data = null;
     agendamento.horario = null;
     renderizarAgendamento();
-
-    // Desce pro próximo passo (calendário)
     scrollParaPasso('passo-2');
 }
 
@@ -332,16 +317,10 @@ function renderizarCalendario() {
     grade.innerHTML = html;
 }
 
-// ============================================
-// 🔽 CLIQUE NA DATA
-// Rola automaticamente pros horários
-// ============================================
 function selecionarData(dataStr) {
     agendamento.data = dataStr;
     agendamento.horario = null;
     renderizarAgendamento();
-
-    // Desce pros horários
     scrollParaPasso('passo-3');
 }
 
@@ -438,15 +417,9 @@ function gerarSlotsHorarios() {
     return slots;
 }
 
-// ============================================
-// 🔽 CLIQUE NO HORÁRIO
-// Rola automaticamente pro formulário de dados
-// ============================================
 function selecionarHorario(hora) {
     agendamento.horario = hora;
     renderizarAgendamento();
-
-    // Desce pro formulário de dados
     scrollParaPasso('passo-4');
 }
 
@@ -468,9 +441,6 @@ function renderizarResumo() {
     document.getElementById('resumo-agendamento').style.display = 'block';
 }
 
-// ============================================
-// 🔽 BOTÃO VOLTAR TAMBÉM ROLA SUAVEMENTE
-// ============================================
 function voltarPasso() {
     if (agendamento.horario) {
         agendamento.horario = null;
@@ -630,6 +600,8 @@ function confirmarAgendamento() {
 
             const agendamentoId = resultado.key;
             localStorage.setItem('ultimoAgendamento', agendamentoId);
+            localStorage.setItem('ultimoTelefone', telefone);
+            localStorage.setItem('ultimoNome', nome);
 
             const data = new Date(agendamento.data + 'T00:00:00');
             const dataFormatada = data.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });

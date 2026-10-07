@@ -20,6 +20,10 @@
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: 'Poppins', sans-serif;
     background-color: #f8f9fa;
@@ -32,39 +36,68 @@ h1, h2, h3, .navbar-brand {
     letter-spacing: 2px;
 }
 
+/* ============================================
+   ROLAGEM SUAVE E OFFSET DA NAVBAR FIXA
+   ============================================ */
+#servicos,
+#agendar,
+#contato,
+.passo {
+    scroll-margin-top: 90px;
+}
+
+@media (max-width: 768px) {
+    #servicos,
+    #agendar,
+    #contato,
+    .passo {
+        scroll-margin-top: 75px;
+    }
+}
+
 /* ---------- NAVBAR ---------- */
 #mainNav {
     background: var(--cor-escura);
-    padding: 12px 0;
+    padding: 10px 0;
     border-bottom: 3px solid var(--cor-primaria);
     box-shadow: 0 3px 0 var(--cor-azul);
 }
 
+/* Logo redondo na navbar — foca no centro (caveira) */
 .navbar-brand {
+    padding: 0;
+    margin-right: 15px;
+    display: flex;
+    align-items: center;
     font-size: 1.6rem;
     font-weight: 700;
     color: #fff !important;
 }
 
-.navbar-brand i {
-    color: var(--cor-primaria);
-}
-
-/* Bônus: logo redondo na navbar */
-.navbar-brand img {
-    height: 42px;
-    width: 42px;
-    object-fit: cover;
+.logo-nav {
+    height: 48px;
+    width: 48px;
     border-radius: 50%;
     border: 2px solid var(--cor-primaria);
-    box-shadow: 0 0 8px rgba(163, 22, 33, .6);
+    box-shadow:
+        0 0 10px rgba(163, 22, 33, .7),
+        0 0 0 2px rgba(212, 175, 55, .35);
+    object-fit: cover;
+    object-position: center 58%;
+    transform: scale(1.55);
+    transition: transform .3s, box-shadow .3s;
+    background: #000;
 }
 
-.navbar-brand span {
-    background: linear-gradient(180deg, #fff 0%, var(--cor-creme) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+.navbar-brand:hover .logo-nav {
+    transform: scale(1.7);
+    box-shadow:
+        0 0 16px rgba(163, 22, 33, .95),
+        0 0 0 2px rgba(212, 175, 55, .55);
+}
+
+.navbar-brand i {
+    color: var(--cor-primaria);
 }
 
 .nav-link {
@@ -76,6 +109,17 @@ h1, h2, h3, .navbar-brand {
 
 .nav-link:hover {
     color: var(--cor-primaria) !important;
+}
+
+/* ---------- BANNER DE NOTIFICAÇÃO ---------- */
+#banner-notificacao {
+    background: linear-gradient(135deg, var(--cor-primaria), var(--cor-primaria-escura)) !important;
+    border-bottom: 2px solid var(--cor-azul);
+}
+
+#banner-notificacao .btn-light {
+    color: var(--cor-primaria-escura);
+    font-weight: 700;
 }
 
 /* ---------- HERO ---------- */
@@ -143,21 +187,116 @@ h1, h2, h3, .navbar-brand {
     border-radius: 50%;
 }
 
+/* ============================================
+   BOTÕES DO HERO
+   - AGENDAR AGORA: grande, chamativo, pulsando
+   - WhatsApp: pequeno, discreto, outline
+   ============================================ */
+
+/* Botão principal: AGENDAR AGORA */
+.btn-agendar-principal {
+    background: linear-gradient(135deg, var(--cor-primaria) 0%, var(--cor-primaria-escura) 100%);
+    color: var(--cor-creme);
+    border: none;
+    padding: 18px 38px;
+    font-size: 1.15rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    border-radius: 14px;
+    box-shadow:
+        0 8px 24px rgba(163, 22, 33, 0.55),
+        0 0 0 2px rgba(212, 175, 55, 0.35);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: transform .25s, box-shadow .25s;
+    position: relative;
+    overflow: hidden;
+    animation: pulseAgendar 2s ease-in-out infinite;
+    text-decoration: none;
+}
+
+.btn-agendar-principal i {
+    font-size: 1.4rem;
+}
+
+.btn-agendar-principal::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+    transition: left .6s;
+}
+
+.btn-agendar-principal:hover {
+    background: linear-gradient(135deg, var(--cor-primaria-escura), var(--cor-primaria));
+    color: var(--cor-creme);
+    transform: translateY(-3px) scale(1.03);
+    box-shadow:
+        0 12px 32px rgba(163, 22, 33, 0.75),
+        0 0 0 3px rgba(212, 175, 55, 0.6);
+    animation-play-state: paused;
+}
+
+.btn-agendar-principal:hover::before {
+    left: 100%;
+}
+
+.btn-agendar-principal:active {
+    transform: translateY(-1px) scale(1);
+}
+
+/* Pulso suave no botão principal */
+@keyframes pulseAgendar {
+    0%, 100% {
+        box-shadow:
+            0 8px 24px rgba(163, 22, 33, 0.55),
+            0 0 0 2px rgba(212, 175, 55, 0.35);
+    }
+    50% {
+        box-shadow:
+            0 8px 28px rgba(163, 22, 33, 0.85),
+            0 0 0 4px rgba(212, 175, 55, 0.55);
+    }
+}
+
+/* Botão secundário: WhatsApp (pequeno e discreto) */
+.btn-whatsapp-pequeno {
+    background: transparent;
+    color: rgba(245, 240, 232, 0.75);
+    border: 2px solid rgba(245, 240, 232, 0.35);
+    padding: 10px 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all .25s;
+    text-decoration: none;
+}
+
+.btn-whatsapp-pequeno i {
+    font-size: 1rem;
+}
+
+.btn-whatsapp-pequeno:hover {
+    background: rgba(245, 240, 232, 0.1);
+    color: var(--cor-creme);
+    border-color: var(--cor-creme);
+    transform: translateY(-2px);
+}
+
 /* ---------- FAIXA PRETA COM ÍCONES ---------- */
 section.bg-black .bi-clock-history { color: var(--cor-primaria) !important; }
 section.bg-black .bi-geo-alt      { color: var(--cor-azul)     !important; }
 section.bg-black .bi-star         { color: var(--cor-dourada)  !important; }
-
-/* ---------- BANNER DE NOTIFICAÇÃO ---------- */
-#banner-notificacao {
-    background: linear-gradient(135deg, var(--cor-primaria), var(--cor-primaria-escura)) !important;
-    border-bottom: 2px solid var(--cor-azul);
-}
-
-#banner-notificacao .btn-light {
-    color: var(--cor-primaria-escura);
-    font-weight: 700;
-}
 
 /* ---------- SERVIÇOS ---------- */
 .servico-card {
@@ -825,5 +964,24 @@ button:focus, .btn:focus {
     .espera-item-actions {
         width: 100%;
         justify-content: flex-end;
+    }
+}
+
+@media (max-width: 576px) {
+    .btn-agendar-principal {
+        padding: 16px 28px;
+        font-size: 1rem;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .btn-whatsapp-pequeno {
+        padding: 10px 16px;
+        font-size: 0.8rem;
+    }
+
+    .logo-nav {
+        height: 42px;
+        width: 42px;
     }
 }

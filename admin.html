@@ -555,6 +555,7 @@
         .login-box {
             background: #fff; border-radius: 20px; padding: 40px 30px;
             width: 100%; max-width: 420px; box-shadow: 0 20px 60px rgba(0,0,0,.5);
+            border-top: 5px solid var(--cor-primaria);
         }
         .login-box h3 { color: #222; }
         .login-box .form-label { color: #222 !important; }
@@ -567,6 +568,7 @@
         .alert-warning { background: #fff3cd !important; color: #664d03 !important; border-left: 5px solid #ffc107; }
         .alert-success { background: #d1e7dd !important; color: #0f5132 !important; border-left: 5px solid #198754; }
         .alert-danger { background: #f8d7da !important; color: #842029 !important; border-left: 5px solid #dc3545; }
+        .alert-secondary { background: #e2e3e5 !important; color: #383d41 !important; border-left: 5px solid #6c757d; }
 
         body .text-muted { color: #a8b2c1 !important; }
         .card .text-muted, .agendamento-item .text-muted, .servico-item .text-muted,
@@ -587,6 +589,9 @@
 
         .bloqueio-section .text-muted { color: #a8b2c1 !important; }
         .badge.bg-secondary { background: #495057 !important; color: #fff !important; }
+
+        /* ============ NOTIFICAÇÕES (CONFIG) ============ */
+        #notif-status.alert { font-weight: 600; }
 
         @media (max-width: 600px) {
             .dash-header h2 { font-size: 1.3rem; }
@@ -978,12 +983,24 @@
 
                 <div class="card p-3 mb-3">
                     <label class="form-label">Notificações do Navegador</label>
-                    <p class="small text-muted mb-2">Ative para receber lembretes.</p>
-                    <button class="btn btn-primary" onclick="ativarNotificacoesNavegador()">
+                    <p class="small text-muted mb-2">
+                        Ative para receber avisos de novos agendamentos e cancelamentos.
+                    </p>
+
+                    <div id="notif-status" class="alert alert-secondary py-2 px-3 small mb-2">
+                        <i class="bi bi-hourglass-split"></i> Verificando status...
+                    </div>
+
+                    <button class="btn btn-primary" id="btn-ativar-notif" onclick="ativarNotificacoesNavegador()">
                         <i class="bi bi-bell"></i> Ativar Notificações
                     </button>
+
                     <button class="btn btn-outline-primary mt-2" onclick="testarNotificacaoNavegador()">
-                        <i class="bi bi-send"></i> Testar
+                        <i class="bi bi-send"></i> Testar notificação
+                    </button>
+
+                    <button class="btn btn-outline-secondary mt-2" onclick="verificarTokenAdmin()">
+                        <i class="bi bi-key"></i> Ver meu token FCM
                     </button>
                 </div>
             </div>
@@ -1105,6 +1122,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-messaging-compat.js"></script>
 
     <script>
     (function() {
@@ -1121,6 +1139,7 @@
         };
 
         const FIREBASE_URL = 'https://seu-jorge-barbearia-default-rtdb.firebaseio.com';
+        const VAPID_KEY = 'BMNlqPRApT_o_nLxDy5H2oWEe0lgD8ttq5i8KYfPEaCm0dAAD6v82GjrKl86t_HbulbLGUNF_23jS4npdEiNuik';
 
         let db = null;
         let auth = null;
@@ -1200,6 +1219,7 @@
             if (nome === 'espera') renderizarListaEspera();
             if (nome === 'faturamento') renderizarFaturamento();
             if (nome === 'bloqueios') renderizarListaCompleta();
+            if (nome === 'config') atualizarStatusNotif();
         };
 
         window.voltarDashboard = function() {
@@ -1357,6 +1377,7 @@
                 const configEmail = document.getElementById('config-email');
                 if (configEmail) configEmail.textContent = user.email;
                 carregarTudo();
+                setTimeout(atualizarStatusNotif, 800);
             } else {
                 usuarioLogado = null;
                 elLogin.style.display = 'flex';
@@ -1367,26 +1388,134 @@
         });
 
         // ============================================
-        // NOTIFICAÇÕES
+        // NOTIFICAÇÕES — STATUS + TOKEN + TESTE
         // ============================================
+        function atualizarStatusNotif() {
+            const el = document.getElementById('notif-status');
+            if (!el) return;
+
+            if (!('Notification' in window)) {
+                el.className = 'alert alert-danger py-2 px-3 small mb-2';
+                el.innerHTML = '<i class="bi bi-x-circle"></i> Este navegador não suporta notificações.';
+                return;
+            }
+
+            const p = Notification.permission;
+            const btn = document.getElementById('btn-ativar-notif');
+
+            if (p === 'granted') {
+                el.className = 'alert alert-success py-2 px-3 small mb-2';
+                el.innerHTML = '<i class="bi bi-check-circle"></i> Notificações ativadas e funcionando!';
+                if (btn) btn.style.display = 'none';
+            } else if (p === 'denied') {
+                el.className = 'alert alert-danger py-2 px-3 small mb-2';
+                el.innerHTML = '<i class="bi bi-x-circle"></i> Permissão negada. Ative manualmente nas configurações do navegador.';
+                if (btn) btn.style.display = 'inline-block';
+            } else {
+                el.className = 'alert alert-warning py-2 px-3 small mb-2';
+                el.innerHTML = '<i class="bi bi-exclamation-triangle"></i> Permissão pendente. Clique em "Ativar Notificações".';
+                if (btn) btn.style.display = 'inline-block';
+            }
+        }
+
+        window.verificarTokenAdmin = async function() {
+            try {
+                await navigator.serviceWorker.register('firebase-messaging-sw.js');
+                await navigator.serviceWorker.ready;
+
+                const messaging = firebase.messaging();
+                const token = await messaging.getToken({ vapidKey: VAPID_KEY });
+
+                if (token) {
+                    await firebase.database().ref('tokens/admin/' + token).set({
+                        token,
+                        criadoEm: Date.now(),
+                        userAgent: navigator.userAgent,
+                        email: usuarioLogado ? usuarioLogado.email : null
+                    });
+                    alert('✅ Token do admin salvo!\n\nComeça com:\n' + token.substring(0, 40) + '...');
+                } else {
+                    alert('⚠️ Nenhum token. Ative as notificações primeiro.');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('❌ Erro ao obter token: ' + err.message);
+            }
+        };
+
         window.ativarNotificacoesNavegador = async function() {
-            if (!('Notification' in window)) { alert('❌ Navegador não suporta.'); return; }
+            if (!('Notification' in window)) {
+                alert('❌ Navegador não suporta.');
+                return;
+            }
             try {
                 const permission = await Notification.requestPermission();
                 if (permission === 'granted') {
                     mostrarAlertaAdmin('✅ Notificações ativadas!', 'success');
-                    new Notification('🔔 Notificações ativadas!', {
-                        body: 'Você vai receber avisos dos agendamentos.',
-                        icon: 'seujorge.PNG'
-                    });
-                } else { alert('❌ Permissão negada.'); }
-            } catch (err) { console.error(err); }
+
+                    // Registrar SW
+                    await navigator.serviceWorker.register('firebase-messaging-sw.js');
+                    const reg = await navigator.serviceWorker.ready;
+
+                    // Notificação de boas-vindas
+                    try {
+                        await reg.showNotification('🔔 Notificações ativadas!', {
+                            body: 'Você vai receber avisos dos agendamentos.',
+                            icon: 'seujorge.png',
+                            badge: 'seujorge.png'
+                        });
+                    } catch (e) {
+                        console.warn('Erro ao mostrar boas-vindas:', e);
+                    }
+
+                    // Salvar token FCM do admin automaticamente
+                    try {
+                        const messaging = firebase.messaging();
+                        const token = await messaging.getToken({ vapidKey: VAPID_KEY });
+                        if (token) {
+                            await firebase.database().ref('tokens/admin/' + token).set({
+                                token,
+                                criadoEm: Date.now(),
+                                userAgent: navigator.userAgent,
+                                email: usuarioLogado ? usuarioLogado.email : null
+                            });
+                            console.log('✅ Token admin salvo:', token.substring(0, 30) + '...');
+                        }
+                    } catch (e) {
+                        console.warn('Token FCM falhou (não crítico):', e);
+                    }
+
+                    atualizarStatusNotif();
+                } else {
+                    alert('❌ Permissão negada.');
+                    atualizarStatusNotif();
+                }
+            } catch (err) {
+                console.error('Erro ao ativar notificações:', err);
+                alert('❌ Erro ao ativar. Tente novamente.');
+            }
         };
 
-        window.testarNotificacaoNavegador = function() {
-            if (Notification.permission === 'granted') {
-                new Notification('🔔 Teste', { body: 'Tudo funcionando!', icon: 'seujorge.PNG' });
-            } else { alert('⚠️ Ative as notificações primeiro.'); }
+        window.testarNotificacaoNavegador = async function() {
+            if (Notification.permission !== 'granted') {
+                alert('⚠️ Ative as notificações primeiro.');
+                return;
+            }
+            try {
+                const reg = await navigator.serviceWorker.ready;
+                await reg.showNotification('🔔 Teste', {
+                    body: 'Tudo funcionando! Você vai receber avisos por aqui.',
+                    icon: 'seujorge.png',
+                    badge: 'seujorge.png',
+                    tag: 'teste-' + Date.now()
+                });
+            } catch (err) {
+                console.error('Erro ao testar:', err);
+                new Notification('🔔 Teste', {
+                    body: 'Tudo funcionando!',
+                    icon: 'seujorge.png'
+                });
+            }
         };
 
         // ============================================
@@ -1599,14 +1728,26 @@
                 </div>`;
         }
 
-        window.lembrarCliente = function(id) {
+        window.lembrarCliente = async function(id) {
             const ag = agendamentos.find(a => a.id === id);
             if (!ag) return;
             const primeiro = (ag.clienteNome || '').split(' ')[0] || 'Cliente';
             const dataFmt = new Date(ag.data + 'T00:00:00').toLocaleDateString('pt-BR');
+
             if ('Notification' in window && Notification.permission === 'granted') {
-                new Notification('🔔 Lembrete', { body: `${primeiro} — ${dataFmt} às ${ag.horario}`, icon: 'seujorge.PNG' });
-                mostrarAlertaAdmin(`🔔 ${primeiro} às ${ag.horario}`, 'info');
+                try {
+                    const reg = await navigator.serviceWorker.ready;
+                    await reg.showNotification('🔔 Lembrete', {
+                        body: `${primeiro} — ${dataFmt} às ${ag.horario}`,
+                        icon: 'seujorge.png',
+                        badge: 'seujorge.png',
+                        tag: 'lembrete-' + id
+                    });
+                    mostrarAlertaAdmin(`🔔 ${primeiro} às ${ag.horario}`, 'info');
+                } catch (err) {
+                    console.error('Erro notificação:', err);
+                    alert(`🔔 ${primeiro} — ${dataFmt} às ${ag.horario}`);
+                }
             } else {
                 alert(`🔔 ${primeiro} — ${dataFmt} às ${ag.horario}`);
             }
@@ -2050,6 +2191,14 @@
             document.body.appendChild(a);
             setTimeout(() => { if (a.parentElement) a.remove(); }, 4000);
         }
+
+        // ============================================
+        // INICIALIZAÇÃO — STATUS NOTIFICAÇÃO
+        // ============================================
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(atualizarStatusNotif, 500);
+            setInterval(atualizarStatusNotif, 3000);
+        });
 
     })();
     </script>

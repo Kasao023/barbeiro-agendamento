@@ -14,9 +14,8 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
         <div class="container">
-            <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="#">
-                <img src="seujorge.png" alt="Seu Jorge Barbearia">
-                <span>SEU JORGE</span>
+            <a class="navbar-brand fw-bold" href="#">
+                <img src="seujorge.png" alt="Seu Jorge Barbearia" class="logo-nav">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -52,12 +51,13 @@
                     <span class="badge bg-danger mb-3">⚡ AGENDAMENTO ONLINE</span>
                     <h1 class="display-4 fw-bold">SEU CORTE, NA HORA CERTA</h1>
                     <p class="lead mt-3">Agende direto com o Seu Jorge, sem precisar ligar ou esperar. Escolha o serviço e o horário que combina com você.</p>
-                    <div class="d-flex gap-3 flex-wrap mt-4">
-                        <a href="#agendar" class="btn btn-danger btn-lg fw-bold">
+
+                    <div class="d-flex gap-3 flex-wrap mt-4 align-items-center">
+                        <a href="#agendar" class="btn btn-agendar-principal">
                             <i class="bi bi-calendar-check"></i> AGENDAR AGORA
                         </a>
-                        <a href="https://wa.me/5515998183052" target="_blank" class="btn btn-outline-light btn-lg">
-                            <i class="bi bi-whatsapp"></i> WHATSAPP
+                        <a href="https://wa.me/5515998183052" target="_blank" class="btn btn-whatsapp-pequeno">
+                            <i class="bi bi-whatsapp"></i> WhatsApp
                         </a>
                     </div>
                 </div>
@@ -269,8 +269,8 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-messaging-compat.js"></script>
-    <script src="notifications.js"></script>
     <script src="script.js"></script>
+    <script src="notifications.js"></script>
     <script>
         async function ativarNotificacoesCliente() {
             const sucesso = await Notificacoes.inicializarNotificacoes('cliente');
@@ -283,7 +283,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            if (Notificacoes.statusPermissao() === 'granted') {
+            if (typeof Notificacoes !== 'undefined' && Notificacoes.statusPermissao() === 'granted') {
                 document.getElementById('banner-notificacao').style.display = 'none';
             }
         });

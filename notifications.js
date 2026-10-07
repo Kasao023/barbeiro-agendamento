@@ -1,5 +1,5 @@
 // ============================================
-// SEU JORGE - SISTEMA DE NOTIFICAÇÕES
+// SEU JORGE - SISTEMA DE NOTIFICAÇÕES (CORRIGIDO)
 // ============================================
 
 const NOTIFICATION_CONFIG = {
@@ -7,41 +7,70 @@ const NOTIFICATION_CONFIG = {
     icon: 'seujorge.png'
 };
 
+let __messagingInstance = null;
+
+function getMessaging() {
+    if (!__messagingInstance) {
+        __messagingInstance = firebase.messaging();
+
+        // Listener de refresh do token (evita token obsoleto)
+        __messagingInstance.onTokenRefresh(async () => {
+            try {
+                const newToken = await __messagingInstance.getToken({
+                    vapidKey: NOTIFICATION_CONFIG.vapidKey
+                });
+                if (newToken) {
+                    await salvarTokenNoFirebase(newToken, 'cliente');
+                    console.log('🔄 Token atualizado:', newToken);
+                }
+            } catch (err) {
+                console.error('❌ Erro ao atualizar token:', err);
+            }
+        });
+    }
+    return __messagingInstance;
+}
+
 function notificacoesSuportadas() {
-    return 'Notification' in window && 'serviceWorker' in navigator && 'PushManager' in window;
+    const httpsOK = location.protocol === 'https:'
+                 || location.hostname === 'localhost'
+                 || location.hostname === '127.0.0.1';
+
+    return httpsOK
+        && 'Notification' in window
+        && 'serviceWorker' in navigator
+        && 'PushManager' in window;
 }
 
 async function solicitarPermissaoNotificacao() {
     if (!notificacoesSuportadas()) {
-        console.warn('⚠️ Notificações não suportadas.');
+        console.warn('⚠️ Notificações não suportadas neste ambiente.');
         return false;
     }
     try {
         const permission = await Notification.requestPermission();
-        if (permission === 'granted') {
-            console.log('✅ Permissão concedida!');
-            return true;
-        }
-        console.log('❌ Permissão negada.');
-        return false;
+        console.log(permission === 'granted' ? '✅ Permissão concedida!' : '❌ Permissão negada.');
+        return permission === 'granted';
     } catch (err) {
-        console.error('❌ Erro:', err);
+        console.error('❌ Erro ao solicitar permissão:', err);
         return false;
     }
 }
 
 async function obterTokenNotificacao() {
     try {
-        const messaging = firebase.messaging();
-        const token = await messaging.getToken({ vapidKey: NOTIFICATION_CONFIG.vapidKey });
+        const messaging = getMessaging();
+        const token = await messaging.getToken({
+            vapidKey: NOTIFICATION_CONFIG.vapidKey
+        });
         if (token) {
-            console.log('✅ Token FCM:', token);
+            console.log('✅ Token FCM obtido.');
             return token;
         }
-        console.log('⚠️ Sem token.');
+        console.warn('⚠️ Sem token FCM.');
         return null;
     } catch (err) {
-        console.error('❌ Erro token:', err);
+        console.error('❌ Erro ao obter token:', err);
         return null;
     }
 }
@@ -50,21 +79,26 @@ async function salvarTokenNoFirebase(token, tipo = 'cliente') {
     if (!token) return;
     const db = firebase.database();
     await db.ref(`tokens/${tipo}/${token}`).set({
-        token: token,
+        token,
         criadoEm: Date.now(),
-        userAgent: navigator.userAgent
+        userAgent: navigator.userAgent,
+        telefone: localStorage.getItem('ultimoTelefone') || null,
+        agendamentoId: localStorage.getItem('ultimoAgendamento') || null
     });
-    console.log(`✅ Token salvo (${tipo}).`);
+    console.log(`✅ Token salvo em tokens/${tipo}/`);
 }
 
 async function inicializarNotificacoes(tipo = 'cliente') {
-    if (!notificacoesSuportadas()) return false;
+    if (!notificacoesSuportadas()) {
+        alert('⚠️ Este navegador não suporta notificações ou você não está em HTTPS.');
+        return false;
+    }
 
     try {
-        await navigator.serviceWorker.register('firebase-messaging-sw.js');
-        console.log('✅ Service Worker registrado.');
+        const reg = await navigator.serviceWorker.register('firebase-messaging-sw.js');
+        console.log('✅ Service Worker registrado:', reg.scope);
     } catch (err) {
-        console.error('❌ Erro SW:', err);
+        console.error('❌ Erro ao registrar SW:', err);
         return false;
     }
 
@@ -77,14 +111,22 @@ async function inicializarNotificacoes(tipo = 'cliente') {
     return true;
 }
 
-function exibirNotificacaoLocal(titulo, corpo, icone = NOTIFICATION_CONFIG.icon) {
-    if (Notification.permission === 'granted') {
-        new Notification(titulo, {
+// Sempre usar o Service Worker (funciona no mobile também)
+async function exibirNotificacaoLocal(titulo, corpo, icone = NOTIFICATION_CONFIG.icon) {
+    if (Notification.permission !== 'granted') return;
+    try {
+        const reg = await navigator.serviceWorker.ready;
+        await reg.showNotification(titulo, {
             body: corpo,
             icon: icone,
             badge: icone,
-            vibrate: [200, 100, 200]
+            vibrate: [200, 100, 200],
+            tag: 'agendamento-' + Date.now()
         });
+    } catch (err) {
+        // Fallback para navegadores antigos
+        console.warn('⚠️ Fallback para Notification API:', err);
+        new Notification(titulo, { body: corpo, icon: icone });
     }
 }
 
