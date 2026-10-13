@@ -1,15 +1,57 @@
 {
   "rules": {
+    "config": {
+      "admin": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      },
+      "servicos": {
+        ".read": true,
+        ".write": "auth != null"
+      }
+    },
+
     "agendamentos": {
       ".read": true,
-      ".write": true,
-      ".indexOn": ["data"]
+      ".indexOn": ["data", "status", "uid"],
+      "$id": {
+        ".write": "auth != null && (auth.token.email === 'ADMIN_EMAIL_AQUI' || (!data.exists() && newData.child('uid').val() === auth.uid) || (data.exists() && data.child('uid').val() === auth.uid))",
+        ".validate": "!newData.exists() || (newData.hasChildren(['clienteNome','clienteTelefone','data','horario','servicoNome','servicoPreco','status','uid']) && newData.child('uid').isString() && newData.child('uid').val().length >= 10 && (newData.child('uid').val() === auth.uid || auth.token.email === 'ADMIN_EMAIL_AQUI') && newData.child('clienteNome').isString() && newData.child('clienteNome').val().length >= 2 && newData.child('clienteNome').val().length <= 80 && newData.child('clienteTelefone').isString() && newData.child('clienteTelefone').val().length >= 10 && newData.child('clienteTelefone').val().length <= 20 && newData.child('data').val().matches(/^\\d{4}-\\d{2}-\\d{2}$/) && newData.child('horario').val().matches(/^\\d{2}:\\d{2}$/) && newData.child('status').val().matches(/^(pendente|concluido|cancelado)$/) && newData.child('servicoPreco').isNumber() && newData.child('servicoPreco').val() >= 0 && newData.child('servicoPreco').val() <= 10000)"
+      }
     },
-    "config": { ".read": true, ".write": true },
-    "bloqueios": { ".read": true, ".write": true },
-    "bloqueios-dia": { ".read": true, ".write": true },
-    "bloqueios-semana": { ".read": true, ".write": true },
-    "lista-espera": { ".read": true, ".write": true },
-    "tokens": { ".read": true, ".write": true }
+
+    "bloqueios": {
+      ".read": true,
+      ".write": "auth != null"
+    },
+    "bloqueios-dia": {
+      ".read": true,
+      ".write": "auth != null"
+    },
+    "bloqueios-semana": {
+      ".read": true,
+      ".write": "auth != null"
+    },
+
+    "lista-espera": {
+      ".read": true,
+      ".write": true,
+      "$data": {
+        "$id": {
+          ".validate": "!newData.exists() || (newData.hasChildren(['nome','telefone','servicoNome','criadoEm','status']) && newData.child('nome').isString() && newData.child('nome').val().length >= 2 && newData.child('nome').val().length <= 80 && newData.child('telefone').isString() && newData.child('telefone').val().length >= 10 && newData.child('telefone').val().length <= 20 && newData.child('criadoEm').isNumber() && newData.child('status').val().matches(/^(aguardando|convertido)$/))"
+        }
+      }
+    },
+
+    "tokens": {
+      "admin": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      },
+      "cliente": {
+        ".read": "auth != null",
+        ".write": true
+      }
+    }
   }
 }

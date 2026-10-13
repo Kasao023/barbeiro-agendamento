@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Agendamento | Seu Jorge</title>
+    <title>Meus Agendamentos | Seu Jorge</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
@@ -12,7 +12,7 @@
         body { background: #0a0a0a !important; color: #fff; padding-top: 0 !important; }
         .topo { background: #0a0a0a; border-bottom: 3px solid var(--cor-primaria); padding: 15px 0; }
         .topo .navbar-brand { font-family: 'Bebas Neue', sans-serif; letter-spacing: 2px; font-size: 1.6rem; }
-        .card-ver { background: #fff; color: #333; border-radius: 15px; padding: 25px; border-top: 5px solid var(--cor-primaria); }
+        .card-ver { background: #fff; color: #333; border-radius: 15px; padding: 25px; border-top: 5px solid var(--cor-primaria); margin-bottom: 16px; }
         .linha { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed #ddd; }
         .linha:last-of-type { border-bottom: none; }
         .label { color: #888; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
@@ -25,6 +25,25 @@
         .btn-cancelar:hover { background: #a71d2a; color: #fff; }
         .btn-voltar { border: 2px solid var(--cor-dourada); color: var(--cor-dourada); font-weight: 700; letter-spacing: 1px; padding: 12px; border-radius: 10px; text-transform: uppercase; }
         .btn-voltar:hover { background: var(--cor-dourada); color: #000; }
+
+        .topo-user {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 8px;
+            font-size: .85rem;
+            color: #888;
+        }
+        .topo-user button {
+            background: transparent;
+            border: 1px solid #555;
+            color: #ccc;
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: .8rem;
+        }
+        .topo-user button:hover { border-color: var(--cor-primaria); color: #fff; }
     </style>
 </head>
 <body>
@@ -32,12 +51,16 @@
     <div class="topo">
         <div class="container text-center">
             <span class="navbar-brand text-white"><i class="bi bi-scissors text-danger"></i> SEU JORGE</span>
+            <div class="topo-user" id="topo-user" style="display:none;">
+                <span>👤 <span id="user-email"></span></span>
+                <button onclick="fazerLogout()"><i class="bi bi-box-arrow-right"></i> Sair</button>
+            </div>
         </div>
     </div>
 
-    <div class="container py-5" style="max-width: 600px;">
+    <div class="container py-5" style="max-width: 700px;">
         <h2 class="text-center mb-4" style="font-family:'Bebas Neue',sans-serif; letter-spacing:3px; color: var(--cor-dourada);">
-            MEU AGENDAMENTO
+            MEUS AGENDAMENTOS
         </h2>
 
         <div id="conteudo">
@@ -54,6 +77,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyBg2LvzNxheXfb_78I9BIqn60DqNAoTLgw",
@@ -66,111 +90,141 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
+        const auth = firebase.auth();
 
-        const params = new URLSearchParams(location.search);
-        const id = params.get('id') || localStorage.getItem('ultimoAgendamento');
         const conteudo = document.getElementById('conteudo');
 
-        if (!id) {
+        window.fazerLogout = async function() {
+            if (!confirm('Deseja sair?')) return;
+            await auth.signOut();
+            location.href = 'index.html';
+        };
+
+        // Escapa HTML para evitar XSS
+        function esc(str) {
+            if (str == null) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function renderLoginPrompt() {
             conteudo.innerHTML = `
                 <div class="card-ver text-center">
-                    <i class="bi bi-calendar-x display-4 text-muted"></i>
-                    <p class="mt-3 mb-2">Nenhum agendamento encontrado.</p>
-                    <p class="small text-muted">Se você já agendou, verifique o link que recebeu no WhatsApp.</p>
-                    <a href="index.html#agendar" class="btn btn-danger mt-3 fw-bold">Fazer um agendamento</a>
+                    <i class="bi bi-lock-fill display-4 text-danger"></i>
+                    <h4 class="mt-3 fw-bold">Entre para ver seus agendamentos</h4>
+                    <p class="text-muted small">Você precisa estar logado para acessar esta área.</p>
+                    <a href="index.html" class="btn btn-danger mt-3 fw-bold px-4">
+                        <i class="bi bi-box-arrow-in-right"></i> Entrar
+                    </a>
                 </div>`;
-        } else {
-            db.ref('agendamentos/' + id).on('value', snap => {
-                const ag = snap.val();
+        }
 
-                if (!ag) {
+        function renderCard(ag) {
+            const status = (ag.status || 'pendente').toLowerCase();
+            const statusLabel = status === 'concluido' ? 'Concluído'
+                              : status === 'cancelado' ? 'Cancelado'
+                              : 'Pendente';
+            const statusClass = 'status-' + status;
+
+            const dataFmt = new Date(ag.data + 'T00:00:00').toLocaleDateString('pt-BR', {
+                weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+            });
+
+            const preco = typeof ag.servicoPreco === 'number'
+                ? 'R$ ' + ag.servicoPreco.toFixed(2).replace('.', ',')
+                : '-';
+
+            let botoes = '';
+            if (status === 'cancelado') {
+                botoes = `<p class="text-center text-muted small mb-0 mt-3">Este agendamento foi cancelado.</p>`;
+            } else if (status === 'concluido') {
+                botoes = `<p class="text-center text-success small mb-0 mt-3"><i class="bi bi-check-circle"></i> Atendimento concluído. Obrigado!</p>`;
+            } else {
+                botoes = `<button class="btn btn-cancelar w-100 mt-3" data-cancelar="${esc(ag.id)}">
+                    <i class="bi bi-x-circle"></i> Cancelar agendamento
+                </button>`;
+            }
+
+            return `
+                <div class="card-ver">
+                    <div class="text-center mb-4">
+                        <span class="status ${statusClass}">${statusLabel}</span>
+                    </div>
+
+                    <div class="linha"><span class="label">Nome</span><span class="valor">${esc(ag.clienteNome || '-')}</span></div>
+                    <div class="linha"><span class="label">Serviço</span><span class="valor">${esc(ag.servicoNome || '-')}</span></div>
+                    <div class="linha"><span class="label">Data</span><span class="valor">${dataFmt}</span></div>
+                    <div class="linha"><span class="label">Horário</span><span class="valor">${esc(ag.horario || '-')}</span></div>
+                    <div class="linha"><span class="label">Valor</span><span class="valor">${preco}</span></div>
+                    ${ag.observacoes ? `<div class="linha"><span class="label">Observações</span><span class="valor" style="max-width:60%; font-weight:400; font-size:0.9rem;">${esc(ag.observacoes)}</span></div>` : ''}
+
+                    ${botoes}
+                </div>
+            `;
+        }
+
+        async function carregarMeusAgendamentos(user) {
+            try {
+                const snap = await db.ref('agendamentos').orderByChild('uid').equalTo(user.uid).once('value');
+                const ags = [];
+                snap.forEach(c => ags.push({ id: c.key, ...c.val() }));
+
+                if (ags.length === 0) {
                     conteudo.innerHTML = `
                         <div class="card-ver text-center">
-                            <i class="bi bi-x-circle display-4 text-danger"></i>
-                            <p class="mt-3 mb-2">Este agendamento não existe mais ou foi cancelado.</p>
-                            <a href="index.html#agendar" class="btn btn-danger mt-3 fw-bold">Fazer novo agendamento</a>
+                            <i class="bi bi-calendar-x display-4 text-muted"></i>
+                            <p class="mt-3 mb-2">Você ainda não tem agendamentos.</p>
+                            <a href="index.html#agendar" class="btn btn-danger mt-3 fw-bold">Fazer um agendamento</a>
                         </div>`;
-                    localStorage.removeItem('ultimoAgendamento');
                     return;
                 }
 
-                const status = (ag.status || 'pendente').toLowerCase();
-                const statusLabel = status === 'concluido' ? 'Concluído'
-                                  : status === 'cancelado' ? 'Cancelado'
-                                  : 'Pendente';
-                const statusClass = 'status-' + status;
+                // Ordena: mais recentes (data/hora) primeiro
+                ags.sort((a, b) => ((b.data || '') + (b.horario || '')).localeCompare((a.data || '') + (a.horario || '')));
 
-                const dataFmt = new Date(ag.data + 'T00:00:00').toLocaleDateString('pt-BR', {
-                    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
-                });
+                conteudo.innerHTML = ags.map(renderCard).join('');
 
-                const preco = typeof ag.servicoPreco === 'number'
-                    ? 'R$ ' + ag.servicoPreco.toFixed(2).replace('.', ',')
-                    : '-';
-
-                conteudo.innerHTML = `
-                    <div class="card-ver">
-                        <div class="text-center mb-4">
-                            <span class="status ${statusClass}">${statusLabel}</span>
-                        </div>
-
-                        <div class="linha">
-                            <span class="label">Nome</span>
-                            <span class="valor">${ag.clienteNome || '-'}</span>
-                        </div>
-                        <div class="linha">
-                            <span class="label">Serviço</span>
-                            <span class="valor">${ag.servicoNome || '-'}</span>
-                        </div>
-                        <div class="linha">
-                            <span class="label">Data</span>
-                            <span class="valor">${dataFmt}</span>
-                        </div>
-                        <div class="linha">
-                            <span class="label">Horário</span>
-                            <span class="valor">${ag.horario || '-'}</span>
-                        </div>
-                        <div class="linha">
-                            <span class="label">Valor</span>
-                            <span class="valor">${preco}</span>
-                        </div>
-                        ${ag.observacoes ? `
-                        <div class="linha">
-                            <span class="label">Observações</span>
-                            <span class="valor" style="max-width:60%; font-weight:400; font-size:0.9rem;">${ag.observacoes}</span>
-                        </div>` : ''}
-
-                        <div id="area-cancelar" class="mt-4"></div>
-                    </div>
-                `;
-
-                const area = document.getElementById('area-cancelar');
-
-                if (status === 'cancelado') {
-                    area.innerHTML = `<p class="text-center text-muted small mb-0">Este agendamento foi cancelado.</p>`;
-                } else if (status === 'concluido') {
-                    area.innerHTML = `<p class="text-center text-success small mb-0"><i class="bi bi-check-circle"></i> Atendimento concluído. Obrigado!</p>`;
-                } else {
-                    area.innerHTML = `<button id="btnCancelar" class="btn btn-cancelar w-100">
-                        <i class="bi bi-x-circle"></i> Cancelar agendamento
-                    </button>`;
-                    document.getElementById('btnCancelar').addEventListener('click', () => {
-                        if (confirm('Tem certeza que deseja cancelar seu agendamento?')) {
-                            db.ref('agendamentos/' + id).remove()
-                                .then(() => {
-                                    localStorage.removeItem('ultimoAgendamento');
-                                    alert('Agendamento cancelado. O horário foi liberado.');
-                                    location.reload();
-                                })
-                                .catch(err => {
-                                    console.error(err);
-                                    alert('Erro ao cancelar. Tente novamente ou chame no WhatsApp.');
-                                });
+                // Bind botões de cancelar
+                document.querySelectorAll('[data-cancelar]').forEach(btn => {
+                    btn.addEventListener('click', async () => {
+                        const id = btn.dataset.cancelar;
+                        if (!confirm('Tem certeza que deseja cancelar este agendamento?')) return;
+                        try {
+                            await db.ref('agendamentos/' + id).remove();
+                            alert('Agendamento cancelado. O horário foi liberado.');
+                            location.reload();
+                        } catch (err) {
+                            console.error(err);
+                            alert('Erro ao cancelar. Tente novamente.');
                         }
                     });
-                }
-            });
+                });
+            } catch (err) {
+                console.error(err);
+                conteudo.innerHTML = `<div class="card-ver text-center"><p class="text-danger mb-0">Erro ao carregar. Tente novamente.</p></div>`;
+            }
         }
+
+        auth.onAuthStateChanged(user => {
+            const topoUser = document.getElementById('topo-user');
+            const elEmail = document.getElementById('user-email');
+
+            if (!user) {
+                if (topoUser) topoUser.style.display = 'none';
+                renderLoginPrompt();
+                return;
+            }
+
+            if (topoUser) topoUser.style.display = 'flex';
+            if (elEmail) elEmail.textContent = user.email || user.displayName || 'Conta';
+
+            // Se tiver ?id= na URL, pode abrir destacado (opcional) — apenas carrega todos
+            carregarMeusAgendamentos(user);
+        });
     </script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 // ============================================
-// SEU JORGE - AGENDAMENTO COM FIREBASE
+// SEU JORGE - AGENDAMENTO COM FIREBASE + AUTH
 // ============================================
 
 const firebaseConfig = {
@@ -14,6 +14,7 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
+const auth = firebase.auth();
 
 const CONFIG = {
     nome: "Seu Jorge",
@@ -35,6 +36,8 @@ const SERVICOS_PADRAO = [
 ];
 
 let servicos = [];
+let currentUser = null;
+let agendamentoPendente = null;  // guarda dados até o login
 
 let agendamento = {
     servico: null,
@@ -52,7 +55,179 @@ let diasInteirosBloqueados = {};
 let diaEstaCheio = false;
 
 // ============================================
-// 🔽 ROLAGEM AUTOMÁTICA ENTRE OS PASSOS
+// 🔐 AUTENTICAÇÃO
+// ============================================
+auth.onAuthStateChanged(user => {
+    currentUser = user;
+    atualizarNavbarCliente();
+
+    // Se logou e tinha um agendamento pendente, retoma o fluxo
+    if (user && agendamentoPendente) {
+        const pend = agendamentoPendente;
+        agendamentoPendente = null;
+
+        // Restaura os campos que o cliente já tinha digitado
+        document.getElementById('cliente-nome').value = pend.nome || '';
+        document.getElementById('cliente-telefone').value = pend.telefone || '';
+        document.getElementById('cliente-obs').value = pend.obs || '';
+
+        // Fecha o modal
+        const modalEl = document.getElementById('modalLoginCliente');
+        const modal = bootstrap.Modal.getInstance(modalEl);
+        if (modal) modal.hide();
+
+        // Continua automaticamente
+        setTimeout(() => confirmarAgendamento(), 300);
+    }
+});
+
+function atualizarNavbarCliente() {
+    const elDeslogado = document.getElementById('nav-login-deslogado');
+    const elLogado = document.getElementById('nav-login-logado');
+    const elNome = document.getElementById('nav-nome-cliente');
+
+    if (!elDeslogado || !elLogado) return;
+
+    if (currentUser) {
+        elDeslogado.classList.add('d-none');
+        elLogado.classList.remove('d-none');
+        const nome = currentUser.displayName || (currentUser.email || '').split('@')[0];
+        if (elNome) elNome.textContent = nome.split(' ')[0];
+    } else {
+        elDeslogado.classList.remove('d-none');
+        elLogado.classList.add('d-none');
+    }
+}
+
+window.abrirModalLogin = function() {
+    document.getElementById('login-erro-cliente').textContent = '';
+    document.getElementById('login-email').value = '';
+    document.getElementById('login-senha').value = '';
+    document.getElementById('cadastro-email').value = '';
+    document.getElementById('cadastro-senha').value = '';
+    document.getElementById('cadastro-senha2').value = '';
+
+    // Volta para tab "entrar"
+    document.querySelectorAll('#tabs-login .nav-link').forEach(b => b.classList.remove('active'));
+    document.querySelector('#tabs-login .nav-link[data-tab="entrar"]').classList.add('active');
+    document.getElementById('form-entrar').style.display = 'block';
+    document.getElementById('form-criar').style.display = 'none';
+
+    new bootstrap.Modal(document.getElementById('modalLoginCliente')).show();
+};
+
+// Tabs do modal
+document.addEventListener('click', function(e) {
+    const btn = e.target.closest('#tabs-login .nav-link');
+    if (!btn) return;
+    const tab = btn.dataset.tab;
+
+    document.querySelectorAll('#tabs-login .nav-link').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    document.getElementById('form-entrar').style.display = tab === 'entrar' ? 'block' : 'none';
+    document.getElementById('form-criar').style.display = tab === 'criar' ? 'block' : 'none';
+    document.getElementById('login-erro-cliente').textContent = '';
+});
+
+function traduzErroAuth(code) {
+    const m = {
+        'auth/user-not-found': '❌ Email não cadastrado.',
+        'auth/wrong-password': '❌ Senha incorreta.',
+        'auth/invalid-email': '❌ Email inválido.',
+        'auth/invalid-credential': '❌ Email ou senha incorretos.',
+        'auth/email-already-in-use': '❌ Este email já está cadastrado. Tente entrar.',
+        'auth/weak-password': '❌ Senha muito fraca (mínimo 6 caracteres).',
+        'auth/too-many-requests': '⚠️ Muitas tentativas. Aguarde 1 minuto.',
+        'auth/network-request-failed': '🌐 Sem conexão. Verifique sua internet.',
+        'auth/popup-closed-by-user': '⚠️ Login cancelado.',
+        'auth/popup-blocked': '⚠️ Popup bloqueado. Permita popups para este site.'
+    };
+    return m[code] || '❌ Erro: ' + code;
+}
+
+window.loginCliente = async function() {
+    const email = document.getElementById('login-email').value.trim();
+    const senha = document.getElementById('login-senha').value;
+    const erroEl = document.getElementById('login-erro-cliente');
+    const btn = document.getElementById('btn-login-cliente');
+    erroEl.textContent = '';
+
+    if (!email || !senha) { erroEl.textContent = 'Preencha email e senha.'; return; }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Entrando...';
+
+    try {
+        await auth.signInWithEmailAndPassword(email, senha);
+        // onAuthStateChanged cuida do resto
+    } catch (err) {
+        erroEl.textContent = traduzErroAuth(err.code);
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-box-arrow-in-right"></i> ENTRAR';
+    }
+};
+
+window.cadastroCliente = async function() {
+    const email = document.getElementById('cadastro-email').value.trim();
+    const s1 = document.getElementById('cadastro-senha').value;
+    const s2 = document.getElementById('cadastro-senha2').value;
+    const erroEl = document.getElementById('login-erro-cliente');
+    const btn = document.getElementById('btn-cadastro-cliente');
+    erroEl.textContent = '';
+
+    if (!email || !s1 || !s2) { erroEl.textContent = 'Preencha todos os campos.'; return; }
+    if (s1.length < 6) { erroEl.textContent = 'Senha precisa ter pelo menos 6 caracteres.'; return; }
+    if (s1 !== s2) { erroEl.textContent = 'As senhas não coincidem.'; return; }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Criando...';
+
+    try {
+        await auth.createUserWithEmailAndPassword(email, s1);
+        // onAuthStateChanged cuida do resto
+    } catch (err) {
+        erroEl.textContent = traduzErroAuth(err.code);
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-person-plus"></i> CRIAR CONTA';
+    }
+};
+
+window.loginGoogle = async function() {
+    const erroEl = document.getElementById('login-erro-cliente');
+    erroEl.textContent = '';
+    try {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        await auth.signInWithPopup(provider);
+    } catch (err) {
+        erroEl.textContent = traduzErroAuth(err.code);
+    }
+};
+
+window.logoutCliente = async function() {
+    if (!confirm('Deseja sair?')) return;
+    await auth.signOut();
+    // opcional: recarregar para limpar estado
+    location.reload();
+};
+
+window.esqueceuSenhaCliente = async function() {
+    const email = document.getElementById('login-email').value.trim();
+    if (!email) {
+        alert('Digite seu email primeiro para receber o link.');
+        return;
+    }
+    if (!confirm(`Enviar link de redefinição para:\n\n${email}?`)) return;
+    try {
+        await auth.sendPasswordResetEmail(email);
+        alert('✅ Link enviado! Confira seu email (e o spam).');
+    } catch (err) {
+        alert(traduzErroAuth(err.code));
+    }
+};
+
+// ============================================
+// ROLAGEM AUTOMÁTICA ENTRE OS PASSOS
 // ============================================
 function scrollParaPasso(idPasso) {
     setTimeout(() => {
@@ -203,6 +378,10 @@ function renderizarAgendamento() {
         renderizarResumo();
         document.getElementById('btn-confirmar').style.display = 'block';
         document.getElementById('btn-voltar').style.display = 'block';
+
+        // Aviso de login (se não estiver logado)
+        const aviso = document.getElementById('login-aviso');
+        if (aviso) aviso.style.display = currentUser ? 'none' : 'block';
     } else {
         document.getElementById('passo-4').style.display = 'none';
         document.getElementById('resumo-agendamento').style.display = 'none';
@@ -398,11 +577,7 @@ function renderizarHorarios() {
     diaEstaCheio = todosOcupados;
 
     if (listaEsperaContainer) {
-        if (todosOcupados) {
-            listaEsperaContainer.style.display = 'block';
-        } else {
-            listaEsperaContainer.style.display = 'none';
-        }
+        listaEsperaContainer.style.display = todosOcupados ? 'block' : 'none';
     }
 }
 
@@ -486,15 +661,8 @@ function salvarListaEspera() {
 
     erroEl.textContent = '';
 
-    if (!nome || !telefone) {
-        erroEl.textContent = 'Preencha nome e WhatsApp.';
-        return;
-    }
-
-    if (telefone.replace(/\D/g, '').length < 10) {
-        erroEl.textContent = 'Telefone inválido.';
-        return;
-    }
+    if (!nome || !telefone) { erroEl.textContent = 'Preencha nome e WhatsApp.'; return; }
+    if (telefone.replace(/\D/g, '').length < 10) { erroEl.textContent = 'Telefone inválido.'; return; }
 
     db.ref('lista-espera/' + agendamento.data).once('value')
         .then(snap => {
@@ -544,7 +712,7 @@ function salvarListaEspera() {
 }
 
 // ============================================
-// CONFIRMAR AGENDAMENTO
+// CONFIRMAR AGENDAMENTO (com login)
 // ============================================
 function confirmarAgendamento() {
     const nome = document.getElementById('cliente-nome').value.trim();
@@ -553,6 +721,15 @@ function confirmarAgendamento() {
 
     if (!nome || !telefone) {
         alert('Preencha seu nome e telefone!');
+        return;
+    }
+
+    // ⭐ CHAVE: se não estiver logado, guarda e abre login
+    if (!currentUser) {
+        agendamentoPendente = { nome, telefone, obs };
+        const sub = document.getElementById('modal-login-sub');
+        if (sub) sub.textContent = 'Faça login rapidinho para confirmar seu agendamento. Seus dados foram guardados.';
+        abrirModalLogin();
         return;
     }
 
@@ -590,7 +767,9 @@ function confirmarAgendamento() {
                 horario: agendamento.horario,
                 observacoes: obs,
                 status: 'pendente',
-                criadoEm: Date.now()
+                criadoEm: Date.now(),
+                uid: currentUser.uid,
+                clienteEmail: currentUser.email || null
             };
 
             return db.ref('agendamentos').push(novoAgendamento);
@@ -650,6 +829,7 @@ function confirmarAgendamento() {
         });
 }
 
+// Máscara do telefone do passo 4
 document.addEventListener('input', function(e) {
     if (e.target.id === 'cliente-telefone') {
         let value = e.target.value.replace(/\D/g, '');
