@@ -73,7 +73,6 @@
                     <li class="nav-item"><a class="nav-link" href="#agendar">Agendar</a></li>
                     <li class="nav-item"><a class="nav-link" href="#contato">Contato</a></li>
 
-                    <!-- Área de login (muda conforme estado) -->
                     <li class="nav-item" id="nav-login-deslogado">
                         <a class="nav-link" href="#" onclick="abrirModalLogin(); return false;">
                             <i class="bi bi-person-circle"></i> Entrar
@@ -339,7 +338,6 @@
                         </li>
                     </ul>
 
-                    <!-- FORM ENTRAR -->
                     <div id="form-entrar">
                         <div class="mb-3">
                             <label class="form-label fw-semibold small">Email</label>
@@ -357,7 +355,6 @@
                         </button>
                     </div>
 
-                    <!-- FORM CRIAR -->
                     <div id="form-criar" style="display:none;">
                         <div class="mb-3">
                             <label class="form-label fw-semibold small">Email</label>
@@ -413,6 +410,12 @@
         </div>
     </section>
 
+    <!-- FAB — Botão flutuante de agendamento -->
+    <button class="fab-agendar" id="fab-agendar" onclick="irParaAgendar()" aria-label="Agendar agora">
+        <i class="bi bi-calendar-plus-fill"></i>
+        <span>Agendar</span>
+    </button>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -449,6 +452,47 @@
                 e.target.value = value;
             }
         });
+
+        // ============================================
+        // FAB — Botão flutuante de agendamento
+        // ============================================
+        (function() {
+            const fab = document.getElementById('fab-agendar');
+            if (!fab) return;
+
+            const hero = document.querySelector('.hero');
+            const secaoAgendar = document.getElementById('agendar');
+
+            function atualizarFab() {
+                if (!hero) {
+                    fab.classList.add('visivel');
+                    return;
+                }
+
+                const heroBottom = hero.getBoundingClientRect().bottom;
+
+                if (heroBottom < 80) {
+                    fab.classList.add('visivel');
+                } else {
+                    fab.classList.remove('visivel');
+                }
+
+                if (secaoAgendar) {
+                    const r = secaoAgendar.getBoundingClientRect();
+                    const estaNaSecao = r.top < window.innerHeight * 0.6 && r.bottom > 100;
+                    fab.classList.toggle('esconder', estaNaSecao);
+                }
+            }
+
+            window.addEventListener('scroll', atualizarFab, { passive: true });
+            window.addEventListener('resize', atualizarFab, { passive: true });
+            atualizarFab();
+        })();
+
+        window.irParaAgendar = function() {
+            const alvo = document.getElementById('agendar');
+            if (alvo) alvo.scrollIntoView({ behavior: 'smooth' });
+        };
     </script>
 </body>
 </html>

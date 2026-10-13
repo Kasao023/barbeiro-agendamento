@@ -590,7 +590,6 @@
         .bloqueio-section .text-muted { color: #a8b2c1 !important; }
         .badge.bg-secondary { background: #495057 !important; color: #fff !important; }
 
-        /* ============ NOTIFICAÇÕES (CONFIG) ============ */
         #notif-status.alert { font-weight: 600; }
 
         @media (max-width: 600px) {
@@ -601,6 +600,132 @@
             .resumo-info strong { font-size: 1.5rem; }
             .ag-simples { padding: 12px; }
             .ag-info strong { font-size: .9rem; }
+        }
+
+        /* ============================================
+           BOTÕES MAIORES PARA TOQUE (MOBILE-FRIENDLY)
+           ============================================ */
+
+        .agendamento-actions,
+        .ag-acoes,
+        .servico-acoes,
+        .espera-item-actions {
+            gap: 10px;
+        }
+
+        .agendamento-actions .btn,
+        .ag-acoes .btn,
+        .servico-acoes .btn,
+        .espera-item-actions .btn {
+            min-width: 46px;
+            min-height: 46px;
+            padding: 10px 14px;
+            font-size: 1.05rem;
+            border-radius: 11px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .agendamento-actions .btn i,
+        .ag-acoes .btn i,
+        .servico-acoes .btn i,
+        .espera-item-actions .btn i {
+            font-size: 1.15rem;
+            line-height: 1;
+        }
+
+        .servico-acoes .btn:has(.bi-pencil) {
+            gap: 6px;
+            padding: 10px 16px;
+        }
+
+        .filtro-btn {
+            padding: 12px 18px;
+            font-size: 0.92rem;
+            min-height: 46px;
+            border-radius: 11px;
+        }
+
+        .filtro-btn i {
+            font-size: 1.05rem;
+        }
+
+        .bloqueio-item .btn {
+            min-width: 46px;
+            min-height: 46px;
+            padding: 10px;
+            font-size: 1.1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bloqueio-item .btn-outline-danger {
+            padding: 8px 14px;
+            font-size: 0.95rem;
+            min-height: 42px;
+        }
+
+        .dia-semana-btn {
+            min-height: 52px;
+            font-size: 0.95rem;
+            padding: 14px 6px;
+        }
+
+        .horario-check {
+            padding: 10px 16px;
+            font-size: 0.95rem;
+            min-height: 44px;
+        }
+
+        .btn-sm {
+            padding: 10px 16px;
+            font-size: 0.92rem;
+            min-height: 44px;
+            border-radius: 10px;
+        }
+
+        .menu-fechar {
+            width: 44px;
+            height: 44px;
+        }
+
+        .ag-simples .ag-acoes .btn {
+            min-width: 44px;
+            min-height: 44px;
+            padding: 8px;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 600px) {
+            .agendamento-actions .btn,
+            .ag-acoes .btn,
+            .servico-acoes .btn,
+            .espera-item-actions .btn {
+                min-width: 48px;
+                min-height: 48px;
+                padding: 11px 14px;
+                font-size: 1.15rem;
+            }
+
+            .agendamento-actions .btn i,
+            .ag-acoes .btn i,
+            .servico-acoes .btn i,
+            .espera-item-actions .btn i {
+                font-size: 1.25rem;
+            }
+
+            .agendamento-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            .filtro-btn {
+                padding: 12px 16px;
+                font-size: 0.88rem;
+            }
         }
     </style>
 </head>
@@ -671,7 +796,6 @@
                     </button>
                 </div>
 
-                <!-- Cards: só Hoje e Amanhã -->
                 <div class="resumo-grid">
                     <div class="resumo-card hoje">
                         <div class="resumo-icon">📅</div>
@@ -689,7 +813,6 @@
                     </div>
                 </div>
 
-                <!-- Agendamentos de HOJE -->
                 <div class="secao">
                     <div class="secao-header">
                         <h3 class="secao-titulo">
@@ -704,7 +827,6 @@
                     <div id="lista-hoje"></div>
                 </div>
 
-                <!-- Agendamentos de AMANHÃ -->
                 <div class="secao">
                     <div class="secao-header">
                         <h3 class="secao-titulo">
@@ -1453,11 +1575,9 @@
                 if (permission === 'granted') {
                     mostrarAlertaAdmin('✅ Notificações ativadas!', 'success');
 
-                    // Registrar SW
                     await navigator.serviceWorker.register('firebase-messaging-sw.js');
                     const reg = await navigator.serviceWorker.ready;
 
-                    // Notificação de boas-vindas
                     try {
                         await reg.showNotification('🔔 Notificações ativadas!', {
                             body: 'Você vai receber avisos dos agendamentos.',
@@ -1468,7 +1588,6 @@
                         console.warn('Erro ao mostrar boas-vindas:', e);
                     }
 
-                    // Salvar token FCM do admin automaticamente
                     try {
                         const messaging = firebase.messaging();
                         const token = await messaging.getToken({ vapidKey: VAPID_KEY });

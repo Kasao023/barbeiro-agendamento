@@ -985,3 +985,97 @@ button:focus, .btn:focus {
         width: 42px;
     }
 }
+
+/* ============================================
+   FAB — BOTÃO FLUTUANTE DE AGENDAMENTO
+   ============================================ */
+.fab-agendar {
+    position: fixed;
+    bottom: 22px;
+    right: 22px;
+    z-index: 999;
+    background: linear-gradient(135deg, var(--cor-primaria) 0%, var(--cor-primaria-escura) 100%);
+    color: var(--cor-creme);
+    border: none;
+    border-radius: 50px;
+    padding: 14px 24px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    font-size: 0.95rem;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    box-shadow:
+        0 8px 24px rgba(163, 22, 33, 0.55),
+        0 0 0 2px rgba(212, 175, 55, 0.4);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: transform .25s, box-shadow .25s, opacity .3s, visibility .3s;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    animation: pulseFab 2.2s ease-in-out infinite;
+}
+
+.fab-agendar i {
+    font-size: 1.35rem;
+}
+
+.fab-agendar.visivel {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.fab-agendar.esconder {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.fab-agendar:hover {
+    background: linear-gradient(135deg, var(--cor-primaria-escura), var(--cor-primaria));
+    transform: translateY(-3px) scale(1.04);
+    box-shadow:
+        0 12px 32px rgba(163, 22, 33, 0.8),
+        0 0 0 3px rgba(212, 175, 55, 0.65);
+    animation-play-state: paused;
+}
+
+.fab-agendar:active {
+    transform: translateY(-1px) scale(1);
+}
+
+@keyframes pulseFab {
+    0%, 100% {
+        box-shadow:
+            0 8px 24px rgba(163, 22, 33, 0.55),
+            0 0 0 2px rgba(212, 175, 55, 0.4);
+    }
+    50% {
+        box-shadow:
+            0 10px 30px rgba(163, 22, 33, 0.9),
+            0 0 0 4px rgba(212, 175, 55, 0.6);
+    }
+}
+
+/* Mobile — botão ligeiramente menor mas ainda gordo pra dedo */
+@media (max-width: 576px) {
+    .fab-agendar {
+        bottom: 16px;
+        right: 16px;
+        padding: 13px 20px;
+        font-size: 0.85rem;
+    }
+    .fab-agendar i {
+        font-size: 1.2rem;
+    }
+}
+
+/* Esconde se o usuário já estiver na seção de agendamento */
+body.esta-agendando .fab-agendar {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
