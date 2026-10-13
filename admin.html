@@ -1295,6 +1295,7 @@
         }
 
         function formatBRL(v) {
+            if (typeof v !== 'number' || isNaN(v)) v = 0;
             return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         }
 
@@ -1872,16 +1873,39 @@
             }
         };
 
+        // ✅ CORRIGIDO: com tratamento de erro
         window.mudarStatus = function(id, status) {
-            db.ref('agendamentos/' + id + '/status').set(status);
-            setTimeout(carregarAgendamentosREST, 500);
+            db.ref('agendamentos/' + id + '/status').set(status)
+                .then(() => {
+                    mostrarAlertaAdmin(status === 'concluido' ? '✅ Concluído!' : '🚫 Cancelado!', status === 'concluido' ? 'success' : 'warning');
+                    setTimeout(carregarAgendamentosREST, 500);
+                })
+                .catch(err => {
+                    console.error('Erro ao mudar status:', err);
+                    if (err.code === 'PERMISSION_DENIED' || (err.message && err.message.includes('permission'))) {
+                        alert('❌ Sem permissão!\n\nProvavelmente este agendamento é antigo (criado antes do login). As regras novas do Firebase já resolvem isso — confirme se foram publicadas no Console.');
+                    } else {
+                        alert('❌ Erro: ' + (err.message || err.code));
+                    }
+                });
         };
 
+        // ✅ CORRIGIDO: com tratamento de erro
         window.excluirAgendamento = function(id) {
-            if (confirm('Excluir permanentemente?')) {
-                db.ref('agendamentos/' + id).remove();
-                setTimeout(carregarAgendamentosREST, 500);
-            }
+            if (!confirm('Excluir permanentemente?')) return;
+            db.ref('agendamentos/' + id).remove()
+                .then(() => {
+                    mostrarAlertaAdmin('🗑️ Agendamento excluído!', 'warning');
+                    setTimeout(carregarAgendamentosREST, 500);
+                })
+                .catch(err => {
+                    console.error('Erro ao excluir:', err);
+                    if (err.code === 'PERMISSION_DENIED' || (err.message && err.message.includes('permission'))) {
+                        alert('❌ Sem permissão para excluir!\n\nEste agendamento pode ser antigo. Confirme se as regras do Firebase foram publicadas com o email correto do admin.');
+                    } else {
+                        alert('❌ Erro ao excluir: ' + (err.message || err.code));
+                    }
+                });
         };
 
         window.limparAgendamentosAntigos = function() {
@@ -1891,10 +1915,15 @@
             if (!confirm(`🧹 Remover ${paraRemover.length} agendamento(s)?`)) return;
             const updates = {};
             paraRemover.forEach(a => { updates['agendamentos/' + a.id] = null; });
-            db.ref().update(updates).then(() => {
-                mostrarAlertaAdmin(`🧹 ${paraRemover.length} removido(s)!`, 'success');
-                setTimeout(carregarAgendamentosREST, 500);
-            });
+            db.ref().update(updates)
+                .then(() => {
+                    mostrarAlertaAdmin(`🧹 ${paraRemover.length} removido(s)!`, 'success');
+                    setTimeout(carregarAgendamentosREST, 500);
+                })
+                .catch(err => {
+                    console.error('Erro ao limpar:', err);
+                    alert('❌ Erro ao limpar: ' + (err.message || err.code));
+                });
         };
 
         // ============================================
@@ -1973,6 +2002,9 @@
                     bootstrap.Modal.getInstance(document.getElementById('modalServico')).hide();
                     mostrarAlertaAdmin('✅ Serviço atualizado!', 'success');
                     setTimeout(carregarServicosREST, 500);
+                }).catch(err => {
+                    console.error('Erro ao salvar serviço:', err);
+                    alert('❌ Erro ao salvar: ' + (err.message || err.code));
                 });
             } else {
                 const novoId = 's' + Date.now();
@@ -1980,6 +2012,9 @@
                     bootstrap.Modal.getInstance(document.getElementById('modalServico')).hide();
                     mostrarAlertaAdmin('✅ Serviço criado!', 'success');
                     setTimeout(carregarServicosREST, 500);
+                }).catch(err => {
+                    console.error('Erro ao criar serviço:', err);
+                    alert('❌ Erro ao criar: ' + (err.message || err.code));
                 });
             }
         };
@@ -2000,6 +2035,9 @@
                 db.ref('config/servicos/' + id).remove().then(() => {
                     mostrarAlertaAdmin('🗑️ Removido.', 'warning');
                     setTimeout(carregarServicosREST, 500);
+                }).catch(err => {
+                    console.error('Erro ao excluir serviço:', err);
+                    alert('❌ Erro ao excluir: ' + (err.message || err.code));
                 });
             }
         };
@@ -2013,6 +2051,9 @@
             db.ref().update(updates).then(() => {
                 mostrarAlertaAdmin(`🧹 ${vazios.length} removido(s)!`, 'success');
                 setTimeout(carregarServicosREST, 500);
+            }).catch(err => {
+                console.error('Erro ao limpar:', err);
+                alert('❌ Erro: ' + (err.message || err.code));
             });
         };
 
@@ -2027,6 +2068,9 @@
                 alert('✅ Dia bloqueado!');
                 document.getElementById('bloqueio-dia-data').value = '';
                 document.getElementById('bloqueio-dia-motivo').value = '';
+            }).catch(err => {
+                console.error('Erro:', err);
+                alert('❌ Erro: ' + (err.message || err.code));
             });
         };
 
@@ -2075,6 +2119,9 @@
                 alert(`✅ ${sel.length} bloqueado(s)!`);
                 document.getElementById('bloqueio-hora-motivo').value = '';
                 carregarHorariosParaBloquear();
+            }).catch(err => {
+                console.error('Erro:', err);
+                alert('❌ Erro: ' + (err.message || err.code));
             });
         };
 
@@ -2093,6 +2140,9 @@
                     const nomes = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
                     alert('✅ ' + ativos.map(d => nomes[d]).join(', '));
                 }
+            }).catch(err => {
+                console.error('Erro:', err);
+                alert('❌ Erro: ' + (err.message || err.code));
             });
         };
 
@@ -2153,9 +2203,9 @@
             });
         }
 
-        window.desbloquearDiaInteiro = function(data) { if (confirm('Remover?')) db.ref('bloqueios-dia/' + data).remove(); };
-        window.desbloquearHorario = function(data, h) { db.ref('bloqueios/' + data + '/' + h).remove(); };
-        window.desbloquearDiaSemana = function(d) { if (confirm('Remover?')) db.ref('bloqueios-semana/' + d).remove(); };
+        window.desbloquearDiaInteiro = function(data) { if (confirm('Remover?')) db.ref('bloqueios-dia/' + data).remove().catch(err => alert('❌ ' + (err.message || err.code))); };
+        window.desbloquearHorario = function(data, h) { db.ref('bloqueios/' + data + '/' + h).remove().catch(err => alert('❌ ' + (err.message || err.code))); };
+        window.desbloquearDiaSemana = function(d) { if (confirm('Remover?')) db.ref('bloqueios-semana/' + d).remove().catch(err => alert('❌ ' + (err.message || err.code))); };
 
         // ============================================
         // LISTA DE ESPERA
@@ -2201,8 +2251,8 @@
             window.open(`https://wa.me/55${tel}?text=${encodeURIComponent(msg)}`, '_blank');
         };
 
-        window.marcarConvertido = function(data, id) { if (confirm('Marcar como atendido?')) db.ref('lista-espera/' + data + '/' + id + '/status').set('convertido'); };
-        window.removerEspera = function(data, id) { if (confirm('Remover?')) db.ref('lista-espera/' + data + '/' + id).remove(); };
+        window.marcarConvertido = function(data, id) { if (confirm('Marcar como atendido?')) db.ref('lista-espera/' + data + '/' + id + '/status').set('convertido').catch(err => alert('❌ ' + (err.message || err.code))); };
+        window.removerEspera = function(data, id) { if (confirm('Remover?')) db.ref('lista-espera/' + data + '/' + id).remove().catch(err => alert('❌ ' + (err.message || err.code))); };
 
         // ============================================
         // FATURAMENTO
