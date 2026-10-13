@@ -19,6 +19,7 @@
         .valor { font-weight: 600; text-align: right; }
         .status { display: inline-block; padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; }
         .status-pendente { background: #fff3cd; color: #856404; }
+        .status-confirmado { background: #cfe2ff; color: #084298; }
         .status-concluido { background: #d4edda; color: #155724; }
         .status-cancelado { background: #f8d7da; color: #721c24; }
         .btn-cancelar { background: #dc3545; border: none; color: #fff; font-weight: 700; letter-spacing: 1px; padding: 12px; border-radius: 10px; text-transform: uppercase; }
@@ -100,7 +101,6 @@
             location.href = 'index.html';
         };
 
-        // Escapa HTML para evitar XSS
         function esc(str) {
             if (str == null) return '';
             return String(str)
@@ -127,6 +127,7 @@
             const status = (ag.status || 'pendente').toLowerCase();
             const statusLabel = status === 'concluido' ? 'Concluído'
                               : status === 'cancelado' ? 'Cancelado'
+                              : status === 'confirmado' ? 'Confirmado'
                               : 'Pendente';
             const statusClass = 'status-' + status;
 
@@ -143,6 +144,10 @@
                 botoes = `<p class="text-center text-muted small mb-0 mt-3">Este agendamento foi cancelado.</p>`;
             } else if (status === 'concluido') {
                 botoes = `<p class="text-center text-success small mb-0 mt-3"><i class="bi bi-check-circle"></i> Atendimento concluído. Obrigado!</p>`;
+            } else if (status === 'confirmado') {
+                botoes = `<button class="btn btn-cancelar w-100 mt-3" data-cancelar="${esc(ag.id)}">
+                    <i class="bi bi-x-circle"></i> Cancelar agendamento
+                </button>`;
             } else {
                 botoes = `<button class="btn btn-cancelar w-100 mt-3" data-cancelar="${esc(ag.id)}">
                     <i class="bi bi-x-circle"></i> Cancelar agendamento
@@ -183,12 +188,10 @@
                     return;
                 }
 
-                // Ordena: mais recentes (data/hora) primeiro
                 ags.sort((a, b) => ((b.data || '') + (b.horario || '')).localeCompare((a.data || '') + (a.horario || '')));
 
                 conteudo.innerHTML = ags.map(renderCard).join('');
 
-                // Bind botões de cancelar
                 document.querySelectorAll('[data-cancelar]').forEach(btn => {
                     btn.addEventListener('click', async () => {
                         const id = btn.dataset.cancelar;
@@ -222,7 +225,6 @@
             if (topoUser) topoUser.style.display = 'flex';
             if (elEmail) elEmail.textContent = user.email || user.displayName || 'Conta';
 
-            // Se tiver ?id= na URL, pode abrir destacado (opcional) — apenas carrega todos
             carregarMeusAgendamentos(user);
         });
     </script>

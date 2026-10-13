@@ -152,6 +152,7 @@
             box-shadow: 0 6px 18px rgba(0,0,0,.2);
         }
         .ag-simples.hj { border-left-color: #ffc107; background: #fffbf0; }
+        .ag-simples.confirmado { border-left-color: #0d6efd; background: #eef5ff; }
         .ag-simples.concluido { border-left-color: #28a745; background: #f0fff4; opacity: .75; }
         .ag-simples.cancelado { border-left-color: #6c757d; background: #f8f8f8; opacity: .6; text-decoration: line-through; }
         .ag-hora {
@@ -167,6 +168,7 @@
             text-align: center;
         }
         .ag-simples.hj .ag-hora { background: #ffc107; color: #333; }
+        .ag-simples.confirmado .ag-hora { background: #0d6efd; }
         .ag-simples.concluido .ag-hora { background: #28a745; }
         .ag-simples.cancelado .ag-hora { background: #6c757d; }
 
@@ -370,6 +372,7 @@
         .agendamento-item:hover {
             transform: translateX(4px); box-shadow: 0 6px 18px rgba(0,0,0,.15);
         }
+        .agendamento-item.status-confirmado { border-left-color: #0d6efd; background: #eef5ff; }
         .agendamento-item.status-concluido { border-left-color: var(--cor-sucesso); background: #f0fff4; }
         .agendamento-item.status-cancelado { border-left-color: #6c757d; background: #f8f8f8; opacity: 0.7; }
         .agendamento-item.status-passado { border-left-color: #adb5bd; }
@@ -387,6 +390,7 @@
             letter-spacing: 1px; font-size: 1.1rem;
         }
         .agendamento-item.status-hoje .hora { background: #ffc107; color: #333; }
+        .agendamento-item.status-confirmado .hora { background: #0d6efd; }
         .agendamento-item.status-concluido .hora { background: var(--cor-sucesso); }
         .agendamento-item.status-cancelado .hora { background: #6c757d; }
 
@@ -403,6 +407,7 @@
             text-transform: uppercase;
         }
         .badge-pendente { background: #fff3cd; color: #856404; }
+        .badge-confirmado { background: #cfe2ff; color: #084298; }
         .badge-concluido { background: #d4edda; color: #155724; }
         .badge-cancelado { background: #f8d7da; color: #721c24; }
 
@@ -879,6 +884,9 @@
                     </button>
                     <button class="filtro-btn" data-filtro="pendentes">
                         <i class="bi bi-hourglass"></i> Pendentes <span class="contador" id="cnt-pendentes">0</span>
+                    </button>
+                    <button class="filtro-btn" data-filtro="confirmados">
+                        <i class="bi bi-hand-thumbs-up"></i> Confirmados <span class="contador" id="cnt-confirmados">0</span>
                     </button>
                     <button class="filtro-btn" data-filtro="concluidos">
                         <i class="bi bi-check-circle"></i> Concluídos <span class="contador" id="cnt-concluidos">0</span>
@@ -1398,8 +1406,33 @@
                 if (ehHoje) classe += ' hj';
                 if (status === 'concluido') classe += ' concluido';
                 if (status === 'cancelado') classe += ' cancelado';
+                if (status === 'confirmado') classe += ' confirmado';
 
                 const tel = (ag.clienteTelefone || '').replace(/\D/g, '');
+
+                let botoes = '';
+                if (status === 'pendente') {
+                    botoes = `
+                        <button class="btn btn-sm btn-info" onclick="mudarStatus('${ag.id}', 'confirmado')" title="Confirmar presença">
+                            <i class="bi bi-hand-thumbs-up-fill"></i>
+                        </button>
+                        <button class="btn btn-sm btn-primary" onclick="mudarStatus('${ag.id}', 'concluido')" title="Já atendi">
+                            <i class="bi bi-check"></i>
+                        </button>
+                        <button class="btn btn-sm btn-secondary" onclick="mudarStatus('${ag.id}', 'cancelado')" title="Cancelar">
+                            <i class="bi bi-x"></i>
+                        </button>
+                    `;
+                } else if (status === 'confirmado') {
+                    botoes = `
+                        <button class="btn btn-sm btn-primary" onclick="mudarStatus('${ag.id}', 'concluido')" title="Já atendi">
+                            <i class="bi bi-check"></i>
+                        </button>
+                        <button class="btn btn-sm btn-secondary" onclick="mudarStatus('${ag.id}', 'cancelado')" title="Cancelar">
+                            <i class="bi bi-x"></i>
+                        </button>
+                    `;
+                }
 
                 return `
                     <div class="${classe}">
@@ -1412,14 +1445,7 @@
                             <a href="https://wa.me/55${tel}" target="_blank" class="btn btn-sm btn-success" title="WhatsApp">
                                 <i class="bi bi-whatsapp"></i>
                             </a>
-                            ${status === 'pendente' ? `
-                                <button class="btn btn-sm btn-primary" onclick="mudarStatus('${ag.id}', 'concluido')" title="Concluir">
-                                    <i class="bi bi-check"></i>
-                                </button>
-                                <button class="btn btn-sm btn-secondary" onclick="mudarStatus('${ag.id}', 'cancelado')" title="Cancelar">
-                                    <i class="bi bi-x"></i>
-                                </button>
-                            ` : ''}
+                            ${botoes}
                         </div>
                     </div>
                 `;
@@ -1751,6 +1777,7 @@
             set('cnt-proximos', agendamentos.filter(a => a.data > hojeStr).length);
             set('cnt-passados', agendamentos.filter(a => a.data < hojeStr).length);
             set('cnt-pendentes', agendamentos.filter(a => (a.status || 'pendente') === 'pendente').length);
+            set('cnt-confirmados', agendamentos.filter(a => a.status === 'confirmado').length);
             set('cnt-concluidos', agendamentos.filter(a => a.status === 'concluido').length);
             set('cnt-cancelados', agendamentos.filter(a => a.status === 'cancelado').length);
         }
@@ -1778,6 +1805,7 @@
             else if (filtroAtivo === 'proximos') lista = lista.filter(a => a.data > hojeStr);
             else if (filtroAtivo === 'passados') lista = lista.filter(a => a.data < hojeStr);
             else if (filtroAtivo === 'pendentes') lista = lista.filter(a => (a.status || 'pendente') === 'pendente');
+            else if (filtroAtivo === 'confirmados') lista = lista.filter(a => a.status === 'confirmado');
             else if (filtroAtivo === 'concluidos') lista = lista.filter(a => a.status === 'concluido');
             else if (filtroAtivo === 'cancelados') lista = lista.filter(a => a.status === 'cancelado');
 
@@ -1815,12 +1843,46 @@
             let classe = 'agendamento-item';
             if (status === 'concluido') classe += ' status-concluido';
             else if (status === 'cancelado') classe += ' status-cancelado';
+            else if (status === 'confirmado') classe += ' status-confirmado';
             else if (ehHoje) classe += ' status-hoje';
             else if (ehPassado) classe += ' status-passado';
 
             const tel = (ag.clienteTelefone || '').replace(/\D/g, '');
             const preco = typeof ag.servicoPreco === 'number' ? ag.servicoPreco.toFixed(2).replace('.', ',') : '-';
-            const badgeClass = status === 'concluido' ? 'badge-concluido' : status === 'cancelado' ? 'badge-cancelado' : 'badge-pendente';
+            const badgeClass = status === 'concluido' ? 'badge-concluido'
+                             : status === 'cancelado' ? 'badge-cancelado'
+                             : status === 'confirmado' ? 'badge-confirmado'
+                             : 'badge-pendente';
+
+            let botoes = '';
+            if (status === 'pendente') {
+                botoes = `
+                    <button class="btn btn-sm btn-warning" onclick="lembrarCliente('${ag.id}')" title="Lembrete">
+                        <i class="bi bi-bell-fill"></i>
+                    </button>
+                    <button class="btn btn-sm btn-info" onclick="mudarStatus('${ag.id}', 'confirmado')" title="Confirmar presença">
+                        <i class="bi bi-hand-thumbs-up-fill"></i>
+                    </button>
+                    <button class="btn btn-sm btn-primary" onclick="mudarStatus('${ag.id}', 'concluido')" title="Já atendi">
+                        <i class="bi bi-check-lg"></i>
+                    </button>
+                    <button class="btn btn-sm btn-secondary" onclick="mudarStatus('${ag.id}', 'cancelado')" title="Cancelar">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                `;
+            } else if (status === 'confirmado') {
+                botoes = `
+                    <button class="btn btn-sm btn-warning" onclick="lembrarCliente('${ag.id}')" title="Lembrete">
+                        <i class="bi bi-bell-fill"></i>
+                    </button>
+                    <button class="btn btn-sm btn-primary" onclick="mudarStatus('${ag.id}', 'concluido')" title="Já atendi">
+                        <i class="bi bi-check-lg"></i>
+                    </button>
+                    <button class="btn btn-sm btn-secondary" onclick="mudarStatus('${ag.id}', 'cancelado')" title="Cancelar">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                `;
+            }
 
             return `
                 <div class="${classe}">
@@ -1839,11 +1901,13 @@
                         <div class="mt-2"><span class="badge-status ${badgeClass}">${status}</span></div>
                     </div>
                     <div class="agendamento-actions">
-                        ${status !== 'concluido' && status !== 'cancelado' ? `<button class="btn btn-sm btn-warning" onclick="lembrarCliente('${ag.id}')"><i class="bi bi-bell-fill"></i></button>` : ''}
-                        <a href="https://wa.me/55${tel}" target="_blank" class="btn btn-sm btn-success"><i class="bi bi-whatsapp"></i></a>
-                        ${status !== 'concluido' ? `<button class="btn btn-sm btn-primary" onclick="mudarStatus('${ag.id}', 'concluido')"><i class="bi bi-check"></i></button>` : ''}
-                        ${status !== 'cancelado' ? `<button class="btn btn-sm btn-secondary" onclick="mudarStatus('${ag.id}', 'cancelado')"><i class="bi bi-x"></i></button>` : ''}
-                        <button class="btn btn-sm btn-danger" onclick="excluirAgendamento('${ag.id}')"><i class="bi bi-trash"></i></button>
+                        <a href="https://wa.me/55${tel}" target="_blank" class="btn btn-sm btn-success" title="WhatsApp">
+                            <i class="bi bi-whatsapp"></i>
+                        </a>
+                        ${botoes}
+                        <button class="btn btn-sm btn-danger" onclick="excluirAgendamento('${ag.id}')" title="Excluir">
+                            <i class="bi bi-trash"></i>
+                        </button>
                     </div>
                 </div>`;
         }
@@ -1873,24 +1937,29 @@
             }
         };
 
-        // ✅ CORRIGIDO: com tratamento de erro
         window.mudarStatus = function(id, status) {
+            const mensagens = {
+                'confirmado': { txt: '📌 Confirmado!', tipo: 'info' },
+                'concluido':  { txt: '✅ Concluído!', tipo: 'success' },
+                'cancelado':  { txt: '🚫 Cancelado!', tipo: 'warning' }
+            };
+            const m = mensagens[status] || { txt: 'Atualizado!', tipo: 'info' };
+
             db.ref('agendamentos/' + id + '/status').set(status)
                 .then(() => {
-                    mostrarAlertaAdmin(status === 'concluido' ? '✅ Concluído!' : '🚫 Cancelado!', status === 'concluido' ? 'success' : 'warning');
+                    mostrarAlertaAdmin(m.txt, m.tipo);
                     setTimeout(carregarAgendamentosREST, 500);
                 })
                 .catch(err => {
                     console.error('Erro ao mudar status:', err);
                     if (err.code === 'PERMISSION_DENIED' || (err.message && err.message.includes('permission'))) {
-                        alert('❌ Sem permissão!\n\nProvavelmente este agendamento é antigo (criado antes do login). As regras novas do Firebase já resolvem isso — confirme se foram publicadas no Console.');
+                        alert('❌ Sem permissão!\n\nEste agendamento pode ser antigo, ou as regras do Firebase não estão publicadas corretamente.');
                     } else {
                         alert('❌ Erro: ' + (err.message || err.code));
                     }
                 });
         };
 
-        // ✅ CORRIGIDO: com tratamento de erro
         window.excluirAgendamento = function(id) {
             if (!confirm('Excluir permanentemente?')) return;
             db.ref('agendamentos/' + id).remove()
@@ -1901,7 +1970,7 @@
                 .catch(err => {
                     console.error('Erro ao excluir:', err);
                     if (err.code === 'PERMISSION_DENIED' || (err.message && err.message.includes('permission'))) {
-                        alert('❌ Sem permissão para excluir!\n\nEste agendamento pode ser antigo. Confirme se as regras do Firebase foram publicadas com o email correto do admin.');
+                        alert('❌ Sem permissão para excluir!\n\nEste agendamento pode ser antigo. Confirme se as regras do Firebase foram publicadas.');
                     } else {
                         alert('❌ Erro ao excluir: ' + (err.message || err.code));
                     }
