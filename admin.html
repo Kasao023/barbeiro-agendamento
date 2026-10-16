@@ -1567,14 +1567,69 @@
             }
         }
 
-        window.verificarTokenAdmin = async function() {
+window.verificarTokenAdmin = async function() {
+    try {
+        const reg = await navigator.serviceWorker.register('firebase-messaging-sw.js', {
+            scope: './'
+        });
+        await navigator.serviceWorker.ready;
+
+        const messaging = firebase.messaging();
+        const token = await messaging.getToken({
+            vapidKey: VAPID_KEY,
+            serviceWorkerRegistration: reg   // ← CRUCIAL
+        });
+
+        if (token) {
+            await firebase.database().ref('tokens/admin/' + token).set({
+                token,
+                criadoEm: Date.now(),
+                userAgent: navigator.userAgent,
+                email: usuarioLogado ? usuarioLogado.email : null
+            });
+            alert('✅ Token do admin salvo!\n\nComeça com:\n' + token.substring(0, 40) + '...');
+        } else {
+            alert('⚠️ Nenhum token. Ative as notificações primeiro.');
+        }
+    } catch (err) {
+        console.error(err);
+        alert('❌ Erro ao obter token:\n\n' + err.message);
+    }
+};
+
+window.ativarNotificacoesNavegador = async function() {
+    if (!('Notification' in window)) {
+        alert('❌ Navegador não suporta.');
+        return;
+    }
+    try {
+        const permission = await Notification.requestPermission();
+        if (permission === 'granted') {
+            mostrarAlertaAdmin('✅ Notificações ativadas!', 'success');
+
+            const reg = await navigator.serviceWorker.register('firebase-messaging-sw.js', {
+                scope: './'
+            });
+            await navigator.serviceWorker.ready;
+
+            // Notificação de boas-vindas
             try {
-                await navigator.serviceWorker.register('firebase-messaging-sw.js');
-                await navigator.serviceWorker.ready;
+                await reg.showNotification('🔔 Notificações ativadas!', {
+                    body: 'Você vai receber avisos dos agendamentos.',
+                    icon: 'seujorge.png',
+                    badge: 'seujorge.png'
+                });
+            } catch (e) {
+                console.warn('Erro ao mostrar boas-vindas:', e);
+            }
 
+            // Token FCM com registration explícita
+            try {
                 const messaging = firebase.messaging();
-                const token = await messaging.getToken({ vapidKey: VAPID_KEY });
-
+                const token = await messaging.getToken({
+                    vapidKey: VAPID_KEY,
+                    serviceWorkerRegistration: reg   // ← CRUCIAL
+                });
                 if (token) {
                     await firebase.database().ref('tokens/admin/' + token).set({
                         token,
@@ -1582,66 +1637,22 @@
                         userAgent: navigator.userAgent,
                         email: usuarioLogado ? usuarioLogado.email : null
                     });
-                    alert('✅ Token do admin salvo!\n\nComeça com:\n' + token.substring(0, 40) + '...');
-                } else {
-                    alert('⚠️ Nenhum token. Ative as notificações primeiro.');
+                    console.log('✅ Token admin salvo:', token.substring(0, 30) + '...');
                 }
-            } catch (err) {
-                console.error(err);
-                alert('❌ Erro ao obter token: ' + err.message);
+            } catch (e) {
+                console.warn('Token FCM falhou (não crítico):', e);
             }
-        };
 
-        window.ativarNotificacoesNavegador = async function() {
-            if (!('Notification' in window)) {
-                alert('❌ Navegador não suporta.');
-                return;
-            }
-            try {
-                const permission = await Notification.requestPermission();
-                if (permission === 'granted') {
-                    mostrarAlertaAdmin('✅ Notificações ativadas!', 'success');
-
-                    await navigator.serviceWorker.register('firebase-messaging-sw.js');
-                    const reg = await navigator.serviceWorker.ready;
-
-                    try {
-                        await reg.showNotification('🔔 Notificações ativadas!', {
-                            body: 'Você vai receber avisos dos agendamentos.',
-                            icon: 'seujorge.png',
-                            badge: 'seujorge.png'
-                        });
-                    } catch (e) {
-                        console.warn('Erro ao mostrar boas-vindas:', e);
-                    }
-
-                    try {
-                        const messaging = firebase.messaging();
-                        const token = await messaging.getToken({ vapidKey: VAPID_KEY });
-                        if (token) {
-                            await firebase.database().ref('tokens/admin/' + token).set({
-                                token,
-                                criadoEm: Date.now(),
-                                userAgent: navigator.userAgent,
-                                email: usuarioLogado ? usuarioLogado.email : null
-                            });
-                            console.log('✅ Token admin salvo:', token.substring(0, 30) + '...');
-                        }
-                    } catch (e) {
-                        console.warn('Token FCM falhou (não crítico):', e);
-                    }
-
-                    atualizarStatusNotif();
-                } else {
-                    alert('❌ Permissão negada.');
-                    atualizarStatusNotif();
-                }
-            } catch (err) {
-                console.error('Erro ao ativar notificações:', err);
-                alert('❌ Erro ao ativar. Tente novamente.');
-            }
-        };
-
+            atualizarStatusNotif();
+        } else {
+            alert('❌ Permissão negada.');
+            atualizarStatusNotif();
+        }
+    } catch (err) {
+        console.error('Erro ao ativar notificações:', err);
+        alert('❌ Erro ao ativar:\n\n' + err.message);
+    }
+};
         window.testarNotificacaoNavegador = async function() {
             if (Notification.permission !== 'granted') {
                 alert('⚠️ Ative as notificações primeiro.');
