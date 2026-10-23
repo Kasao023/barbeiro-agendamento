@@ -6,97 +6,127 @@
     <title>Painel - Seu Jorge</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { background: #0a0a0a !important; color: #fff; padding-top: 0 !important; }
-        .card { color: #333; }
+        :root {
+            --cor-primaria: #a31621;
+            --cor-azul-app: #34495e;
+            --cor-azul-claro: #eaf2f8;
+            --cor-amarelo-app: #f1c40f;
+            --cor-fundo: #f4f6f9;
+            --cor-texto: #2c3e50;
+        }
 
-        /* ============ DASHBOARD ============ */
+        body { 
+            background: var(--cor-fundo) !important; 
+            color: var(--cor-texto); 
+            padding-top: 0 !important; 
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* ============ NAVBAR SUPERIOR (SIMPLES) ============ */
+        .navbar-admin {
+            background: var(--cor-azul-app);
+            padding: 15px 20px;
+            border-bottom: 4px solid var(--cor-amarelo-app);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar-admin .brand {
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* ============ DASHBOARD HEADER ============ */
         .dash-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 20px 0;
-            border-bottom: 1px solid #1a1a1a;
             margin-bottom: 24px;
             flex-wrap: wrap;
             gap: 12px;
         }
         .dash-header h2 {
-            font-size: 1.6rem;
-            font-weight: 800;
+            font-size: 1.5rem;
+            font-weight: 700;
             margin: 0;
-            color: #fff;
+            color: var(--cor-azul-app);
         }
         .dash-header .saudacao {
-            color: #888;
-            font-size: .9rem;
+            color: #666;
+            font-size: .95rem;
+            font-weight: 500;
         }
 
         .btn-menu-abrir {
-            background: var(--cor-primaria);
+            background: var(--cor-azul-app);
             color: #fff;
             border: none;
             padding: 12px 22px;
-            border-radius: 12px;
-            font-weight: 700;
+            border-radius: 10px;
+            font-weight: 600;
             display: flex;
             align-items: center;
             gap: 8px;
             transition: 0.2s;
-            font-size: .95rem;
+            font-size: 1rem;
         }
         .btn-menu-abrir:hover {
-            background: #b91c2c;
+            background: #2c3e50;
             transform: translateY(-2px);
         }
-        .btn-menu-abrir i { font-size: 1.2rem; }
 
         /* CARDS DE RESUMO */
         .resumo-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 14px;
+            gap: 16px;
             margin-bottom: 24px;
         }
         .resumo-card {
-            background: #1a1a1a;
-            border-radius: 14px;
+            background: #fff;
+            border-radius: 12px;
             padding: 20px;
-            border-left: 5px solid var(--cor-primaria);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-left: 6px solid var(--cor-azul-app);
             display: flex;
             align-items: center;
             gap: 16px;
         }
-        .resumo-card.hoje { border-left-color: #ffc107; }
-        .resumo-card.amanha { border-left-color: #17a2b8; }
+        .resumo-card.hoje { border-left-color: var(--cor-amarelo-app); }
+        .resumo-card.amanha { border-left-color: #3498db; }
         .resumo-icon {
-            width: 52px;
-            height: 52px;
-            border-radius: 14px;
+            width: 55px;
+            height: 55px;
+            border-radius: 12px;
             display: grid;
             place-items: center;
-            font-size: 1.6rem;
-            background: rgba(220,53,69,.15);
+            font-size: 1.8rem;
+            background: var(--cor-azul-claro);
             flex-shrink: 0;
         }
-        .resumo-card.hoje .resumo-icon { background: rgba(255,199,7,.15); }
-        .resumo-card.amanha .resumo-icon { background: rgba(23,162,184,.15); }
+        .resumo-card.hoje .resumo-icon { background: #fef9e7; }
+        .resumo-card.amanha .resumo-icon { background: #eaf2f8; }
         .resumo-info strong {
             display: block;
             font-size: 1.8rem;
-            font-weight: 800;
-            color: #fff;
-            line-height: 1;
-            font-family: 'Bebas Neue', sans-serif;
-            letter-spacing: 1px;
+            font-weight: 700;
+            color: var(--cor-azul-app);
+            line-height: 1.2;
         }
         .resumo-info span {
-            color: #888;
-            font-size: .82rem;
+            color: #666;
+            font-size: .9rem;
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: .5px;
         }
 
         /* SEÇÃO DE AGENDAMENTOS */
@@ -107,7 +137,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 14px;
+            margin-bottom: 16px;
             flex-wrap: wrap;
             gap: 8px;
         }
@@ -115,93 +145,94 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 1.15rem;
+            font-size: 1.2rem;
             font-weight: 700;
-            color: #fff;
+            color: var(--cor-azul-app);
             margin: 0;
         }
-        .secao-titulo i { color: var(--cor-primaria); }
+        .secao-titulo i { color: var(--cor-azul-app); }
         .secao-badge {
-            background: #fff;
-            color: #0a0a0a;
-            font-size: .75rem;
-            font-weight: 800;
-            padding: 4px 10px;
+            background: var(--cor-azul-app);
+            color: #fff;
+            font-size: .85rem;
+            font-weight: 700;
+            padding: 4px 12px;
             border-radius: 20px;
         }
-        .secao-badge.hoje { background: #ffc107; }
-        .secao-badge.amanha { background: #17a2b8; color: #fff; }
+        .secao-badge.hoje { background: var(--cor-amarelo-app); color: #333; }
+        .secao-badge.amanha { background: #3498db; color: #fff; }
 
-        /* CARD DE AGENDAMENTO SIMPLIFICADO */
+        /* CARDS DE AGENDAMENTO (SIMPLES E LEGÍVEIS) */
         .ag-simples {
             background: #fff;
             color: #333;
             border-radius: 12px;
-            padding: 14px 16px;
-            margin-bottom: 10px;
+            padding: 16px;
+            margin-bottom: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 12px;
             flex-wrap: wrap;
-            border-left: 4px solid var(--cor-primaria);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border-left: 5px solid var(--cor-azul-app);
             transition: 0.2s;
         }
         .ag-simples:hover {
-            transform: translateX(3px);
-            box-shadow: 0 6px 18px rgba(0,0,0,.2);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.1);
         }
-        .ag-simples.hj { border-left-color: #ffc107; background: #fffbf0; }
-        .ag-simples.confirmado { border-left-color: #0d6efd; background: #eef5ff; }
-        .ag-simples.concluido { border-left-color: #28a745; background: #f0fff4; opacity: .75; }
-        .ag-simples.cancelado { border-left-color: #6c757d; background: #f8f8f8; opacity: .6; text-decoration: line-through; }
+        .ag-simples.hj { border-left-color: var(--cor-amarelo-app); background: #fefefe; }
+        .ag-simples.confirmado { border-left-color: #3498db; }
+        .ag-simples.concluido { border-left-color: #2ecc71; opacity: .7; }
+        .ag-simples.cancelado { border-left-color: #95a5a6; opacity: .6; text-decoration: line-through; }
+        
         .ag-hora {
-            background: var(--cor-primaria);
+            background: var(--cor-azul-app);
             color: #fff;
-            padding: 6px 12px;
+            padding: 8px 14px;
             border-radius: 8px;
-            font-family: 'Bebas Neue', sans-serif;
-            letter-spacing: 1px;
-            font-size: 1.1rem;
+            font-size: 1.3rem;
             font-weight: 700;
-            min-width: 62px;
+            min-width: 70px;
             text-align: center;
         }
-        .ag-simples.hj .ag-hora { background: #ffc107; color: #333; }
-        .ag-simples.confirmado .ag-hora { background: #0d6efd; }
-        .ag-simples.concluido .ag-hora { background: #28a745; }
-        .ag-simples.cancelado .ag-hora { background: #6c757d; }
+        .ag-simples.hj .ag-hora { background: var(--cor-amarelo-app); color: #333; }
+        .ag-simples.confirmado .ag-hora { background: #3498db; }
+        .ag-simples.concluido .ag-hora { background: #2ecc71; }
+        .ag-simples.cancelado .ag-hora { background: #95a5a6; }
 
-        .ag-info { flex: 1; min-width: 180px; }
+        .ag-info { flex: 1; min-width: 200px; }
         .ag-info strong {
             display: block;
-            font-size: 1rem;
-            color: #222;
-            margin-bottom: 2px;
+            font-size: 1.1rem;
+            color: var(--cor-azul-app);
+            margin-bottom: 4px;
         }
         .ag-info small {
             color: #666;
-            font-size: .82rem;
+            font-size: .9rem;
             display: block;
+            font-weight: 500;
         }
         .ag-acoes {
             display: flex;
-            gap: 6px;
+            gap: 8px;
             align-items: center;
             flex-wrap: wrap;
         }
-        .ag-acoes .btn { padding: 6px 10px; font-size: .85rem; }
 
         .msg-vazia {
-            background: #1a1a1a;
+            background: #fff;
             border-radius: 12px;
             padding: 30px 20px;
             text-align: center;
-            color: #666;
+            color: #7f8c8d;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
         .msg-vazia i {
             font-size: 2.5rem;
-            color: #333;
+            color: #bdc3c7;
             display: block;
             margin-bottom: 10px;
         }
@@ -211,48 +242,47 @@
             position: fixed;
             top: 0;
             right: 0;
-            width: 340px;
-            max-width: 90vw;
+            width: 320px;
+            max-width: 85vw;
             height: 100vh;
-            background: #0f0f0f;
-            border-left: 2px solid var(--cor-primaria);
+            background: #fff;
+            border-left: 4px solid var(--cor-azul-app);
             transform: translateX(100%);
             transition: transform .3s cubic-bezier(.4,0,.2,1);
             z-index: 2000;
             display: flex;
             flex-direction: column;
-            box-shadow: -10px 0 40px rgba(0,0,0,.6);
+            box-shadow: -5px 0 25px rgba(0,0,0,.15);
         }
         .menu-drawer.open { transform: translateX(0); }
 
         .menu-header {
-            padding: 24px;
-            border-bottom: 1px solid #1a1a1a;
+            padding: 20px;
+            border-bottom: 1px solid #eee;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background: var(--cor-azul-app);
+            color: #fff;
         }
         .menu-header h3 {
             margin: 0;
-            font-family: 'Bebas Neue', sans-serif;
-            letter-spacing: 2px;
-            font-size: 1.4rem;
-            color: #fff;
+            font-size: 1.2rem;
+            font-weight: 700;
         }
-        .menu-header h3 i { color: var(--cor-primaria); }
 
         .menu-fechar {
             width: 36px;
             height: 36px;
-            border-radius: 10px;
-            background: #1a1a1a;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.2);
             color: #fff;
             border: none;
             display: grid;
             place-items: center;
             transition: 0.2s;
         }
-        .menu-fechar:hover { background: var(--cor-primaria); }
+        .menu-fechar:hover { background: rgba(255,255,255,0.4); }
 
         .menu-lista {
             flex: 1;
@@ -260,14 +290,14 @@
             padding: 16px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
         }
         .menu-item {
-            background: #1a1a1a;
-            border-radius: 12px;
+            background: #f8f9fa;
+            border-radius: 10px;
             padding: 16px;
-            color: #fff;
-            border: none;
+            color: var(--cor-azul-app);
+            border: 1px solid #eee;
             text-align: left;
             display: flex;
             align-items: center;
@@ -279,29 +309,28 @@
             width: 100%;
         }
         .menu-item:hover {
-            background: #252525;
-            transform: translateX(-4px);
-            border-left: 4px solid var(--cor-primaria);
+            background: var(--cor-azul-claro);
+            border-color: #bdc3c7;
         }
         .menu-item-icon {
-            width: 42px;
-            height: 42px;
-            border-radius: 10px;
-            background: rgba(220,53,69,.15);
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: #fff;
             display: grid;
             place-items: center;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             flex-shrink: 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
         .menu-item-info { flex: 1; }
-        .menu-item-info strong { display: block; font-size: .95rem; }
-        .menu-item-info small { color: #888; font-size: .78rem; font-weight: 400; }
-        .menu-item .badge { font-size: .7rem; }
+        .menu-item-info strong { display: block; font-size: 1rem; }
+        .menu-item-info small { color: #7f8c8d; font-size: .85rem; font-weight: 400; }
 
         .overlay-menu {
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,.7);
+            background: rgba(0,0,0,.5);
             opacity: 0;
             visibility: hidden;
             transition: 0.3s;
@@ -319,467 +348,370 @@
             gap: 14px;
             margin-bottom: 24px;
             padding-bottom: 16px;
-            border-bottom: 1px solid #1a1a1a;
+            border-bottom: 2px solid #e0e6ed;
             flex-wrap: wrap;
         }
         .btn-voltar {
-            background: #1a1a1a;
-            color: #fff;
-            border: none;
+            background: #fff;
+            color: var(--cor-azul-app);
+            border: 1px solid #ccc;
             padding: 10px 16px;
-            border-radius: 10px;
+            border-radius: 8px;
             font-weight: 600;
             display: flex;
             align-items: center;
             gap: 6px;
             transition: 0.2s;
-            font-size: .9rem;
+            font-size: .95rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
-        .btn-voltar:hover { background: var(--cor-primaria); }
+        .btn-voltar:hover { background: var(--cor-azul-claro); }
         .view-header h2 {
             margin: 0;
             font-size: 1.4rem;
-            font-weight: 800;
-            color: #fff;
+            font-weight: 700;
+            color: var(--cor-azul-app);
         }
 
-        /* Estilos antigos mantidos */
+        /* FILTROS */
         .filtros-agendamentos {
             display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;
         }
         .filtro-btn {
-            background: #1a1a1a; color: #fff; border: 2px solid #333;
-            border-radius: 10px; padding: 8px 16px; font-weight: 600;
-            font-size: 0.85rem; cursor: pointer; transition: all 0.2s;
+            background: #fff; color: var(--cor-azul-app); border: 2px solid #e0e6ed;
+            border-radius: 8px; padding: 10px 16px; font-weight: 600;
+            font-size: 0.9rem; cursor: pointer; transition: all 0.2s;
             display: flex; align-items: center; gap: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
         }
-        .filtro-btn:hover { border-color: var(--cor-primaria); }
+        .filtro-btn:hover { border-color: var(--cor-azul-app); }
         .filtro-btn.ativo {
-            background: var(--cor-primaria); border-color: var(--cor-primaria); color: #fff;
+            background: var(--cor-azul-app); border-color: var(--cor-azul-app); color: #fff;
         }
         .filtro-btn .contador {
-            background: rgba(255,255,255,.2); padding: 2px 8px;
-            border-radius: 10px; font-size: 0.75rem;
+            background: #e0e6ed; padding: 2px 8px;
+            border-radius: 10px; font-size: 0.8rem; color: var(--cor-azul-app);
         }
-        .filtro-btn.ativo .contador { background: rgba(0,0,0,.3); }
+        .filtro-btn.ativo .contador { background: rgba(255,255,255,.3); color: #fff; }
 
+        /* AGENDAMENTOS COMPLETOS */
         .agendamento-item {
-            background: #fff; color: #333; border-radius: 12px; padding: 15px;
-            margin-bottom: 10px; border-left: 5px solid var(--cor-primaria);
+            background: #fff; color: #333; border-radius: 12px; padding: 16px;
+            margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--cor-azul-app);
             display: flex; justify-content: space-between; align-items: center;
             gap: 15px; flex-wrap: wrap; transition: all 0.2s;
         }
-        .agendamento-item:hover {
-            transform: translateX(4px); box-shadow: 0 6px 18px rgba(0,0,0,.15);
-        }
-        .agendamento-item.status-confirmado { border-left-color: #0d6efd; background: #eef5ff; }
-        .agendamento-item.status-concluido { border-left-color: var(--cor-sucesso); background: #f0fff4; }
-        .agendamento-item.status-cancelado { border-left-color: #6c757d; background: #f8f8f8; opacity: 0.7; }
-        .agendamento-item.status-passado { border-left-color: #adb5bd; }
-        .agendamento-item.status-hoje { border-left-color: #ffc107; background: #fffbf0; }
+        .agendamento-item:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.1); }
+        .agendamento-item.status-confirmado { border-left-color: #3498db; }
+        .agendamento-item.status-concluido { border-left-color: #2ecc71; }
+        .agendamento-item.status-cancelado { border-left-color: #95a5a6; opacity: 0.7; }
+        .agendamento-item.status-hoje { border-left-color: var(--cor-amarelo-app); background: #fefefe; }
 
         .agendamento-info { flex: 1; min-width: 250px; }
         .agendamento-data-hora {
-            display: flex; align-items: center; gap: 10px; margin-bottom: 6px;
+            display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
             font-size: 1.05rem; font-weight: 700; flex-wrap: wrap;
         }
-        .agendamento-data-hora .data { color: #666; font-weight: 500; font-size: 0.9rem; }
+        .agendamento-data-hora .data { color: #555; font-weight: 600; font-size: 0.95rem; }
         .agendamento-data-hora .hora {
-            background: var(--cor-primaria); color: #fff; padding: 3px 10px;
-            border-radius: 8px; font-family: 'Bebas Neue', sans-serif;
-            letter-spacing: 1px; font-size: 1.1rem;
+            background: var(--cor-azul-app); color: #fff; padding: 4px 10px;
+            border-radius: 6px; font-size: 1.1rem;
         }
-        .agendamento-item.status-hoje .hora { background: #ffc107; color: #333; }
-        .agendamento-item.status-confirmado .hora { background: #0d6efd; }
-        .agendamento-item.status-concluido .hora { background: var(--cor-sucesso); }
-        .agendamento-item.status-cancelado .hora { background: #6c757d; }
+        .agendamento-item.status-hoje .hora { background: var(--cor-amarelo-app); color: #333; }
+        .agendamento-item.status-confirmado .hora { background: #3498db; }
+        .agendamento-item.status-concluido .hora { background: #2ecc71; }
+        .agendamento-item.status-cancelado .hora { background: #95a5a6; }
 
         .agendamento-detalhes {
             display: flex; flex-wrap: wrap; gap: 15px;
-            font-size: 0.9rem; color: #555;
+            font-size: 0.95rem; color: #555;
         }
         .agendamento-detalhes span { display: inline-flex; align-items: center; gap: 4px; }
-        .agendamento-actions { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+        .agendamento-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 
         .badge-status {
-            display: inline-block; padding: 4px 10px; border-radius: 20px;
-            font-size: 0.7rem; font-weight: 700; letter-spacing: 0.5px;
+            display: inline-block; padding: 4px 10px; border-radius: 6px;
+            font-size: 0.75rem; font-weight: 700;
             text-transform: uppercase;
         }
-        .badge-pendente { background: #fff3cd; color: #856404; }
-        .badge-confirmado { background: #cfe2ff; color: #084298; }
-        .badge-concluido { background: #d4edda; color: #155724; }
-        .badge-cancelado { background: #f8d7da; color: #721c24; }
+        .badge-pendente { background: #fef9e7; color: #b7950b; }
+        .badge-confirmado { background: #eaf2f8; color: #2980b9; }
+        .badge-concluido { background: #e8f8f5; color: #1e8449; }
+        .badge-cancelado { background: #f2f3f4; color: #7b7d7d; }
 
         .agendamento-vazio {
-            text-align: center; padding: 40px 20px; color: #999;
-            background: #1a1a1a; border-radius: 12px;
+            text-align: center; padding: 40px 20px; color: #7f8c8d;
+            background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
-        .agendamento-vazio i { font-size: 3rem; color: #666; display: block; margin-bottom: 10px; }
+        .agendamento-vazio i { font-size: 3rem; color: #bdc3c7; display: block; margin-bottom: 10px; }
 
+        /* SERVIÇOS */
         .servico-item {
-            background: #fff; color: #333; border-radius: 12px; padding: 15px;
-            margin-bottom: 10px; border-left: 5px solid var(--cor-primaria);
+            background: #fff; color: #333; border-radius: 12px; padding: 16px;
+            margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--cor-azul-app);
             display: flex; justify-content: space-between; align-items: center;
             gap: 15px; flex-wrap: wrap; transition: all 0.2s;
         }
-        .servico-item:hover { transform: translateX(4px); box-shadow: 0 6px 18px rgba(0,0,0,.15); }
-        .servico-item.servico-vazio { border-left-color: #ffc107; background: #fffbf0; }
-        .servico-item.servico-inativo { border-left-color: #6c757d; background: #f8f8f8; opacity: 0.7; }
+        .servico-item:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.1); }
+        .servico-item.servico-vazio { border-left-color: var(--cor-amarelo-app); background: #fefefe; }
+        .servico-item.servico-inativo { border-left-color: #95a5a6; background: #f9f9f9; opacity: 0.7; }
         .servico-info { flex: 1; min-width: 250px; display: flex; align-items: center; gap: 15px; }
         .servico-icone-lista {
-            width: 55px; height: 55px; border-radius: 50%;
-            background: linear-gradient(135deg, var(--cor-primaria), var(--cor-primaria-escura));
-            color: #fff; display: flex; align-items: center; justify-content: center;
-            font-size: 1.6rem; flex-shrink: 0;
+            width: 50px; height: 50px; border-radius: 10px;
+            background: var(--cor-azul-claro);
+            color: var(--cor-azul-app); display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; flex-shrink: 0;
         }
-        .servico-item.servico-vazio .servico-icone-lista { background: linear-gradient(135deg, #ffc107, #e0a800); }
+        .servico-item.servico-vazio .servico-icone-lista { background: #fef9e7; color: #b7950b; }
         .servico-texto { flex: 1; }
         .servico-nome-lista {
             font-size: 1.1rem; font-weight: 700; margin-bottom: 4px;
-            color: #222; text-transform: uppercase; letter-spacing: 0.5px;
+            color: var(--cor-azul-app); text-transform: uppercase;
         }
         .servico-detalhes-lista {
-            display: flex; flex-wrap: wrap; gap: 15px; font-size: 0.9rem; color: #555;
+            display: flex; flex-wrap: wrap; gap: 15px; font-size: 0.95rem; color: #555;
         }
         .servico-detalhes-lista span { display: inline-flex; align-items: center; gap: 4px; }
-        .servico-preco-lista {
-            font-weight: 700; color: var(--cor-primaria);
-            font-size: 1.1rem; font-family: 'Bebas Neue', sans-serif;
-            letter-spacing: 1px;
-        }
-        .servico-item.servico-vazio .servico-preco-lista { color: #856404; }
-        .servico-acoes { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+        .servico-preco-lista { font-weight: 700; color: #27ae60; font-size: 1.1rem; }
+        .servico-acoes { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 
+        /* BLOQUEIOS */
         .bloqueio-section {
-            background: #1a1a1a; border-radius: 12px; padding: 20px;
-            margin-bottom: 20px; border-left: 4px solid var(--cor-primaria);
+            background: #fff; border-radius: 12px; padding: 20px;
+            margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--cor-azul-app);
         }
-        .bloqueio-section h6 { color: #fff; margin-bottom: 15px; }
+        .bloqueio-section h6 { color: var(--cor-azul-app); font-weight: 700; margin-bottom: 15px; }
         .bloqueio-item {
-            background: #fff; color: #333; border-radius: 8px; padding: 10px 15px;
+            background: #f8f9fa; color: #333; border-radius: 8px; padding: 12px 15px;
             margin-bottom: 8px; display: flex; justify-content: space-between;
-            align-items: center; border-left: 3px solid var(--cor-primaria);
+            align-items: center; border-left: 4px solid var(--cor-azul-app);
         }
-        .bloqueio-item.dia-inteiro { border-left-color: #dc3545; }
-        .bloqueio-item.recorrente { border-left-color: #ffc107; }
+        .bloqueio-item.dia-inteiro { border-left-color: #e74c3c; }
+        .bloqueio-item.recorrente { border-left-color: var(--cor-amarelo-app); }
+        
         .horario-check {
-            display: inline-flex; align-items: center; gap: 5px;
-            padding: 6px 12px; background: #fff; color: #333;
-            border-radius: 8px; margin: 3px; cursor: pointer;
-            border: 2px solid transparent; user-select: none;
-            font-weight: 600; font-size: 0.85rem;
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 14px; background: #fff; color: #333;
+            border-radius: 8px; margin: 4px; cursor: pointer;
+            border: 1px solid #ddd; user-select: none;
+            font-weight: 600; font-size: 0.9rem;
         }
-        .horario-check:hover { border-color: var(--cor-primaria); }
-        .horario-check input { cursor: pointer; }
-        .horario-check.marcado { background: var(--cor-primaria); color: #fff; border-color: var(--cor-primaria); }
+        .horario-check:hover { border-color: var(--cor-azul-app); }
+        .horario-check input { cursor: pointer; width: 16px; height: 16px; }
+        .horario-check.marcado { background: var(--cor-azul-app); color: #fff; border-color: var(--cor-azul-app); }
+        
         .dias-semana-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-top: 10px; }
         .dia-semana-btn {
-            background: #fff; color: #333; border: 2px solid transparent;
-            padding: 12px 5px; border-radius: 10px; text-align: center;
-            font-weight: 700; cursor: pointer; transition: 0.2s; font-size: 0.8rem;
+            background: #fff; color: #333; border: 1px solid #ddd;
+            padding: 12px 5px; border-radius: 8px; text-align: center;
+            font-weight: 700; cursor: pointer; transition: 0.2s; font-size: 0.85rem;
         }
-        .dia-semana-btn:hover { border-color: var(--cor-primaria); }
-        .dia-semana-btn.ativo { background: var(--cor-primaria); color: #fff; border-color: var(--cor-primaria); }
+        .dia-semana-btn:hover { border-color: var(--cor-azul-app); }
+        .dia-semana-btn.ativo { background: var(--cor-azul-app); color: #fff; border-color: var(--cor-azul-app); }
 
+        /* LISTA DE ESPERA */
         .espera-dia-bloco {
-            background: #1a1a1a; border-radius: 12px; padding: 20px;
-            margin-bottom: 20px; border-left: 4px solid #ffc107;
+            background: #fff; border-radius: 12px; padding: 20px;
+            margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--cor-amarelo-app);
         }
         .espera-dia-titulo {
             display: flex; justify-content: space-between; align-items: center;
             margin-bottom: 15px; padding-bottom: 10px;
-            border-bottom: 2px solid #333; flex-wrap: wrap; gap: 8px;
+            border-bottom: 1px solid #eee; flex-wrap: wrap; gap: 8px;
         }
-        .espera-dia-titulo h6 { margin: 0; color: #fff; font-size: 1.1rem; }
+        .espera-dia-titulo h6 { margin: 0; color: var(--cor-azul-app); font-weight: 700; font-size: 1.1rem; }
         .espera-item {
-            background: #fff; color: #333; border-radius: 10px; padding: 12px 15px;
+            background: #f8f9fa; color: #333; border-radius: 8px; padding: 12px 15px;
             margin-bottom: 8px; display: flex; justify-content: space-between;
             align-items: center; flex-wrap: wrap; gap: 10px;
-            border-left: 3px solid #ffc107;
+            border: 1px solid #eee;
         }
         .espera-item-info { flex: 1; min-width: 200px; }
-        .espera-item-info strong { display: block; font-size: 1rem; color: #333; }
-        .espera-item-info small { color: #666; font-size: 0.85rem; }
-        .espera-item-actions { display: flex; gap: 5px; flex-wrap: wrap; }
+        .espera-item-info strong { display: block; font-size: 1rem; color: var(--cor-azul-app); }
+        .espera-item-info small { color: #666; font-size: 0.9rem; font-weight: 500; }
+        .espera-item-actions { display: flex; gap: 6px; flex-wrap: wrap; }
 
+        /* FATURAMENTO */
         .faturamento-card {
-            background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
-            border-radius: 16px; padding: 22px;
-            border-left: 5px solid var(--cor-primaria);
-            position: relative; overflow: hidden; transition: all 0.3s;
+            background: #fff; border-radius: 12px; padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--cor-azul-app);
+            transition: all 0.3s;
         }
-        .faturamento-card.hoje { border-left-color: #ffc107; }
-        .faturamento-card.semana { border-left-color: #17a2b8; }
-        .faturamento-card.mes { border-left-color: #28a745; }
-        .faturamento-card.total { border-left-color: #7c3aed; }
+        .faturamento-card.hoje { border-left-color: var(--cor-amarelo-app); }
+        .faturamento-card.semana { border-left-color: #3498db; }
+        .faturamento-card.mes { border-left-color: #2ecc71; }
+        .faturamento-card.total { border-left-color: #9b59b6; }
         .faturamento-label {
-            font-size: 0.85rem; font-weight: 600; color: #a8b2c1;
-            text-transform: uppercase; letter-spacing: 1.5px;
-            margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+            font-size: 0.85rem; font-weight: 700; color: #7f8c8d;
+            text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
         }
-        .faturamento-card.hoje .faturamento-label i { color: #ffc107; }
-        .faturamento-card.semana .faturamento-label i { color: #17a2b8; }
-        .faturamento-card.mes .faturamento-label i { color: #28a745; }
-        .faturamento-card.total .faturamento-label i { color: #7c3aed; }
+        .faturamento-card.hoje .faturamento-label i { color: var(--cor-amarelo-app); }
+        .faturamento-card.semana .faturamento-label i { color: #3498db; }
+        .faturamento-card.mes .faturamento-label i { color: #2ecc71; }
+        .faturamento-card.total .faturamento-label i { color: #9b59b6; }
         .faturamento-valor {
-            font-size: 1.9rem; font-weight: 800; color: #fff;
-            font-family: 'Bebas Neue', sans-serif;
-            letter-spacing: 1px; line-height: 1; margin-bottom: 6px;
+            font-size: 1.8rem; font-weight: 700; color: var(--cor-azul-app);
+            line-height: 1; margin-bottom: 6px;
         }
-        .faturamento-card.hoje .faturamento-valor { color: #ffc107; }
-        .faturamento-card.semana .faturamento-valor { color: #4dd0e1; }
-        .faturamento-card.mes .faturamento-valor { color: #66bb6a; }
-        .faturamento-card.total .faturamento-valor { color: #a78bfa; }
-        .faturamento-qtd { font-size: 0.8rem; color: #888; }
+        .faturamento-card.hoje .faturamento-valor { color: #d4ac0d; }
+        .faturamento-card.semana .faturamento-valor { color: #2980b9; }
+        .faturamento-card.mes .faturamento-valor { color: #1e8449; }
+        .faturamento-card.total .faturamento-valor { color: #8e44ad; }
+        .faturamento-qtd { font-size: 0.85rem; color: #95a5a6; font-weight: 600; }
 
         .fat-item {
-            background: #fff; color: #333; border-radius: 12px; padding: 14px 18px;
+            background: #fff; color: #333; border-radius: 10px; padding: 14px 18px;
             margin-bottom: 8px; display: flex; justify-content: space-between;
             align-items: center; gap: 15px; flex-wrap: wrap;
-            border-left: 4px solid var(--cor-sucesso); transition: all 0.2s;
+            border-left: 4px solid #2ecc71; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
         .fat-item-info { flex: 1; min-width: 220px; }
-        .fat-item-info strong { display: block; font-size: 1rem; color: #222; }
-        .fat-item-info small { color: #666; font-size: 0.85rem; }
-        .fat-item-valor {
-            font-size: 1.2rem; font-weight: 800; color: var(--cor-sucesso);
-            font-family: 'Bebas Neue', sans-serif; letter-spacing: 1px;
-        }
+        .fat-item-info strong { display: block; font-size: 1rem; color: var(--cor-azul-app); }
+        .fat-item-info small { color: #666; font-size: 0.9rem; }
+        .fat-item-valor { font-size: 1.2rem; font-weight: 700; color: #27ae60; }
+        
         .fat-dia-titulo {
-            background: #1a1a1a; border-radius: 10px; padding: 12px 18px;
+            background: #fff; border-radius: 10px; padding: 14px 18px;
             margin-top: 20px; margin-bottom: 10px;
             display: flex; justify-content: space-between; align-items: center;
-            flex-wrap: wrap; gap: 10px;
-            border-left: 4px solid var(--cor-sucesso);
+            flex-wrap: wrap; gap: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border-left: 4px solid #2ecc71;
         }
-        .fat-dia-titulo h6 { margin: 0; color: #fff; font-size: 1rem; }
-        .fat-dia-titulo .total { color: #66bb6a; font-weight: 800; font-size: 1.1rem; }
+        .fat-dia-titulo h6 { margin: 0; color: var(--cor-azul-app); font-weight: 700; font-size: 1.05rem; }
+        .fat-dia-titulo .total { color: #27ae60; font-weight: 700; font-size: 1.1rem; }
 
         /* LOGIN */
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--cor-fundo);
+            padding: 20px;
+        }
         .login-box {
-            background: #fff; border-radius: 20px; padding: 40px 30px;
-            width: 100%; max-width: 420px; box-shadow: 0 20px 60px rgba(0,0,0,.5);
-            border-top: 5px solid var(--cor-primaria);
+            background: #fff; border-radius: 12px; padding: 40px 30px;
+            width: 100%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,.1);
+            border-top: 6px solid var(--cor-azul-app);
         }
-        .login-box h3 { color: #222; }
-        .login-box .form-label { color: #222 !important; }
-        .login-box .form-control { color: #222 !important; background: #f8f9fa !important; }
-        .login-box .text-muted { color: #666 !important; }
-
-        /* CORREÇÕES DE CONTRASTE */
-        .alert { color: #222 !important; border: none; }
-        .alert-info { background: #cfe8ff !important; color: #0a3a6b !important; border-left: 5px solid #0d6efd; }
-        .alert-warning { background: #fff3cd !important; color: #664d03 !important; border-left: 5px solid #ffc107; }
-        .alert-success { background: #d1e7dd !important; color: #0f5132 !important; border-left: 5px solid #198754; }
-        .alert-danger { background: #f8d7da !important; color: #842029 !important; border-left: 5px solid #dc3545; }
-        .alert-secondary { background: #e2e3e5 !important; color: #383d41 !important; border-left: 5px solid #6c757d; }
-
-        body .text-muted { color: #a8b2c1 !important; }
-        .card .text-muted, .agendamento-item .text-muted, .servico-item .text-muted,
-        .espera-item .text-muted, .bloqueio-item .text-muted, .modal-content .text-muted {
-            color: #666 !important;
+        .login-box h3 { color: var(--cor-azul-app); font-weight: 700; }
+        .login-box .form-label { color: var(--cor-azul-app) !important; font-weight: 600; }
+        .login-box .form-control { 
+            color: #333 !important; 
+            background: #f8f9fa !important; 
+            border: 2px solid #e0e6ed; 
+            padding: 12px;
+            font-size: 1rem;
         }
+        .login-box .form-control:focus { border-color: var(--cor-azul-app); box-shadow: none; }
+        .login-box .btn-danger { background: var(--cor-azul-app); border: none; padding: 12px; font-size: 1.1rem; }
+        .login-box .btn-danger:hover { background: #2c3e50; }
 
-        .form-control { color: #222 !important; background: #fff !important; border: 2px solid #dee2e6; }
-        .form-control:focus { border-color: var(--cor-primaria); box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2); }
-        .form-label { color: #e8edf7 !important; font-weight: 600; }
-        .bloqueio-section label.text-white, .bloqueio-section .form-label, label.text-white {
-            color: #e8edf7 !important;
+        /* CORREÇÕES DE CONTRASTE E INPUTS */
+        .form-control { 
+            color: #333 !important; 
+            background: #fff !important; 
+            border: 2px solid #e0e6ed; 
+            padding: 10px;
         }
-        .modal-content { color: #222; }
-        .modal-content .form-label { color: #222 !important; }
-        .modal-content .modal-title { color: #222 !important; }
-        .modal-content .modal-body { color: #222 !important; }
+        .form-control:focus { border-color: var(--cor-azul-app); box-shadow: 0 0 0 3px rgba(52, 73, 94, 0.2); }
+        .form-label { color: var(--cor-azul-app) !important; font-weight: 600; }
+        .modal-content { color: #333; border-radius: 12px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .modal-content .modal-title { color: var(--cor-azul-app) !important; font-weight: 700; }
+        .modal-content .form-label { color: var(--cor-azul-app) !important; }
+        .modal-header { border-bottom: 1px solid #eee; }
+        .modal-footer { border-top: 1px solid #eee; }
 
-        .bloqueio-section .text-muted { color: #a8b2c1 !important; }
-        .badge.bg-secondary { background: #495057 !important; color: #fff !important; }
-
-        #notif-status.alert { font-weight: 600; }
-
-        @media (max-width: 600px) {
-            .dash-header h2 { font-size: 1.3rem; }
-            .btn-menu-abrir { padding: 10px 16px; font-size: .85rem; }
-            .resumo-card { padding: 16px; gap: 12px; }
-            .resumo-icon { width: 44px; height: 44px; font-size: 1.3rem; }
-            .resumo-info strong { font-size: 1.5rem; }
-            .ag-simples { padding: 12px; }
-            .ag-info strong { font-size: .9rem; }
-        }
-
-        /* ============================================
-           BOTÕES MAIORES PARA TOQUE (MOBILE-FRIENDLY)
-           ============================================ */
-
-        .agendamento-actions,
-        .ag-acoes,
-        .servico-acoes,
-        .espera-item-actions {
-            gap: 10px;
-        }
-
+        /* BOTÕES GRANDES PARA O SEU JORGE (MOBILE-FRIENDLY) */
         .agendamento-actions .btn,
         .ag-acoes .btn,
         .servico-acoes .btn,
         .espera-item-actions .btn {
-            min-width: 46px;
-            min-height: 46px;
-            padding: 10px 14px;
-            font-size: 1.05rem;
-            border-radius: 11px;
+            min-width: 50px;
+            min-height: 50px;
+            padding: 10px 16px;
+            font-size: 1.15rem;
+            border-radius: 8px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
+            font-weight: 600;
         }
-
+        
         .agendamento-actions .btn i,
         .ag-acoes .btn i,
         .servico-acoes .btn i,
         .espera-item-actions .btn i {
-            font-size: 1.15rem;
+            font-size: 1.3rem;
             line-height: 1;
         }
 
-        .servico-acoes .btn:has(.bi-pencil) {
-            gap: 6px;
-            padding: 10px 16px;
-        }
-
-        .filtro-btn {
-            padding: 12px 18px;
-            font-size: 0.92rem;
-            min-height: 46px;
-            border-radius: 11px;
-        }
-
-        .filtro-btn i {
-            font-size: 1.05rem;
-        }
-
-        .bloqueio-item .btn {
-            min-width: 46px;
-            min-height: 46px;
-            padding: 10px;
-            font-size: 1.1rem;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .bloqueio-item .btn-outline-danger {
-            padding: 8px 14px;
-            font-size: 0.95rem;
-            min-height: 42px;
-        }
-
-        .dia-semana-btn {
-            min-height: 52px;
-            font-size: 0.95rem;
-            padding: 14px 6px;
-        }
-
-        .horario-check {
-            padding: 10px 16px;
-            font-size: 0.95rem;
-            min-height: 44px;
-        }
-
-        .btn-sm {
-            padding: 10px 16px;
-            font-size: 0.92rem;
-            min-height: 44px;
-            border-radius: 10px;
-        }
-
-        .menu-fechar {
-            width: 44px;
-            height: 44px;
-        }
-
-        .ag-simples .ag-acoes .btn {
-            min-width: 44px;
-            min-height: 44px;
-            padding: 8px;
-            font-size: 1.1rem;
-        }
+        .filtro-btn { padding: 12px 18px; font-size: 0.95rem; border-radius: 8px; }
 
         @media (max-width: 600px) {
-            .agendamento-actions .btn,
-            .ag-acoes .btn,
-            .servico-acoes .btn,
-            .espera-item-actions .btn {
-                min-width: 48px;
-                min-height: 48px;
-                padding: 11px 14px;
-                font-size: 1.15rem;
-            }
-
-            .agendamento-actions .btn i,
-            .ag-acoes .btn i,
-            .servico-acoes .btn i,
-            .espera-item-actions .btn i {
-                font-size: 1.25rem;
-            }
-
-            .agendamento-actions {
-                width: 100%;
-                justify-content: flex-end;
-            }
-
-            .filtro-btn {
-                padding: 12px 16px;
-                font-size: 0.88rem;
-            }
+            .dash-header h2 { font-size: 1.3rem; }
+            .btn-menu-abrir { padding: 10px 16px; font-size: .9rem; }
+            .resumo-card { padding: 16px; gap: 12px; }
+            .resumo-icon { width: 45px; height: 45px; font-size: 1.4rem; }
+            .resumo-info strong { font-size: 1.5rem; }
+            .ag-simples { padding: 12px; }
+            .ag-info strong { font-size: 1rem; }
+            .ag-hora { font-size: 1.1rem; padding: 6px 10px; min-width: 60px; }
         }
+
     </style>
 </head>
 <body>
 
     <!-- ============ TELA DE LOGIN ============ -->
-    <div id="tela-login" class="d-flex align-items-center justify-content-center" style="min-height: 100vh;">
+    <div id="tela-login" class="login-container">
         <div class="login-box">
             <div class="text-center mb-4">
-                <i class="bi bi-scissors display-4 text-danger"></i>
+                <i class="bi bi-scissors display-4" style="color: var(--cor-azul-app);"></i>
                 <h3 class="mt-3 fw-bold">PAINEL DO JORGE</h3>
                 <p class="text-muted small mb-0">Área restrita</p>
             </div>
 
             <div class="mb-3">
-                <label class="form-label fw-semibold">
-                    <i class="bi bi-envelope-fill text-danger"></i> Email
+                <label class="form-label">
+                    <i class="bi bi-envelope-fill"></i> Email
                 </label>
-                <input type="email" id="email-input" class="form-control form-control-lg" 
+                <input type="email" id="email-input" class="form-control" 
                        placeholder="seu@email.com" autocomplete="email">
             </div>
 
-            <div class="mb-3">
-                <label class="form-label fw-semibold">
-                    <i class="bi bi-lock-fill text-danger"></i> Senha
+            <div class="mb-4">
+                <label class="form-label">
+                    <i class="bi bi-lock-fill"></i> Senha
                 </label>
-                <input type="password" id="senha-input" class="form-control form-control-lg" 
+                <input type="password" id="senha-input" class="form-control" 
                        placeholder="Sua senha" autocomplete="current-password"
                        onkeypress="if(event.key==='Enter') fazerLogin()">
             </div>
 
-            <button class="btn btn-danger btn-lg fw-bold w-100 mb-2" id="btn-entrar" onclick="fazerLogin()">
+            <button class="btn btn-danger w-100 mb-3" id="btn-entrar" onclick="fazerLogin()">
                 <i class="bi bi-box-arrow-in-right"></i> ENTRAR
             </button>
 
-            <button class="btn btn-link text-danger w-100 small" onclick="esqueceuSenha()" type="button">
+            <button class="btn btn-link text-secondary w-100 small" onclick="esqueceuSenha()" type="button">
                 Esqueci minha senha
             </button>
 
-            <p id="login-erro" class="text-danger small text-center mt-3 mb-0"></p>
+            <p id="login-erro" class="text-danger small text-center mt-3 mb-0 fw-bold"></p>
         </div>
     </div>
 
     <!-- ============ PAINEL ============ -->
     <div id="tela-painel" style="display: none;">
-        <nav class="navbar navbar-dark bg-black border-bottom border-danger">
-            <div class="container">
-                <span class="navbar-brand fw-bold"><i class="bi bi-scissors"></i> PAINEL</span>
-                <button class="btn btn-outline-light btn-sm" onclick="fazerLogout()">
+        <nav class="navbar-admin">
+            <div class="container-fluid p-0">
+                <span class="brand"><i class="bi bi-scissors"></i> PAINEL</span>
+                <button class="btn btn-sm btn-light fw-bold" onclick="fazerLogout()">
                     <i class="bi bi-box-arrow-right"></i> Sair
                 </button>
             </div>
@@ -797,7 +729,7 @@
                     </div>
                     <button class="btn-menu-abrir" onclick="abrirMenu()">
                         <i class="bi bi-grid-3x3-gap-fill"></i>
-                        Mais ferramentas
+                        Menu
                     </button>
                 </div>
 
@@ -821,11 +753,11 @@
                 <div class="secao">
                     <div class="secao-header">
                         <h3 class="secao-titulo">
-                            <i class="bi bi-fire"></i>
+                            <i class="bi bi-calendar-check"></i>
                             Agendamentos de Hoje
                             <span class="secao-badge hoje" id="badge-hoje">0</span>
                         </h3>
-                        <button class="btn btn-sm btn-outline-light" onclick="abrirFerramenta('agendamentos')">
+                        <button class="btn btn-sm btn-outline-dark fw-bold" onclick="abrirFerramenta('agendamentos')">
                             Ver todos <i class="bi bi-arrow-right"></i>
                         </button>
                     </div>
@@ -855,15 +787,15 @@
                 </div>
 
                 <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                    <p class="text-muted small mb-0">Todos os agendamentos ficam salvos aqui.</p>
+                    <p class="text-muted small mb-0 fw-semibold">Todos os agendamentos ficam salvos aqui.</p>
                     <div class="d-flex gap-2 flex-wrap">
                         <button class="btn btn-danger btn-sm fw-bold" onclick="abrirAvisarAmanha()">
                             <i class="bi bi-megaphone-fill"></i> Avisar amanhã
                         </button>
-                        <button class="btn btn-outline-info btn-sm" onclick="recarregarAgendamentos()">
+                        <button class="btn btn-outline-secondary btn-sm fw-bold" onclick="recarregarAgendamentos()">
                             <i class="bi bi-arrow-clockwise"></i> Atualizar
                         </button>
-                        <button class="btn btn-outline-warning btn-sm" onclick="limparAgendamentosAntigos()">
+                        <button class="btn btn-outline-warning btn-sm fw-bold text-dark" onclick="limparAgendamentosAntigos()">
                             <i class="bi bi-eraser"></i> Limpar antigos
                         </button>
                     </div>
@@ -909,15 +841,15 @@
                 </div>
 
                 <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                    <p class="text-muted small mb-0">Serviços que aparecem no site do cliente.</p>
+                    <p class="text-muted small mb-0 fw-semibold">Serviços que aparecem no site do cliente.</p>
                     <div class="d-flex gap-2">
-                        <button class="btn btn-outline-info btn-sm" onclick="recarregarServicos()">
+                        <button class="btn btn-outline-secondary btn-sm fw-bold" onclick="recarregarServicos()">
                             <i class="bi bi-arrow-clockwise"></i> Atualizar
                         </button>
-                        <button class="btn btn-outline-warning btn-sm" onclick="limparServicosVazios()">
+                        <button class="btn btn-outline-warning btn-sm fw-bold text-dark" onclick="limparServicosVazios()">
                             <i class="bi bi-eraser"></i> Limpar vazios
                         </button>
-                        <button class="btn btn-danger" onclick="adicionarServico()">
+                        <button class="btn btn-danger fw-bold" onclick="adicionarServico()">
                             <i class="bi bi-plus-circle"></i> Adicionar
                         </button>
                     </div>
@@ -949,7 +881,7 @@
 
                 <div class="bloqueio-section">
                     <h6><i class="bi bi-calendar-x text-danger"></i> 1. Bloquear dia inteiro</h6>
-                    <p class="text-muted small mb-3">Ex: feriado, folga, viagem...</p>
+                    <p class="text-muted small mb-3 fw-semibold">Ex: feriado, folga, viagem...</p>
                     <div class="row g-2">
                         <div class="col-md-5">
                             <input type="date" id="bloqueio-dia-data" class="form-control">
@@ -958,7 +890,7 @@
                             <input type="text" id="bloqueio-dia-motivo" class="form-control" placeholder="Motivo (opcional)">
                         </div>
                         <div class="col-md-2">
-                            <button class="btn btn-danger w-100" onclick="bloquearDiaInteiro()">
+                            <button class="btn btn-danger w-100 fw-bold" onclick="bloquearDiaInteiro()">
                                 <i class="bi bi-lock-fill"></i> Bloquear
                             </button>
                         </div>
@@ -969,25 +901,25 @@
                     <h6><i class="bi bi-clock-history text-warning"></i> 2. Bloquear horários específicos</h6>
                     <div class="row g-2 mb-3">
                         <div class="col-md-6">
-                            <label class="text-white small">Data</label>
+                            <label class="form-label small mb-1">Data</label>
                             <input type="date" id="bloqueio-hora-data" class="form-control" onchange="carregarHorariosParaBloquear()">
                         </div>
                         <div class="col-md-6">
-                            <label class="text-white small">Motivo (opcional)</label>
+                            <label class="form-label small mb-1">Motivo (opcional)</label>
                             <input type="text" id="bloqueio-hora-motivo" class="form-control" placeholder="Ex: Almoço">
                         </div>
                     </div>
                     <div id="horarios-para-bloquear" class="mb-3">
-                        <p class="text-muted small">Selecione uma data para ver os horários.</p>
+                        <p class="text-muted small fw-semibold">Selecione uma data para ver os horários.</p>
                     </div>
-                    <button class="btn btn-warning w-100" onclick="bloquearHorariosSelecionados()">
+                    <button class="btn btn-warning w-100 fw-bold text-dark" onclick="bloquearHorariosSelecionados()">
                         <i class="bi bi-lock-fill"></i> Bloquear horários selecionados
                     </button>
                 </div>
 
                 <div class="bloqueio-section">
                     <h6><i class="bi bi-arrow-repeat text-info"></i> 3. Bloquear dia da semana</h6>
-                    <p class="text-muted small mb-3">Ex: toda segunda-feira você não trabalha.</p>
+                    <p class="text-muted small mb-3 fw-semibold">Ex: toda segunda-feira você não trabalha.</p>
                     <div class="dias-semana-grid">
                         <div class="dia-semana-btn" data-dia="0" onclick="toggleDiaSemana(this, 0)">Dom</div>
                         <div class="dia-semana-btn" data-dia="1" onclick="toggleDiaSemana(this, 1)">Seg</div>
@@ -997,7 +929,7 @@
                         <div class="dia-semana-btn" data-dia="5" onclick="toggleDiaSemana(this, 5)">Sex</div>
                         <div class="dia-semana-btn" data-dia="6" onclick="toggleDiaSemana(this, 6)">Sáb</div>
                     </div>
-                    <button class="btn btn-info w-100 mt-3" onclick="salvarDiasSemana()">
+                    <button class="btn btn-primary w-100 mt-3 fw-bold" onclick="salvarDiasSemana()">
                         <i class="bi bi-save"></i> Salvar dias da semana
                     </button>
                 </div>
@@ -1016,7 +948,7 @@
                     </button>
                     <h2>⏳ Lista de Espera</h2>
                 </div>
-                <p class="text-muted small mb-4">
+                <p class="text-muted small mb-4 fw-semibold">
                     Clientes que entraram na fila quando o dia estava lotado.
                 </p>
                 <div id="lista-espera-admin"></div>
@@ -1062,7 +994,7 @@
                     </div>
                 </div>
 
-                <h6 class="text-white mb-2"><i class="bi bi-funnel"></i> Detalhes por período</h6>
+                <h6 class="text-dark fw-bold mb-2"><i class="bi bi-funnel"></i> Detalhes por período</h6>
                 <div class="filtros-agendamentos">
                     <button class="filtro-btn ativo" data-filtro-fat="hoje"><i class="bi bi-sun"></i> Hoje</button>
                     <button class="filtro-btn" data-filtro-fat="semana"><i class="bi bi-calendar-week"></i> Esta semana</button>
@@ -1071,12 +1003,12 @@
                     <button class="filtro-btn" data-filtro-fat="todos"><i class="bi bi-list-ul"></i> Todos</button>
                 </div>
 
-                <div class="alert alert-success d-flex justify-content-between align-items-center flex-wrap gap-2">
-                    <div>
+                <div class="alert alert-success d-flex justify-content-between align-items-center flex-wrap gap-2 border-0 shadow-sm" style="border-left: 5px solid #2ecc71 !important;">
+                    <div class="text-success fw-bold">
                         <i class="bi bi-cash-coin fs-4"></i>
                         <strong class="ms-2">Total no período:</strong>
                     </div>
-                    <div class="fs-4 fw-bold" id="fat-filtro-total">R$ 0,00</div>
+                    <div class="fs-4 fw-bold text-success" id="fat-filtro-total">R$ 0,00</div>
                 </div>
 
                 <div id="lista-faturamento"></div>
@@ -1091,45 +1023,45 @@
                     <h2>⚙️ Configurações</h2>
                 </div>
 
-                <div class="card p-3 mb-3">
-                    <h6><i class="bi bi-shield-lock-fill text-danger"></i> Conta</h6>
-                    <p class="small text-muted mb-2">
-                        Logado como: <strong id="config-email">-</strong>
+                <div class="card p-4 mb-3 border-0 shadow-sm">
+                    <h6 class="fw-bold text-dark"><i class="bi bi-shield-lock-fill text-primary"></i> Conta</h6>
+                    <p class="small text-muted mb-3 fw-semibold">
+                        Logado como: <strong id="config-email" class="text-dark">-</strong>
                     </p>
-                    <button class="btn btn-outline-danger" onclick="fazerLogout()">
+                    <button class="btn btn-outline-danger fw-bold" onclick="fazerLogout()">
                         <i class="bi bi-box-arrow-right"></i> Sair da conta
                     </button>
                 </div>
 
-                <div class="card p-3 mb-3">
-                    <h6><i class="bi bi-key-fill text-danger"></i> Alterar senha</h6>
-                    <p class="small text-muted mb-2">
+                <div class="card p-4 mb-3 border-0 shadow-sm">
+                    <h6 class="fw-bold text-dark"><i class="bi bi-key-fill text-primary"></i> Alterar senha</h6>
+                    <p class="small text-muted mb-3 fw-semibold">
                         Enviaremos um link para o seu email.
                     </p>
-                    <button class="btn btn-danger" onclick="esqueceuSenha()">
+                    <button class="btn btn-primary fw-bold" onclick="esqueceuSenha()">
                         <i class="bi bi-envelope"></i> Enviar link
                     </button>
                 </div>
 
-                <div class="card p-3 mb-3">
-                    <label class="form-label">Notificações do Navegador</label>
-                    <p class="small text-muted mb-2">
+                <div class="card p-4 mb-3 border-0 shadow-sm">
+                    <label class="form-label fw-bold fs-6">Notificações do Navegador</label>
+                    <p class="small text-muted mb-3 fw-semibold">
                         Ative para receber avisos de novos agendamentos e cancelamentos.
                     </p>
 
-                    <div id="notif-status" class="alert alert-secondary py-2 px-3 small mb-2">
+                    <div id="notif-status" class="alert alert-secondary py-2 px-3 small mb-3 fw-bold border-0">
                         <i class="bi bi-hourglass-split"></i> Verificando status...
                     </div>
 
-                    <button class="btn btn-primary" id="btn-ativar-notif" onclick="ativarNotificacoesNavegador()">
+                    <button class="btn btn-primary fw-bold mb-2" id="btn-ativar-notif" onclick="ativarNotificacoesNavegador()">
                         <i class="bi bi-bell"></i> Ativar Notificações
                     </button>
 
-                    <button class="btn btn-outline-primary mt-2" onclick="testarNotificacaoNavegador()">
+                    <button class="btn btn-outline-primary fw-bold mb-2" onclick="testarNotificacaoNavegador()">
                         <i class="bi bi-send"></i> Testar notificação
                     </button>
 
-                    <button class="btn btn-outline-secondary mt-2" onclick="verificarTokenAdmin()">
+                    <button class="btn btn-outline-secondary fw-bold" onclick="verificarTokenAdmin()">
                         <i class="bi bi-key"></i> Ver meu token FCM
                     </button>
                 </div>
@@ -1178,7 +1110,7 @@
                     <strong>Lista de Espera</strong>
                     <small>Clientes na fila</small>
                 </div>
-                <span class="badge bg-warning text-dark" id="menu-badge-espera" style="display:none;">0</span>
+                <span class="badge bg-warning text-dark fw-bold" id="menu-badge-espera" style="display:none; font-size: 0.9rem;">0</span>
             </button>
 
             <button class="menu-item" onclick="abrirFerramenta('faturamento')">
@@ -1201,30 +1133,30 @@
 
     <!-- ============ MODAL SERVIÇO ============ -->
     <div class="modal fade" id="modalServico" tabindex="-1">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Editar Serviço</h5>
+                    <h5 class="modal-title fw-bold">Editar Serviço</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" id="edit-servico-id">
                     <div class="mb-3">
-                        <label class="form-label">Nome</label>
+                        <label class="form-label fw-bold">Nome</label>
                         <input type="text" id="edit-servico-nome" class="form-control">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Duração (minutos)</label>
+                        <label class="form-label fw-bold">Duração (minutos)</label>
                         <input type="number" id="edit-servico-duracao" class="form-control">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Preço (R$)</label>
+                        <label class="form-label fw-bold">Preço (R$)</label>
                         <input type="number" id="edit-servico-preco" class="form-control" step="0.01">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button class="btn btn-danger" onclick="salvarServico()">Salvar</button>
+                    <button class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-primary fw-bold" onclick="salvarServico()">Salvar</button>
                 </div>
             </div>
         </div>
@@ -1232,17 +1164,17 @@
 
     <!-- ============ MODAL AVISAR AMANHÃ ============ -->
     <div class="modal fade" id="modalAvisarAmanha" tabindex="-1">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title"><i class="bi bi-megaphone-fill"></i> Avisar clientes de amanhã</h5>
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title fw-bold"><i class="bi bi-megaphone-fill"></i> Avisar clientes de amanhã</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <div id="lista-avisar-amanha"></div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Fechar</button>
                 </div>
             </div>
         </div>
@@ -1395,7 +1327,7 @@
                 container.innerHTML = `
                     <div class="msg-vazia">
                         <i class="bi bi-calendar-x"></i>
-                        <p class="mb-0">Nenhum agendamento ${ehHoje ? 'para hoje' : 'para amanhã'}.</p>
+                        <p class="mb-0 fw-semibold">Nenhum agendamento ${ehHoje ? 'para hoje' : 'para amanhã'}.</p>
                     </div>`;
                 return;
             }
@@ -1413,23 +1345,23 @@
                 let botoes = '';
                 if (status === 'pendente') {
                     botoes = `
-                        <button class="btn btn-sm btn-info" onclick="mudarStatus('${ag.id}', 'confirmado')" title="Confirmar presença">
+                        <button class="btn btn-sm btn-info text-white" onclick="mudarStatus('${ag.id}', 'confirmado')" title="Confirmar presença">
                             <i class="bi bi-hand-thumbs-up-fill"></i>
                         </button>
                         <button class="btn btn-sm btn-primary" onclick="mudarStatus('${ag.id}', 'concluido')" title="Já atendi">
-                            <i class="bi bi-check"></i>
+                            <i class="bi bi-check-lg"></i>
                         </button>
-                        <button class="btn btn-sm btn-secondary" onclick="mudarStatus('${ag.id}', 'cancelado')" title="Cancelar">
-                            <i class="bi bi-x"></i>
+                        <button class="btn btn-sm btn-outline-danger" onclick="mudarStatus('${ag.id}', 'cancelado')" title="Cancelar">
+                            <i class="bi bi-x-lg"></i>
                         </button>
                     `;
                 } else if (status === 'confirmado') {
                     botoes = `
                         <button class="btn btn-sm btn-primary" onclick="mudarStatus('${ag.id}', 'concluido')" title="Já atendi">
-                            <i class="bi bi-check"></i>
+                            <i class="bi bi-check-lg"></i>
                         </button>
-                        <button class="btn btn-sm btn-secondary" onclick="mudarStatus('${ag.id}', 'cancelado')" title="Cancelar">
-                            <i class="bi bi-x"></i>
+                        <button class="btn btn-sm btn-outline-danger" onclick="mudarStatus('${ag.id}', 'cancelado')" title="Cancelar">
+                            <i class="bi bi-x-lg"></i>
                         </button>
                     `;
                 }
@@ -1439,7 +1371,7 @@
                         <div class="ag-hora">${ag.horario || '--:--'}</div>
                         <div class="ag-info">
                             <strong>${ag.clienteNome || 'Sem nome'}</strong>
-                            <small>💈 ${ag.servicoNome || '-'} • 📞 ${ag.clienteTelefone || '-'}</small>
+                            <small><i class="bi bi-scissors"></i> ${ag.servicoNome || '-'} • <i class="bi bi-telephone"></i> ${ag.clienteTelefone || '-'}</small>
                         </div>
                         <div class="ag-acoes">
                             <a href="https://wa.me/55${tel}" target="_blank" class="btn btn-sm btn-success" title="WhatsApp">
@@ -1544,7 +1476,7 @@
             if (!el) return;
 
             if (!('Notification' in window)) {
-                el.className = 'alert alert-danger py-2 px-3 small mb-2';
+                el.className = 'alert alert-danger py-2 px-3 small mb-3 fw-bold border-0';
                 el.innerHTML = '<i class="bi bi-x-circle"></i> Este navegador não suporta notificações.';
                 return;
             }
@@ -1553,83 +1485,33 @@
             const btn = document.getElementById('btn-ativar-notif');
 
             if (p === 'granted') {
-                el.className = 'alert alert-success py-2 px-3 small mb-2';
+                el.className = 'alert alert-success py-2 px-3 small mb-3 fw-bold border-0';
                 el.innerHTML = '<i class="bi bi-check-circle"></i> Notificações ativadas e funcionando!';
                 if (btn) btn.style.display = 'none';
             } else if (p === 'denied') {
-                el.className = 'alert alert-danger py-2 px-3 small mb-2';
+                el.className = 'alert alert-danger py-2 px-3 small mb-3 fw-bold border-0';
                 el.innerHTML = '<i class="bi bi-x-circle"></i> Permissão negada. Ative manualmente nas configurações do navegador.';
                 if (btn) btn.style.display = 'inline-block';
             } else {
-                el.className = 'alert alert-warning py-2 px-3 small mb-2';
+                el.className = 'alert alert-warning py-2 px-3 small mb-3 fw-bold border-0 text-dark';
                 el.innerHTML = '<i class="bi bi-exclamation-triangle"></i> Permissão pendente. Clique em "Ativar Notificações".';
                 if (btn) btn.style.display = 'inline-block';
             }
         }
 
-window.verificarTokenAdmin = async function() {
-    try {
-        const reg = await navigator.serviceWorker.register('firebase-messaging-sw.js', {
-            scope: './'
-        });
-        await navigator.serviceWorker.ready;
-
-        const messaging = firebase.messaging();
-        const token = await messaging.getToken({
-            vapidKey: VAPID_KEY,
-            serviceWorkerRegistration: reg   // ← CRUCIAL
-        });
-
-        if (token) {
-            await firebase.database().ref('tokens/admin/' + token).set({
-                token,
-                criadoEm: Date.now(),
-                userAgent: navigator.userAgent,
-                email: usuarioLogado ? usuarioLogado.email : null
-            });
-            alert('✅ Token do admin salvo!\n\nComeça com:\n' + token.substring(0, 40) + '...');
-        } else {
-            alert('⚠️ Nenhum token. Ative as notificações primeiro.');
-        }
-    } catch (err) {
-        console.error(err);
-        alert('❌ Erro ao obter token:\n\n' + err.message);
-    }
-};
-
-window.ativarNotificacoesNavegador = async function() {
-    if (!('Notification' in window)) {
-        alert('❌ Navegador não suporta.');
-        return;
-    }
-    try {
-        const permission = await Notification.requestPermission();
-        if (permission === 'granted') {
-            mostrarAlertaAdmin('✅ Notificações ativadas!', 'success');
-
-            const reg = await navigator.serviceWorker.register('firebase-messaging-sw.js', {
-                scope: './'
-            });
-            await navigator.serviceWorker.ready;
-
-            // Notificação de boas-vindas
+        window.verificarTokenAdmin = async function() {
             try {
-                await reg.showNotification('🔔 Notificações ativadas!', {
-                    body: 'Você vai receber avisos dos agendamentos.',
-                    icon: 'seujorge.png',
-                    badge: 'seujorge.png'
+                const reg = await navigator.serviceWorker.register('firebase-messaging-sw.js', {
+                    scope: './'
                 });
-            } catch (e) {
-                console.warn('Erro ao mostrar boas-vindas:', e);
-            }
+                await navigator.serviceWorker.ready;
 
-            // Token FCM com registration explícita
-            try {
                 const messaging = firebase.messaging();
                 const token = await messaging.getToken({
                     vapidKey: VAPID_KEY,
-                    serviceWorkerRegistration: reg   // ← CRUCIAL
+                    serviceWorkerRegistration: reg
                 });
+
                 if (token) {
                     await firebase.database().ref('tokens/admin/' + token).set({
                         token,
@@ -1637,22 +1519,71 @@ window.ativarNotificacoesNavegador = async function() {
                         userAgent: navigator.userAgent,
                         email: usuarioLogado ? usuarioLogado.email : null
                     });
-                    console.log('✅ Token admin salvo:', token.substring(0, 30) + '...');
+                    alert('✅ Token do admin salvo!\n\nComeça com:\n' + token.substring(0, 40) + '...');
+                } else {
+                    alert('⚠️ Nenhum token. Ative as notificações primeiro.');
                 }
-            } catch (e) {
-                console.warn('Token FCM falhou (não crítico):', e);
+            } catch (err) {
+                console.error(err);
+                alert('❌ Erro ao obter token:\n\n' + err.message);
             }
+        };
 
-            atualizarStatusNotif();
-        } else {
-            alert('❌ Permissão negada.');
-            atualizarStatusNotif();
-        }
-    } catch (err) {
-        console.error('Erro ao ativar notificações:', err);
-        alert('❌ Erro ao ativar:\n\n' + err.message);
-    }
-};
+        window.ativarNotificacoesNavegador = async function() {
+            if (!('Notification' in window)) {
+                alert('❌ Navegador não suporta.');
+                return;
+            }
+            try {
+                const permission = await Notification.requestPermission();
+                if (permission === 'granted') {
+                    mostrarAlertaAdmin('✅ Notificações ativadas!', 'success');
+
+                    const reg = await navigator.serviceWorker.register('firebase-messaging-sw.js', {
+                        scope: './'
+                    });
+                    await navigator.serviceWorker.ready;
+
+                    try {
+                        await reg.showNotification('🔔 Notificações ativadas!', {
+                            body: 'Você vai receber avisos dos agendamentos.',
+                            icon: 'seujorge.png',
+                            badge: 'seujorge.png'
+                        });
+                    } catch (e) {
+                        console.warn('Erro ao mostrar boas-vindas:', e);
+                    }
+
+                    try {
+                        const messaging = firebase.messaging();
+                        const token = await messaging.getToken({
+                            vapidKey: VAPID_KEY,
+                            serviceWorkerRegistration: reg
+                        });
+                        if (token) {
+                            await firebase.database().ref('tokens/admin/' + token).set({
+                                token,
+                                criadoEm: Date.now(),
+                                userAgent: navigator.userAgent,
+                                email: usuarioLogado ? usuarioLogado.email : null
+                            });
+                            console.log('✅ Token admin salvo:', token.substring(0, 30) + '...');
+                        }
+                    } catch (e) {
+                        console.warn('Token FCM falhou (não crítico):', e);
+                    }
+
+                    atualizarStatusNotif();
+                } else {
+                    alert('❌ Permissão negada.');
+                    atualizarStatusNotif();
+                }
+            } catch (err) {
+                console.error('Erro ao ativar notificações:', err);
+                alert('❌ Erro ao ativar:\n\n' + err.message);
+            }
+        };
+
         window.testarNotificacaoNavegador = async function() {
             if (Notification.permission !== 'granted') {
                 alert('⚠️ Ative as notificações primeiro.');
@@ -1829,13 +1760,13 @@ window.ativarNotificacoesNavegador = async function() {
 
             container.innerHTML = '';
             if (lista.length === 0) {
-                container.innerHTML = `<div class="agendamento-vazio"><i class="bi bi-calendar-x"></i><p class="mb-0">Nenhum agendamento.</p></div>`;
+                container.innerHTML = `<div class="agendamento-vazio"><i class="bi bi-calendar-x"></i><p class="mb-0 fw-semibold">Nenhum agendamento.</p></div>`;
                 return;
             }
 
             const cont = document.createElement('div');
             cont.className = 'mb-3';
-            cont.innerHTML = `<span class="badge bg-secondary">${lista.length} agendamento${lista.length > 1 ? 's' : ''}</span>`;
+            cont.innerHTML = `<span class="badge bg-secondary" style="font-size: 0.9rem;">${lista.length} agendamento${lista.length > 1 ? 's' : ''}</span>`;
             container.appendChild(cont);
 
             lista.forEach(ag => {
@@ -1868,28 +1799,28 @@ window.ativarNotificacoesNavegador = async function() {
             let botoes = '';
             if (status === 'pendente') {
                 botoes = `
-                    <button class="btn btn-sm btn-warning" onclick="lembrarCliente('${ag.id}')" title="Lembrete">
+                    <button class="btn btn-sm btn-warning text-dark" onclick="lembrarCliente('${ag.id}')" title="Lembrete">
                         <i class="bi bi-bell-fill"></i>
                     </button>
-                    <button class="btn btn-sm btn-info" onclick="mudarStatus('${ag.id}', 'confirmado')" title="Confirmar presença">
+                    <button class="btn btn-sm btn-info text-white" onclick="mudarStatus('${ag.id}', 'confirmado')" title="Confirmar presença">
                         <i class="bi bi-hand-thumbs-up-fill"></i>
                     </button>
                     <button class="btn btn-sm btn-primary" onclick="mudarStatus('${ag.id}', 'concluido')" title="Já atendi">
                         <i class="bi bi-check-lg"></i>
                     </button>
-                    <button class="btn btn-sm btn-secondary" onclick="mudarStatus('${ag.id}', 'cancelado')" title="Cancelar">
+                    <button class="btn btn-sm btn-outline-danger" onclick="mudarStatus('${ag.id}', 'cancelado')" title="Cancelar">
                         <i class="bi bi-x-lg"></i>
                     </button>
                 `;
             } else if (status === 'confirmado') {
                 botoes = `
-                    <button class="btn btn-sm btn-warning" onclick="lembrarCliente('${ag.id}')" title="Lembrete">
+                    <button class="btn btn-sm btn-warning text-dark" onclick="lembrarCliente('${ag.id}')" title="Lembrete">
                         <i class="bi bi-bell-fill"></i>
                     </button>
                     <button class="btn btn-sm btn-primary" onclick="mudarStatus('${ag.id}', 'concluido')" title="Já atendi">
                         <i class="bi bi-check-lg"></i>
                     </button>
-                    <button class="btn btn-sm btn-secondary" onclick="mudarStatus('${ag.id}', 'cancelado')" title="Cancelar">
+                    <button class="btn btn-sm btn-outline-danger" onclick="mudarStatus('${ag.id}', 'cancelado')" title="Cancelar">
                         <i class="bi bi-x-lg"></i>
                     </button>
                 `;
@@ -1900,14 +1831,14 @@ window.ativarNotificacoesNavegador = async function() {
                     <div class="agendamento-info">
                         <div class="agendamento-data-hora">
                             <span class="hora">${ag.horario || '--:--'}</span>
-                            <span class="data">📅 ${dataFmt}${ehHoje ? ' <span class="badge bg-warning text-dark ms-1">HOJE</span>' : ''}</span>
+                            <span class="data"><i class="bi bi-calendar"></i> ${dataFmt}${ehHoje ? ' <span class="badge bg-warning text-dark ms-1">HOJE</span>' : ''}</span>
                         </div>
                         <div class="agendamento-detalhes">
-                            <span>👤 <strong>${ag.clienteNome || 'Sem nome'}</strong></span>
-                            <span>💈 ${ag.servicoNome || '-'}</span>
-                            <span>💰 R$ ${preco}</span>
-                            <span>📞 ${ag.clienteTelefone || '-'}</span>
-                            ${ag.observacoes ? `<span>📝 ${ag.observacoes}</span>` : ''}
+                            <span><i class="bi bi-person"></i> <strong>${ag.clienteNome || 'Sem nome'}</strong></span>
+                            <span><i class="bi bi-scissors"></i> ${ag.servicoNome || '-'}</span>
+                            <span><i class="bi bi-cash"></i> R$ ${preco}</span>
+                            <span><i class="bi bi-telephone"></i> ${ag.clienteTelefone || '-'}</span>
+                            ${ag.observacoes ? `<span><i class="bi bi-card-text"></i> ${ag.observacoes}</span>` : ''}
                         </div>
                         <div class="mt-2"><span class="badge-status ${badgeClass}">${status}</span></div>
                     </div>
@@ -2021,7 +1952,7 @@ window.ativarNotificacoesNavegador = async function() {
             container.innerHTML = '';
 
             if (lista.length === 0) {
-                container.innerHTML = `<div class="agendamento-vazio"><i class="bi bi-inbox"></i><p class="mb-0">Nenhum serviço.</p></div>`;
+                container.innerHTML = `<div class="agendamento-vazio"><i class="bi bi-inbox"></i><p class="mb-0 fw-semibold">Nenhum serviço.</p></div>`;
                 return;
             }
 
@@ -2050,7 +1981,7 @@ window.ativarNotificacoesNavegador = async function() {
                         </div>
                         <div class="servico-acoes">
                             <button class="btn btn-sm btn-primary" onclick="editarServico('${s.id}')"><i class="bi bi-pencil"></i> Editar</button>
-                            <button class="btn btn-sm btn-danger" onclick="excluirServico('${s.id}')"><i class="bi bi-trash"></i></button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="excluirServico('${s.id}')"><i class="bi bi-trash"></i></button>
                         </div>
                     </div>`;
                 while (wrapper.firstChild) container.appendChild(wrapper.firstChild);
@@ -2158,7 +2089,7 @@ window.ativarNotificacoesNavegador = async function() {
             const data = document.getElementById('bloqueio-hora-data').value;
             const container = document.getElementById('horarios-para-bloquear');
             if (!container) return;
-            if (!data) { container.innerHTML = '<p class="text-muted small">Selecione uma data.</p>'; return; }
+            if (!data) { container.innerHTML = '<p class="text-muted small fw-semibold">Selecione uma data.</p>'; return; }
 
             const horarios = [];
             for (let h = 9; h < 20; h++) for (let m = 0; m < 60; m += 30) {
@@ -2170,8 +2101,8 @@ window.ativarNotificacoesNavegador = async function() {
                 db.ref('bloqueios-dia/' + data).once('value')
             ]).then(([snapH, snapD]) => {
                 const jb = snapH.val() || {};
-                if (snapD.exists()) { container.innerHTML = '<p class="text-danger small">⚠️ Dia já bloqueado.</p>'; return; }
-                let html = '<p class="text-white small mb-2">Marque os horários:</p><div>';
+                if (snapD.exists()) { container.innerHTML = '<p class="text-danger small fw-bold">⚠️ Dia já bloqueado.</p>'; return; }
+                let html = '<p class="text-dark small mb-2 fw-bold">Marque os horários:</p><div>';
                 horarios.forEach(h => {
                     html += `<label class="horario-check ${jb[h] ? 'marcado' : ''}"><input type="checkbox" value="${h}" ${jb[h] ? 'checked' : ''} onchange="toggleHorarioCheck(this)"> ${h}</label>`;
                 });
@@ -2249,15 +2180,15 @@ window.ativarNotificacoesNavegador = async function() {
 
                 if (Object.keys(dias).length > 0) {
                     tem = true;
-                    html += '<h6 class="text-white mt-3 mb-2"><i class="bi bi-calendar-x text-danger"></i> Dias bloqueados:</h6>';
+                    html += '<h6 class="text-dark mt-3 mb-2 fw-bold"><i class="bi bi-calendar-x text-danger"></i> Dias bloqueados:</h6>';
                     Object.keys(dias).sort().forEach(data => {
                         const df = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR');
-                        html += `<div class="bloqueio-item dia-inteiro"><div><strong>${df}</strong><small class="d-block text-muted">${dias[data].motivo || 'Folga'}</small></div><button class="btn btn-sm btn-danger" onclick="desbloquearDiaInteiro('${data}')"><i class="bi bi-trash"></i></button></div>`;
+                        html += `<div class="bloqueio-item dia-inteiro"><div><strong>${df}</strong><small class="d-block text-muted fw-semibold">${dias[data].motivo || 'Folga'}</small></div><button class="btn btn-sm btn-outline-danger" onclick="desbloquearDiaInteiro('${data}')"><i class="bi bi-trash"></i></button></div>`;
                     });
                 }
                 if (Object.keys(horas).length > 0) {
                     tem = true;
-                    html += '<h6 class="text-white mt-4 mb-2"><i class="bi bi-clock-history text-warning"></i> Horários bloqueados:</h6>';
+                    html += '<h6 class="text-dark mt-4 mb-2 fw-bold"><i class="bi bi-clock-history text-warning"></i> Horários bloqueados:</h6>';
                     Object.keys(horas).sort().forEach(data => {
                         const hd = horas[data];
                         if (!hd || typeof hd !== 'object') return;
@@ -2265,7 +2196,7 @@ window.ativarNotificacoesNavegador = async function() {
                         const lh = Object.keys(hd).sort();
                         if (lh.length === 0) return;
                         html += `<div class="bloqueio-item"><div><strong>${df}</strong><div class="d-flex gap-1 flex-wrap mt-2">`;
-                        lh.forEach(h => { html += `<button class="btn btn-sm btn-outline-danger" onclick="desbloquearHorario('${data}', '${h}')">${h} ✕</button>`; });
+                        lh.forEach(h => { html += `<button class="btn btn-sm btn-outline-danger fw-bold" onclick="desbloquearHorario('${data}', '${h}')">${h} ✕</button>`; });
                         html += `</div></div></div>`;
                     });
                 }
@@ -2273,12 +2204,12 @@ window.ativarNotificacoesNavegador = async function() {
                 if (ds.length > 0) {
                     tem = true;
                     const nomes = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
-                    html += '<h6 class="text-white mt-4 mb-2"><i class="bi bi-arrow-repeat text-info"></i> Dias recorrentes:</h6>';
+                    html += '<h6 class="text-dark mt-4 mb-2 fw-bold"><i class="bi bi-arrow-repeat text-info"></i> Dias recorrentes:</h6>';
                     ds.forEach(d => {
-                        html += `<div class="bloqueio-item recorrente"><div><strong>${nomes[d]}s</strong></div><button class="btn btn-sm btn-danger" onclick="desbloquearDiaSemana(${d})"><i class="bi bi-trash"></i></button></div>`;
+                        html += `<div class="bloqueio-item recorrente"><div><strong>${nomes[d]}s</strong></div><button class="btn btn-sm btn-outline-danger" onclick="desbloquearDiaSemana(${d})"><i class="bi bi-trash"></i></button></div>`;
                     });
                 }
-                if (!tem) html = '<p class="text-muted small">Nenhum bloqueio ativo.</p>';
+                if (!tem) html = '<p class="text-muted small fw-semibold">Nenhum bloqueio ativo.</p>';
                 container.innerHTML = html;
             });
         }
@@ -2296,7 +2227,7 @@ window.ativarNotificacoesNavegador = async function() {
 
             const datas = Object.keys(listaEspera).sort();
             if (datas.length === 0) {
-                container.innerHTML = '<p class="text-muted text-center py-4">📭 Nenhum cliente.</p>';
+                container.innerHTML = '<p class="text-muted text-center py-4 fw-semibold">📭 Nenhum cliente.</p>';
                 return;
             }
 
@@ -2310,14 +2241,14 @@ window.ativarNotificacoesNavegador = async function() {
                 if (lista.length === 0) return;
 
                 const df = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
-                html += `<div class="espera-dia-bloco"><div class="espera-dia-titulo"><h6><i class="bi bi-calendar-event text-warning"></i> ${df}</h6><span class="badge bg-warning text-dark">${lista.length}</span></div>`;
+                html += `<div class="espera-dia-bloco"><div class="espera-dia-titulo"><h6><i class="bi bi-calendar-event text-warning"></i> ${df}</h6><span class="badge bg-warning text-dark fw-bold" style="font-size:0.9rem;">${lista.length}</span></div>`;
                 lista.forEach((item, i) => {
                     const he = item.criadoEm ? new Date(item.criadoEm).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '';
-                    html += `<div class="espera-item"><div class="espera-item-info"><strong>${i+1}º — ${item.nome || 'Sem nome'}</strong><small>📞 ${item.telefone || '-'} • 💈 ${item.servicoNome || '-'}${he ? ` • 🕐 ${he}` : ''}</small></div><div class="espera-item-actions"><button class="btn btn-sm btn-success" onclick="chamarEspera('${data}', '${item.id}')"><i class="bi bi-whatsapp"></i></button><button class="btn btn-sm btn-primary" onclick="marcarConvertido('${data}', '${item.id}')"><i class="bi bi-check-circle"></i></button><button class="btn btn-sm btn-danger" onclick="removerEspera('${data}', '${item.id}')"><i class="bi bi-trash"></i></button></div></div>`;
+                    html += `<div class="espera-item"><div class="espera-item-info"><strong>${i+1}º — ${item.nome || 'Sem nome'}</strong><small><i class="bi bi-telephone"></i> ${item.telefone || '-'} • <i class="bi bi-scissors"></i> ${item.servicoNome || '-'}${he ? ` • <i class="bi bi-clock"></i> ${he}` : ''}</small></div><div class="espera-item-actions"><button class="btn btn-sm btn-success" onclick="chamarEspera('${data}', '${item.id}')" title="Chamar no WhatsApp"><i class="bi bi-whatsapp"></i></button><button class="btn btn-sm btn-primary" onclick="marcarConvertido('${data}', '${item.id}')" title="Marcar como atendido"><i class="bi bi-check-circle"></i></button><button class="btn btn-sm btn-outline-danger" onclick="removerEspera('${data}', '${item.id}')" title="Remover"><i class="bi bi-trash"></i></button></div></div>`;
                 });
                 html += `</div>`;
             });
-            container.innerHTML = html || '<p class="text-muted text-center py-4">📭 Nenhum cliente.</p>';
+            container.innerHTML = html || '<p class="text-muted text-center py-4 fw-semibold">📭 Nenhum cliente.</p>';
         }
 
         window.chamarEspera = function(data, id) {
@@ -2374,7 +2305,7 @@ window.ativarNotificacoesNavegador = async function() {
             container.innerHTML = '';
 
             if (lf.length === 0) {
-                container.innerHTML = `<div class="agendamento-vazio"><i class="bi bi-cash-stack"></i><p class="mb-0">Nenhum atendimento concluído.</p></div>`;
+                container.innerHTML = `<div class="agendamento-vazio"><i class="bi bi-cash-stack"></i><p class="mb-0 fw-semibold">Nenhum atendimento concluído.</p></div>`;
                 return;
             }
 
@@ -2386,12 +2317,12 @@ window.ativarNotificacoesNavegador = async function() {
                 const df = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
                 const titulo = document.createElement('div');
                 titulo.className = 'fat-dia-titulo';
-                titulo.innerHTML = `<h6><i class="bi bi-calendar-check text-success"></i> ${df}</h6><span class="total">${formatBRL(soma(itens))} <small class="text-muted">(${itens.length})</small></span>`;
+                titulo.innerHTML = `<h6><i class="bi bi-calendar-check text-success"></i> ${df}</h6><span class="total">${formatBRL(soma(itens))} <small class="text-muted fw-semibold">(${itens.length})</small></span>`;
                 container.appendChild(titulo);
 
                 itens.forEach(a => {
                     const w = document.createElement('div');
-                    w.innerHTML = `<div class="fat-item"><div class="fat-item-info"><strong>${a.horario} — ${a.clienteNome || 'Sem nome'}</strong><small>💈 ${a.servicoNome || '-'}</small></div><div class="fat-item-valor">${formatBRL(a.servicoPreco || 0)}</div></div>`;
+                    w.innerHTML = `<div class="fat-item"><div class="fat-item-info"><strong>${a.horario} — ${a.clienteNome || 'Sem nome'}</strong><small><i class="bi bi-scissors"></i> ${a.servicoNome || '-'}</small></div><div class="fat-item-valor">${formatBRL(a.servicoPreco || 0)}</div></div>`;
                     while (w.firstChild) container.appendChild(w.firstChild);
                 });
             });
@@ -2409,17 +2340,17 @@ window.ativarNotificacoesNavegador = async function() {
             const df = new Date(amanhaStr + 'T00:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
 
             if (lista.length === 0) {
-                container.innerHTML = `<div class="alert alert-warning text-center"><i class="bi bi-calendar-x fs-1 d-block mb-2"></i><strong>Nenhum agendamento para amanhã.</strong></div>`;
+                container.innerHTML = `<div class="alert alert-warning text-center border-0 shadow-sm"><i class="bi bi-calendar-x fs-1 d-block mb-2"></i><strong class="fw-bold">Nenhum agendamento para amanhã.</strong></div>`;
                 new bootstrap.Modal(document.getElementById('modalAvisarAmanha')).show();
                 return;
             }
 
-            let html = `<h6 class="mb-3 text-dark"><i class="bi bi-calendar-event"></i> ${lista.length} agendamento(s) — ${df}</h6>`;
+            let html = `<h6 class="mb-3 text-dark fw-bold"><i class="bi bi-calendar-event"></i> ${lista.length} agendamento(s) — ${df}</h6>`;
             lista.forEach(ag => {
                 const tel = (ag.clienteTelefone || '').replace(/\D/g, '');
                 const primeiro = (ag.clienteNome || '').split(' ')[0] || 'Cliente';
                 const msg = `Olá ${primeiro}! Aqui é o Seu Jorge. Passando pra lembrar do seu horário amanhã (${df}) às ${ag.horario}, serviço ${ag.servicoNome}. Tá confirmado? 💈`;
-                html += `<div class="agendamento-item" style="margin-bottom:8px;"><div class="agendamento-info"><strong>${ag.horario} — ${ag.clienteNome}</strong><small class="d-block text-muted">💈 ${ag.servicoNome} • 📞 ${ag.clienteTelefone}</small></div><a href="https://wa.me/55${tel}?text=${encodeURIComponent(msg)}" target="_blank" class="btn btn-sm btn-success fw-bold"><i class="bi bi-whatsapp"></i> Avisar</a></div>`;
+                html += `<div class="agendamento-item" style="margin-bottom:8px;"><div class="agendamento-info"><strong>${ag.horario} — ${ag.clienteNome}</strong><small class="d-block text-muted fw-semibold"><i class="bi bi-scissors"></i> ${ag.servicoNome} • <i class="bi bi-telephone"></i> ${ag.clienteTelefone}</small></div><a href="https://wa.me/55${tel}?text=${encodeURIComponent(msg)}" target="_blank" class="btn btn-sm btn-success fw-bold" style="padding: 10px 16px; font-size: 1rem;"><i class="bi bi-whatsapp"></i> Avisar</a></div>`;
             });
             container.innerHTML = html;
             new bootstrap.Modal(document.getElementById('modalAvisarAmanha')).show();
@@ -2434,8 +2365,8 @@ window.ativarNotificacoesNavegador = async function() {
             const cores = { success: 'alert-success', info: 'alert-info', warning: 'alert-warning', danger: 'alert-danger' };
             const a = document.createElement('div');
             a.id = 'alerta-admin';
-            a.className = `alert ${cores[tipo]} alert-dismissible fade show`;
-            a.style.cssText = 'position:fixed;top:80px;right:20px;z-index:9999;min-width:280px;box-shadow:0 4px 20px rgba(0,0,0,.3);font-weight:600;';
+            a.className = `alert ${cores[tipo]} alert-dismissible fade show border-0 shadow`;
+            a.style.cssText = 'position:fixed;top:80px;right:20px;z-index:9999;min-width:280px;font-weight:700;';
             a.innerHTML = `${m}<button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>`;
             document.body.appendChild(a);
             setTimeout(() => { if (a.parentElement) a.remove(); }, 4000);

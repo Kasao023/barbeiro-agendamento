@@ -1,5 +1,5 @@
 // ============================================
-// SEU JORGE - SISTEMA DE NOTIFICAÇÕES (CORRIGIDO)
+// SEU JORGE - SISTEMA DE NOTIFICAÇÕES
 // ============================================
 
 const NOTIFICATION_CONFIG = {
@@ -12,7 +12,9 @@ const NOTIFICATION_CONFIG = {
 let __messagingInstance = null;
 let __swRegistration = null;
 
-// Registra o SW uma única vez e reutiliza
+// ============================================
+// SERVICE WORKER
+// ============================================
 async function obterServiceWorkerRegistration() {
     if (__swRegistration) return __swRegistration;
     if (!('serviceWorker' in navigator)) {
@@ -32,6 +34,9 @@ async function obterServiceWorkerRegistration() {
     }
 }
 
+// ============================================
+// MESSAGING
+// ============================================
 function getMessaging() {
     if (!__messagingInstance) {
         __messagingInstance = firebase.messaging();
@@ -42,7 +47,7 @@ function getMessaging() {
                 const reg = await obterServiceWorkerRegistration();
                 const newToken = await __messagingInstance.getToken({
                     vapidKey: NOTIFICATION_CONFIG.vapidKey,
-                    serviceWorkerRegistration: reg   // ← CRUCIAL
+                    serviceWorkerRegistration: reg
                 });
                 if (newToken) {
                     await salvarTokenNoFirebase(newToken, 'cliente');
@@ -56,6 +61,9 @@ function getMessaging() {
     return __messagingInstance;
 }
 
+// ============================================
+// VERIFICAÇÕES
+// ============================================
 function notificacoesSuportadas() {
     const httpsOK = location.protocol === 'https:'
                  || location.hostname === 'localhost'
@@ -82,6 +90,9 @@ async function solicitarPermissaoNotificacao() {
     }
 }
 
+// ============================================
+// TOKEN FCM
+// ============================================
 async function obterTokenNotificacao() {
     try {
         const reg = await obterServiceWorkerRegistration();
@@ -89,7 +100,7 @@ async function obterTokenNotificacao() {
         const messaging = getMessaging();
         const token = await messaging.getToken({
             vapidKey: NOTIFICATION_CONFIG.vapidKey,
-            serviceWorkerRegistration: reg   // ← CRUCIAL
+            serviceWorkerRegistration: reg
         });
 
         if (token) {
@@ -104,19 +115,38 @@ async function obterTokenNotificacao() {
     }
 }
 
+// ============================================
+// SALVAR TOKEN NO BANCO
+// ============================================
 async function salvarTokenNoFirebase(token, tipo = 'cliente') {
     if (!token) return;
     const db = firebase.database();
+
+    // Tenta pegar uid do usuário logado
+    let uid = null;
+    try {
+        if (firebase.auth && firebase.auth().currentUser) {
+            uid = firebase.auth().currentUser.uid;
+        }
+    } catch (e) {
+        console.warn('Não foi possível obter uid:', e);
+    }
+
     await db.ref(`tokens/${tipo}/${token}`).set({
         token,
+        uid: uid,
         criadoEm: Date.now(),
         userAgent: navigator.userAgent,
         telefone: localStorage.getItem('ultimoTelefone') || null,
         agendamentoId: localStorage.getItem('ultimoAgendamento') || null
     });
-    console.log(`✅ Token salvo em tokens/${tipo}/`);
+
+    console.log(`✅ Token salvo em tokens/${tipo}/ (uid: ${uid || 'anônimo'})`);
 }
 
+// ============================================
+// INICIALIZAÇÃO COMPLETA
+// ============================================
 async function inicializarNotificacoes(tipo = 'cliente') {
     if (!notificacoesSuportadas()) {
         alert('⚠️ Este navegador não suporta notificações ou você não está em HTTPS.');
@@ -142,7 +172,9 @@ async function inicializarNotificacoes(tipo = 'cliente') {
     return true;
 }
 
-// Mostra notificação local via SW (funciona no mobile também)
+// ============================================
+// NOTIFICAÇÃO LOCAL (para testes/uso imediato)
+// ============================================
 async function exibirNotificacaoLocal(titulo, corpo, icone = NOTIFICATION_CONFIG.icon) {
     if (Notification.permission !== 'granted') return;
     try {
@@ -160,11 +192,17 @@ async function exibirNotificacaoLocal(titulo, corpo, icone = NOTIFICATION_CONFIG
     }
 }
 
+// ============================================
+// STATUS
+// ============================================
 function statusPermissao() {
     if (!notificacoesSuportadas()) return 'nao_suportado';
     return Notification.permission;
 }
 
+// ============================================
+// EXPORTA
+// ============================================
 window.Notificacoes = {
     solicitarPermissaoNotificacao,
     obterTokenNotificacao,

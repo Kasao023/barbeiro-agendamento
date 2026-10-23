@@ -2,7 +2,7 @@
   "name": "functions",
   "description": "Cloud Functions para notificações do Seu Jorge",
   "engines": {
-    "node": "18"
+    "node": "20"
   },
   "main": "index.js",
   "dependencies": {
