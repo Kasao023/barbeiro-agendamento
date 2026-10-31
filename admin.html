@@ -4,60 +4,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel - Seu Jorge</title>
+    <!-- Bootstrap puro, sem os estilos pretos do index -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
     <style>
-        body { background: #0a0a0a !important; color: #fff; padding-top: 0 !important; }
-        .nav-pills .nav-link { color: #fff; border-radius: 10px; }
-        .nav-pills .nav-link.active { background: var(--cor-primaria); }
-        .agendamento-card {
-            background: #fff; color: #333; border-radius: 10px; padding: 15px;
-            margin-bottom: 10px; border-left: 4px solid var(--cor-primaria);
+        /* Estilo simples e cinza para o Admin */
+        body { background-color: #f4f6f8; color: #333; padding-top: 20px; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+        
+        .navbar-admin {
+            background-color: #ffffff;
+            border-bottom: 1px solid #dee2e6;
+            padding: 10px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
-        .agendamento-card.concluido { border-left-color: var(--cor-sucesso); opacity: 0.7; }
-        .agendamento-card.cancelado { border-left-color: #6c757d; opacity: 0.5; text-decoration: line-through; }
-        .agendamento-card.falta { border-left-color: #dc3545 !important; background: #fff5f5; }
-        .servico-admin-card {
-            background: #fff; color: #333; border-radius: 10px; padding: 15px;
-            margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: #495057 !important;
+            font-size: 1.2rem;
         }
-        .card { color: #333; }
 
-        /* FILTROS */
-        .filtros-agendamento {
-            display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;
+        /* Cards de agendamento simples */
+        .agendamento-card {
+            background: #fff;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
-        .filtro-btn {
-            background: #1a1a1a; color: #fff; border: 2px solid #333;
-            padding: 10px 20px; border-radius: 50px; font-weight: 600;
-            font-size: 0.85rem; cursor: pointer; transition: all 0.3s;
-            font-family: inherit; display: flex; align-items: center; gap: 6px;
-        }
-        .filtro-btn:hover { border-color: var(--cor-primaria); background: #2a2a2a; }
-        .filtro-btn.ativo { background: var(--cor-primaria); border-color: var(--cor-primaria); color: #fff; }
-        .filtro-btn .badge-filtro {
-            background: rgba(255,255,255,0.3); padding: 2px 8px;
-            border-radius: 50px; font-size: 0.75rem; margin-left: 4px;
-        }
+        
+        /* Destaque para o status */
+        .agendamento-card.pendente { border-left: 4px solid #ffc107; }
+        .agendamento-card.pago { border-left: 4px solid #0dcaf0; }
+        .agendamento-card.cancelado { border-left: 4px solid #dc3545; opacity: 0.8; }
+        .agendamento-card.concluido { border-left: 4px solid #198754; opacity: 0.7; }
+
+        /* Botões simples */
+        .btn-pago { background-color: #0dcaf0; color: #fff; border: none; font-weight: 600; }
+        .btn-pago:hover { background-color: #0bb5d6; color: #fff; }
+        
+        .btn-cancelar-simples { background-color: #dc3545; color: #fff; border: none; font-weight: 600; }
+        .btn-cancelar-simples:hover { background-color: #bb2d3b; color: #fff; }
+
+        /* Filtros simples */
+        .nav-pills .nav-link { color: #495057; font-weight: 600; border-radius: 8px; }
+        .nav-pills .nav-link.active { background-color: #6c757d; color: #fff; }
+        
+        /* Badge de contador */
+        .badge-contador { background-color: #6c757d; color: #fff; margin-left: 5px; }
+        
+        .texto-info { color: #6c757d; font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
-    <!-- LOGIN -->
-    <div id="tela-login" class="d-flex align-items-center justify-content-center" style="min-height: 100vh;">
-        <div class="card p-4 shadow-lg" style="width: 100%; max-width: 400px;">
+    <!-- LOGIN (Simples, fundo branco) -->
+    <div id="tela-login" class="d-flex align-items-center justify-content-center" style="min-height: 90vh;">
+        <div class="card p-4 shadow-sm" style="width: 100%; max-width: 400px; border: 1px solid #dee2e6;">
             <div class="text-center mb-4">
-                <i class="bi bi-scissors display-4 text-danger"></i>
-                <h3 class="mt-3 fw-bold">PAINEL DO JORGE</h3>
-                <p class="text-muted small">Área restrita</p>
+                <i class="bi bi-scissors display-5 text-secondary"></i>
+                <h4 class="mt-3 fw-bold text-dark">Painel do Jorge</h4>
             </div>
             <input type="email" id="email-input" class="form-control mb-2" placeholder="Email">
             <input type="password" id="senha-input" class="form-control mb-3" placeholder="Senha"
                    onkeypress="if(event.key==='Enter') fazerLogin()">
-            <button class="btn btn-danger btn-lg fw-bold" onclick="fazerLogin()">
-                <i class="bi bi-box-arrow-in-right"></i> ENTRAR
+            <button class="btn btn-secondary btn-lg fw-bold" onclick="fazerLogin()">
+                Entrar
             </button>
             <p id="login-erro" class="text-danger small text-center mt-2"></p>
         </div>
@@ -65,113 +78,96 @@
 
     <!-- PAINEL -->
     <div id="tela-painel" style="display: none;">
-        <nav class="navbar navbar-dark bg-black border-bottom border-danger">
-            <div class="container">
-                <span class="navbar-brand fw-bold"><i class="bi bi-scissors"></i> PAINEL</span>
-                <button class="btn btn-outline-light btn-sm" onclick="fazerLogout()">
-                    <i class="bi bi-box-arrow-right"></i> Sair
-                </button>
+        
+        <!-- Barra Superior: Menu de Ferramentas à Direita -->
+        <nav class="navbar navbar-admin">
+            <div class="container d-flex justify-content-between align-items-center">
+                <span class="navbar-brand"><i class="bi bi-shop"></i> Painel de Agendamentos</span>
+                
+                <div class="dropdown">
+                    <button class="btn btn-outline-secondary dropdown-toggle btn-sm fw-bold" type="button" id="menuFerramentas" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-gear-fill"></i> Ferramentas
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="menuFerramentas">
+                        <li><h6 class="dropdown-header">Gerenciamento</h6></li>
+                        <li><button class="dropdown-item" onclick="abrirModalServicos()"><i class="bi bi-scissors text-secondary"></i> Editar Serviços</button></li>
+                        <li><button class="dropdown-item" onclick="abrirModalBloqueios()"><i class="bi bi-calendar-x text-secondary"></i> Bloquear Horários</button></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><button class="dropdown-item text-danger" onclick="fazerLogout()"><i class="bi bi-box-arrow-right"></i> Sair</button></li>
+                    </ul>
+                </div>
             </div>
         </nav>
 
-        <div class="container py-4">
-            <ul class="nav nav-pills mb-4">
-                <li class="nav-item"><a class="nav-link active" data-bs-toggle="pill" href="#aba-agendamentos">📅 Agendamentos</a></li>
-                <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#aba-servicos">✂️ Serviços</a></li>
-                <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#aba-bloqueios">🚫 Bloqueios</a></li>
-                <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#aba-config">⚙️ Config</a></li>
+        <div class="container py-4" style="max-width: 800px;">
+            <!-- Filtros (Abas do topo) -->
+            <ul class="nav nav-pills mb-4 justify-content-center" style="background: #fff; padding: 5px; border-radius: 10px; border: 1px solid #dee2e6;">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#" onclick="mudarFiltro('hoje', this); return false;">
+                        Hoje <span class="badge badge-contador" id="badge-hoje">0</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="mudarFiltro('proximos', this); return false;">
+                        Próximos <span class="badge badge-contador" id="badge-proximos">0</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="mudarFiltro('faltas', this); return false;">
+                        Faltas <span class="badge badge-contador bg-danger" id="badge-faltas">0</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="mudarFiltro('todos', this); return false;">
+                        Todos <span class="badge badge-contador" id="badge-todos">0</span>
+                    </a>
+                </li>
             </ul>
 
-            <div class="tab-content">
-                <div class="tab-pane fade show active" id="aba-agendamentos">
-                    <h4 class="text-white mb-3">📅 Agendamentos</h4>
+            <!-- Lista de Agendamentos -->
+            <div id="lista-agendamentos">
+                <!-- Cards gerados via JS -->
+            </div>
+        </div>
+    </div>
 
-                    <!-- FILTROS -->
-                    <div class="filtros-agendamento mb-4">
-                        <button class="filtro-btn ativo" data-filtro="todos" onclick="filtrarAgendamentos('todos', this)">
-                            <i class="bi bi-list-ul"></i> TODOS
-                        </button>
-                        <button class="filtro-btn" data-filtro="hoje" onclick="filtrarAgendamentos('hoje', this)">
-                            <i class="bi bi-calendar-day"></i> HOJE
-                        </button>
-                        <button class="filtro-btn" data-filtro="proximos" onclick="filtrarAgendamentos('proximos', this)">
-                            <i class="bi bi-calendar-week"></i> PRÓXIMOS
-                        </button>
-                        <button class="filtro-btn" data-filtro="faltas" onclick="filtrarAgendamentos('faltas', this)">
-                            <i class="bi bi-exclamation-triangle"></i> FALTAS
-                        </button>
-                    </div>
-
-                    <div id="lista-agendamentos"></div>
+    <!-- MODAL SERVIÇOS (Simples) -->
+    <div class="modal fade" id="modalServicos" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title"><i class="bi bi-scissors"></i> Editar Serviços</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-
-                <div class="tab-pane fade" id="aba-servicos">
-                    <h4 class="text-white mb-3">✂️ Serviços</h4>
-                    <div id="lista-servicos"></div>
-                    <button class="btn btn-danger mt-3" onclick="adicionarServico()">
-                        <i class="bi bi-plus-circle"></i> Adicionar Serviço
-                    </button>
-                </div>
-
-                <div class="tab-pane fade" id="aba-bloqueios">
-                    <h4 class="text-white mb-3">🚫 Bloquear Horários</h4>
-                    <p class="text-muted small">Bloqueie horários que você não vai atender.</p>
-                    <div class="row g-3">
-                        <div class="col-md-4">
-                            <label class="form-label text-white">Data</label>
-                            <input type="date" id="bloqueio-data" class="form-control">
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label text-white">Horário</label>
-                            <input type="time" id="bloqueio-hora" class="form-control" step="1800">
-                        </div>
-                        <div class="col-md-4 d-flex align-items-end">
-                            <button class="btn btn-danger w-100" onclick="bloquearHorario()">
-                                <i class="bi bi-lock"></i> Bloquear
-                            </button>
-                        </div>
-                    </div>
-                    <div id="lista-bloqueios" class="mt-4"></div>
-                </div>
-
-                <div class="tab-pane fade" id="aba-config">
-                    <h4 class="text-white mb-3">⚙️ Configurações</h4>
-                    <div class="card p-3 mb-3">
-                        <label class="form-label">Alterar Senha</label>
-                        <input type="password" id="nova-senha" class="form-control mb-2" placeholder="Nova senha">
-                        <button class="btn btn-danger" onclick="alterarSenha()">Salvar Nova Senha</button>
-                    </div>
+                <div class="modal-body">
+                    <div id="lista-servicos-admin"></div>
+                    <button class="btn btn-secondary btn-sm mt-3" onclick="adicionarServico()">+ Adicionar Novo Serviço</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL SERVIÇO -->
-    <div class="modal fade" id="modalServico" tabindex="-1">
+    <!-- MODAL BLOQUEIOS (Simples) -->
+    <div class="modal fade" id="modalBloqueios" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Editar Serviço</h5>
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title"><i class="bi bi-calendar-x"></i> Bloquear Horário</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <input type="hidden" id="edit-servico-id">
                     <div class="mb-3">
-                        <label class="form-label">Nome</label>
-                        <input type="text" id="edit-servico-nome" class="form-control">
+                        <label class="form-label fw-bold">Data</label>
+                        <input type="date" id="bloqueio-data" class="form-control">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Duração (minutos)</label>
-                        <input type="number" id="edit-servico-duracao" class="form-control">
+                        <label class="form-label fw-bold">Horário</label>
+                        <input type="time" id="bloqueio-hora" class="form-control" step="1800">
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Preço (R$)</label>
-                        <input type="number" id="edit-servico-preco" class="form-control" step="0.01">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button class="btn btn-danger" onclick="salvarServico()">Salvar</button>
+                    <button class="btn btn-secondary w-100 fw-bold" onclick="bloquearHorario()">Bloquear</button>
+                    <hr>
+                    <h6 class="fw-bold">Horários Bloqueados:</h6>
+                    <div id="lista-bloqueios" class="mt-2"></div>
                 </div>
             </div>
         </div>
@@ -182,9 +178,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     
-    <!-- ============================================ -->
-    <!-- JAVASCRIPT DO PAINEL (CORRIGIDO)             -->
-    <!-- ============================================ -->
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyBg2LvzNxheXfb_78I9BIqn60DqNAoTLgw",
@@ -202,88 +195,55 @@
 
         let servicos = [];
         let agendamentos = [];
-        let filtroAtual = 'todos';
+        let filtroAtual = 'hoje'; // Começa no Hoje por padrão
 
-        // ============================================
-        // UTILITÁRIO: DATA LOCAL (Evita bug de fuso horário UTC)
-        // ============================================
         function obterDataHojeLocal() {
             const d = new Date();
-            const ano = d.getFullYear();
-            const mes = String(d.getMonth() + 1).padStart(2, '0');
-            const dia = String(d.getDate()).padStart(2, '0');
-            return `${ano}-${mes}-${dia}`;
+            return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
         }
 
         // ============================================
-        // LOGIN COM FIREBASE AUTH
+        // AUTENTICAÇÃO
         // ============================================
         window.fazerLogin = function() {
             const email = document.getElementById('email-input').value.trim();
             const senha = document.getElementById('senha-input').value;
             const erroEl = document.getElementById('login-erro');
-
             erroEl.textContent = '';
 
-            if (!email || !senha) {
-                erroEl.textContent = 'Preencha email e senha.';
-                return;
-            }
+            if (!email || !senha) { erroEl.textContent = 'Preencha email e senha.'; return; }
 
             auth.signInWithEmailAndPassword(email, senha)
-                .then(() => {
-                    sessionStorage.setItem('logado', 'true');
-                    window.abrirPainel();
-                })
-                .catch(err => {
-                    console.error('❌ Erro login:', err);
-                    erroEl.textContent = 'Email ou senha incorretos.';
-                });
+                .then(() => { window.abrirPainel(); })
+                .catch(() => { erroEl.textContent = 'Email ou senha incorretos.'; });
         };
 
         window.fazerLogout = function() {
-            auth.signOut().then(() => {
-                sessionStorage.removeItem('logado');
-                location.reload();
-            });
+            auth.signOut().then(() => { location.reload(); });
         };
 
         window.abrirPainel = function() {
-            const elLogin = document.getElementById('tela-login');
-            const elPainel = document.getElementById('tela-painel');
-
-            if (!elLogin || !elPainel) return;
-
-            elLogin.style.setProperty('display', 'none', 'important');
-            elPainel.style.display = 'block';
-
+            document.getElementById('tela-login').style.display = 'none';
+            document.getElementById('tela-painel').style.display = 'block';
             carregarTudo();
         };
 
-        // Verificar se já está logado
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                sessionStorage.setItem('logado', 'true');
-                window.abrirPainel();
-            }
-        });
+        auth.onAuthStateChanged(user => { if (user) window.abrirPainel(); });
 
         // ============================================
-        // CARREGAR TUDO
+        // CARREGAR DADOS
         // ============================================
         function carregarTudo() {
             db.ref('config/servicos').on('value', snap => {
                 servicos = [];
                 snap.forEach(c => servicos.push({ id: c.key, ...c.val() }));
-                renderizarServicos();
+                renderizarServicosAdmin();
             });
 
             db.ref('agendamentos').on('value', snap => {
                 agendamentos = [];
-                snap.forEach(c => {
-                    agendamentos.push({ id: c.key, ...c.val() });
-                });
-                renderizarAgendamentos();
+                snap.forEach(c => { agendamentos.push({ id: c.key, ...c.val() }); });
+                atualizarPainel();
             });
 
             db.ref('bloqueios').on('value', snap => {
@@ -292,181 +252,149 @@
         }
 
         // ============================================
-        // FILTROS
+        // FILTROS E RENDERIZAÇÃO
         // ============================================
-        window.filtrarAgendamentos = function(filtro, btn) {
+        window.mudarFiltro = function(filtro, btn) {
             filtroAtual = filtro;
-            document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('ativo'));
-            if (btn) btn.classList.add('ativo');
-            renderizarAgendamentos();
+            document.querySelectorAll('.nav-pills .nav-link').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            atualizarPainel();
         };
 
-        // ============================================
-        // AGENDAMENTOS
-        // ============================================
-        function renderizarAgendamentos() {
+        function atualizarPainel() {
+            const hojeStr = obterDataHojeLocal();
+            
+            // Atualiza contadores
+            document.getElementById('badge-hoje').textContent = agendamentos.filter(a => a.data === hojeStr).length;
+            document.getElementById('badge-proximos').textContent = agendamentos.filter(a => a.data > hojeStr).length;
+            document.getElementById('badge-faltas').textContent = agendamentos.filter(a => a.data < hojeStr && a.status === 'pendente').length;
+            document.getElementById('badge-todos').textContent = agendamentos.length;
+
+            // Filtra lista
+            let lista = [];
+            if (filtroAtual === 'hoje') lista = agendamentos.filter(a => a.data === hojeStr);
+            else if (filtroAtual === 'proximos') lista = agendamentos.filter(a => a.data > hojeStr);
+            else if (filtroAtual === 'faltas') lista = agendamentos.filter(a => a.data < hojeStr && a.status === 'pendente');
+            else lista = agendamentos.slice();
+
+            // Ordena
+            lista.sort((a, b) => ((a.data || '') + (a.horario || '')).localeCompare((b.data || '') + (b.horario || '')));
+
+            // Renderiza
             const container = document.getElementById('lista-agendamentos');
-            if (!container) return;
-
-            const hojeStr = obterDataHojeLocal(); // Corrigido para fuso local
-
-            let listaFiltrada = [];
-            let titulo = '';
-
-            switch (filtroAtual) {
-                case 'hoje':
-                    listaFiltrada = agendamentos.filter(a => a.data === hojeStr);
-                    titulo = '📅 HOJE';
-                    break;
-                case 'proximos':
-                    listaFiltrada = agendamentos.filter(a => a.data > hojeStr);
-                    titulo = '⏳ PRÓXIMOS';
-                    break;
-                case 'faltas':
-                    listaFiltrada = agendamentos.filter(a => 
-                        a.data < hojeStr && a.status === 'pendente'
-                    );
-                    titulo = '⚠️ FALTAS (não atendidos)';
-                    break;
-                case 'todos':
-                default:
-                    listaFiltrada = agendamentos.slice();
-                    titulo = '📋 TODOS';
-                    break;
-            }
-
-            listaFiltrada.sort((a, b) => 
-                ((a.data || '') + (a.horario || '')).localeCompare((b.data || '') + (b.horario || ''))
-            );
-
-            atualizarContadores(hojeStr);
-
-            if (listaFiltrada.length === 0) {
-                container.innerHTML = `<p class="text-muted">Nenhum agendamento em "${titulo}".</p>`;
+            if (lista.length === 0) {
+                container.innerHTML = `<div class="alert alert-light text-center border">Nenhum agendamento encontrado.</div>`;
                 return;
             }
 
-            let html = `<h5 class="text-white mb-3">${titulo} (${listaFiltrada.length})</h5>`;
-
-            listaFiltrada.forEach(ag => {
+            let html = '';
+            lista.forEach(ag => {
                 const ehHoje = ag.data === hojeStr;
-                const ehFalta = ag.data < hojeStr && ag.status === 'pendente';
-                html += montarCard(ag, ehHoje, ehFalta);
+                html += montarCard(ag, ehHoje);
             });
-
             container.innerHTML = html;
         }
 
-        function atualizarContadores(hojeStr) {
-            const totalHoje = agendamentos.filter(a => a.data === hojeStr).length;
-            const totalProximos = agendamentos.filter(a => a.data > hojeStr).length;
-            const totalFaltas = agendamentos.filter(a => a.data < hojeStr && a.status === 'pendente').length;
-            const totalTodos = agendamentos.length;
-
-            const btnHoje = document.querySelector('.filtro-btn[data-filtro="hoje"]');
-            const btnProximos = document.querySelector('.filtro-btn[data-filtro="proximos"]');
-            const btnFaltas = document.querySelector('.filtro-btn[data-filtro="faltas"]');
-            const btnTodos = document.querySelector('.filtro-btn[data-filtro="todos"]');
-
-            if (btnHoje) btnHoje.innerHTML = `<i class="bi bi-calendar-day"></i> HOJE <span class="badge-filtro">${totalHoje}</span>`;
-            if (btnProximos) btnProximos.innerHTML = `<i class="bi bi-calendar-week"></i> PRÓXIMOS <span class="badge-filtro">${totalProximos}</span>`;
-            if (btnFaltas) btnFaltas.innerHTML = `<i class="bi bi-exclamation-triangle"></i> FALTAS <span class="badge-filtro">${totalFaltas}</span>`;
-            if (btnTodos) btnTodos.innerHTML = `<i class="bi bi-list-ul"></i> TODOS <span class="badge-filtro">${totalTodos}</span>`;
-        }
-
-        function montarCard(ag, ehHoje, ehFalta) {
+        function montarCard(ag, ehHoje) {
             const dataFmt = new Date(ag.data + 'T00:00:00').toLocaleDateString('pt-BR');
-            const classe = ag.status === 'concluido' ? 'concluido' 
-                         : (ag.status === 'cancelado' ? 'cancelado' 
-                         : (ehFalta ? 'falta' : ''));
-            const tel = (ag.clienteTelefone || '').replace(/\D/g, '');
             const preco = typeof ag.servicoPreco === 'number' ? ag.servicoPreco.toFixed(2).replace('.', ',') : '-';
-            const badge = ag.status === 'concluido' ? 'success' 
-                        : ag.status === 'cancelado' ? 'secondary' 
-                        : ag.status === 'pago' ? 'info'
-                        : ehFalta ? 'danger' 
-                        : 'warning';
+            const status = ag.status || 'pendente';
+            const tel = (ag.clienteTelefone || '').replace(/\D/g, '');
+
+            // Define a classe de borda baseada no status
+            const classeBorda = status === 'pago' ? 'pago' 
+                              : status === 'cancelado' ? 'cancelado' 
+                              : status === 'concluido' ? 'concluido' 
+                              : 'pendente';
+
+            // ========================================================
+            // LÓGICA DOS BOTÕES SIMPLIFICADA
+            // ========================================================
+            let botoesAcao = '';
+            
+            // Se for ABA HOJE, mostra APENAS Pago e Cancelado
+            if (filtroAtual === 'hoje') {
+                // Só mostra os botões se ainda não estiver pago ou cancelado
+                if (status !== 'pago' && status !== 'cancelado') {
+                    botoesAcao = `
+                        <div class="d-flex gap-2 mt-3">
+                            <button class="btn btn-pago flex-grow-1 py-2 fw-bold" onclick="mudarStatus('${ag.id}', 'pago')">
+                                <i class="bi bi-cash"></i> Pago
+                            </button>
+                            <button class="btn btn-cancelar-simples flex-grow-1 py-2 fw-bold" onclick="mudarStatus('${ag.id}', 'cancelado')">
+                                <i class="bi bi-x-circle"></i> Cancelado (Faltou)
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    botoesAcao = `<p class="text-muted small mt-2 mb-0">Status já atualizado.</p>`;
+                }
+            } else {
+                // Nas outras abas, mostra apenas o WhatsApp para comunicação
+                botoesAcao = `
+                    <div class="d-flex gap-2 mt-3">
+                        <a href="https://wa.me/55${tel}" target="_blank" class="btn btn-success flex-grow-1 py-2 fw-bold">
+                            <i class="bi bi-whatsapp"></i> Chamar no WhatsApp
+                        </a>
+                    </div>
+                `;
+            }
 
             return `
-                <div class="agendamento-card ${classe}" ${ehHoje ? 'style="border-left-color:#ffc107;"' : ''}>
+                <div class="agendamento-card ${classeBorda}">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <h6 class="mb-1"><strong>${ag.horario || '--:--'}</strong> — ${ag.clienteNome || 'Sem nome'}</h6>
-                            <p class="mb-1 small">📅 ${dataFmt}</p>
-                            <p class="mb-1 small">💈 ${ag.servicoNome || '-'} — R$ ${preco}</p>
-                            <p class="mb-1 small">📞 ${ag.clienteTelefone || '-'}</p>
-                            ${ag.observacoes ? `<p class="mb-0 small text-muted">📝 ${ag.observacoes}</p>` : ''}
-                            <span class="badge bg-${badge} mt-1">${ag.status || 'pendente'}</span>
-                            ${ehFalta ? '<span class="badge bg-danger ms-1">⚠️ NÃO ATENDIDO</span>' : ''}
+                            <h5 class="mb-1 fw-bold text-dark">${ag.horario || '--:--'} - ${ag.clienteNome || 'Sem nome'}</h5>
+                            <p class="mb-1 text-secondary"><i class="bi bi-calendar"></i> ${dataFmt}</p>
+                            <p class="mb-1 text-secondary"><i class="bi bi-scissors"></i> ${ag.servicoNome || '-'} - R$ ${preco}</p>
+                            <p class="mb-1 text-secondary"><i class="bi bi-phone"></i> ${ag.clienteTelefone || '-'}</p>
                         </div>
-                        <div class="d-flex gap-1 flex-wrap justify-content-end">
-                            <button class="btn btn-sm btn-warning" onclick="lembrarCliente('${ag.id}')" title="Lembrar">
-                                <i class="bi bi-bell"></i>
-                            </button>
-                            <a href="https://wa.me/55${tel}" target="_blank" class="btn btn-sm btn-success" title="WhatsApp">
-                                <i class="bi bi-whatsapp"></i>
-                            </a>
-                            <button class="btn btn-sm btn-primary" onclick="mudarStatus('${ag.id}', 'concluido')" title="Concluir">
-                                <i class="bi bi-check"></i>
-                            </button>
-                            <button class="btn btn-sm btn-info" onclick="mudarStatus('${ag.id}', 'pago')" title="Pago">
-                                <i class="bi bi-cash"></i>
-                            </button>
-                            <button class="btn btn-sm btn-secondary" onclick="mudarStatus('${ag.id}', 'cancelado')" title="Cancelar">
-                                <i class="bi bi-x"></i>
-                            </button>
-                            <button class="btn btn-sm btn-danger" onclick="excluirAgendamento('${ag.id}')" title="Excluir">
-                                <i class="bi bi-trash"></i>
-                            </button>
+                        <div>
+                            <span class="badge ${status === 'pago' ? 'bg-info text-dark' : status === 'cancelado' ? 'bg-danger' : status === 'concluido' ? 'bg-success' : 'bg-warning text-dark'} px-3 py-2">
+                                ${status.toUpperCase()}
+                            </span>
                         </div>
                     </div>
+                    ${botoesAcao}
                 </div>
             `;
         }
 
+        // ============================================
+        // AÇÕES RÁPIDAS
+        // ============================================
         window.mudarStatus = function(id, status) {
+            // Se estiver cancelando, pede confirmação simples
+            if (status === 'cancelado' && !confirm('Tem certeza que o cliente faltou/cancelou?')) return;
             db.ref('agendamentos/' + id + '/status').set(status);
         };
 
-        window.excluirAgendamento = function(id) {
-            if (confirm('Excluir este agendamento?')) {
-                db.ref('agendamentos/' + id).remove();
-            }
+        // ============================================
+        // SERVIÇOS E BLOQUEIOS (MODAIS)
+        // ============================================
+        window.abrirModalServicos = function() {
+            new bootstrap.Modal(document.getElementById('modalServicos')).show();
         };
 
-        window.lembrarCliente = function(id) {
-            const ag = agendamentos.find(a => a.id === id);
-            if (!ag) return;
-            const tel = (ag.clienteTelefone || '').replace(/\D/g, '');
-            if (!tel) { alert('Sem telefone cadastrado.'); return; }
-            const primeiro = (ag.clienteNome || '').split(' ')[0] || 'tudo bem';
-            const dataFmt = new Date(ag.data + 'T00:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
-            const msg = `Fala ${primeiro}! Passando pra confirmar seu horário: ${dataFmt} às ${ag.horario}, serviço ${ag.servicoNome}. Tá confirmado? 💈`;
-            window.open(`https://wa.me/55${tel}?text=${encodeURIComponent(msg)}`, '_blank');
+        window.abrirModalBloqueios = function() {
+            new bootstrap.Modal(document.getElementById('modalBloqueios')).show();
         };
 
-        // ============================================
-        // SERVIÇOS
-        // ============================================
-        function renderizarServicos() {
-            const container = document.getElementById('lista-servicos');
+        function renderizarServicosAdmin() {
+            const container = document.getElementById('lista-servicos-admin');
             if (!container) return;
             let html = '';
             servicos.forEach(s => {
                 const preco = typeof s.preco === 'number' ? s.preco.toFixed(2).replace('.', ',') : '-';
                 html += `
-                    <div class="servico-admin-card">
+                    <div class="d-flex justify-content-between align-items-center border-bottom py-2">
                         <div>
-                            <h6 class="mb-0">${s.nome || '-'}</h6>
-                            <small>${s.duracao || '-'} min - R$ ${preco}</small>
+                            <strong class="text-dark">${s.nome}</strong><br>
+                            <small class="text-muted">${s.duracao} min - R$ ${preco}</small>
                         </div>
-                        <div class="d-flex gap-2">
-                            <button class="btn btn-sm btn-primary" onclick="editarServico('${s.id}')">
-                                <i class="bi bi-pencil"></i>
-                            </button>
-                            <button class="btn btn-sm btn-danger" onclick="excluirServico('${s.id}')">
-                                <i class="bi bi-trash"></i>
-                            </button>
+                        <div class="d-flex gap-1">
+                            <button class="btn btn-sm btn-outline-secondary" onclick="editarServico('${s.id}')"><i class="bi bi-pencil"></i></button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="excluirServico('${s.id}')"><i class="bi bi-trash"></i></button>
                         </div>
                     </div>
                 `;
@@ -474,34 +402,25 @@
             container.innerHTML = html;
         }
 
+        window.adicionarServico = function() {
+            const id = 's' + Date.now();
+            db.ref('config/servicos/' + id).set({ nome: 'NOVO SERVIÇO', duracao: 30, preco: 0, icone: 'bi-scissors', ativo: true });
+        };
+
         window.editarServico = function(id) {
             const s = servicos.find(sv => sv.id === id);
             if (!s) return;
-            document.getElementById('edit-servico-id').value = id;
-            document.getElementById('edit-servico-nome').value = s.nome || '';
-            document.getElementById('edit-servico-duracao').value = s.duracao || 30;
-            document.getElementById('edit-servico-preco').value = s.preco || 0;
-            new bootstrap.Modal(document.getElementById('modalServico')).show();
-        };
+            const novoNome = prompt('Nome do Serviço:', s.nome);
+            if (novoNome === null) return;
+            const novoPreco = prompt('Preço (Ex: 35.00):', s.preco);
+            if (novoPreco === null) return;
+            const novaDuracao = prompt('Duração em minutos:', s.duracao);
+            if (novaDuracao === null) return;
 
-        window.salvarServico = function() {
-            const id = document.getElementById('edit-servico-id').value;
-            const dados = {
-                nome: document.getElementById('edit-servico-nome').value.toUpperCase(),
-                duracao: parseInt(document.getElementById('edit-servico-duracao').value) || 30,
-                preco: parseFloat(document.getElementById('edit-servico-preco').value) || 0,
-                icone: 'bi-scissors',
-                ativo: true
-            };
-            db.ref('config/servicos/' + id).update(dados);
-            bootstrap.Modal.getInstance(document.getElementById('modalServico')).hide();
-        };
-
-        window.adicionarServico = function() {
-            const id = 's' + Date.now();
-            db.ref('config/servicos/' + id).set({
-                nome: 'NOVO SERVIÇO', duracao: 30, preco: 0,
-                icone: 'bi-scissors', ativo: true
+            db.ref('config/servicos/' + id).update({
+                nome: novoNome.toUpperCase(),
+                preco: parseFloat(novoPreco) || 0,
+                duracao: parseInt(novaDuracao) || 30
             });
         };
 
@@ -509,15 +428,11 @@
             if (confirm('Excluir este serviço?')) db.ref('config/servicos/' + id).remove();
         };
 
-        // ============================================
-        // BLOQUEIOS
-        // ============================================
         window.bloquearHorario = function() {
             const data = document.getElementById('bloqueio-data').value;
             const hora = document.getElementById('bloqueio-hora').value;
             if (!data || !hora) { alert('Preencha data e hora!'); return; }
             db.ref('bloqueios/' + data + '/' + hora).set(true).then(() => {
-                alert('Horário bloqueado!');
                 document.getElementById('bloqueio-data').value = '';
                 document.getElementById('bloqueio-hora').value = '';
             });
@@ -526,57 +441,27 @@
         function renderizarBloqueios(bloqueios) {
             const container = document.getElementById('lista-bloqueios');
             if (!container) return;
-            let html = '<h6 class="text-white">Horários bloqueados:</h6>';
             const datas = Object.keys(bloqueios).sort();
             if (datas.length === 0) {
-                html += '<p class="text-muted small">Nenhum horário bloqueado.</p>';
-            } else {
-                datas.forEach(data => {
-                    const horas = Object.keys(bloqueios[data]);
-                    if (horas.length === 0) return;
-                    const dataFmt = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR');
-                    html += `<div class="agendamento-card"><strong>${dataFmt}</strong><div class="d-flex gap-1 flex-wrap mt-2">`;
-                    horas.forEach(hora => {
-                        html += `<button class="btn btn-sm btn-outline-danger" onclick="desbloquear('${data}', '${hora}')">${hora} ✕</button>`;
-                    });
-                    html += `</div></div>`;
-                });
+                container.innerHTML = '<p class="text-muted small">Nenhum horário bloqueado.</p>';
+                return;
             }
+            let html = '';
+            datas.forEach(data => {
+                const horas = Object.keys(bloqueios[data]);
+                if (horas.length === 0) return;
+                const dataFmt = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR');
+                html += `<div class="mb-2"><small class="fw-bold text-dark">${dataFmt}:</small><br>`;
+                horas.forEach(hora => {
+                    html += `<span class="badge bg-secondary me-1 mb-1" style="cursor:pointer;" onclick="desbloquear('${data}', '${hora}')">${hora} ✕</span>`;
+                });
+                html += `</div>`;
+            });
             container.innerHTML = html;
         }
 
         window.desbloquear = function(data, hora) {
             db.ref('bloqueios/' + data + '/' + hora).remove();
-        };
-
-        // ============================================
-        // SENHA (CORRIGIDO PARA USAR FIREBASE AUTH)
-        // ============================================
-        window.alterarSenha = function() {
-            const nova = document.getElementById('nova-senha').value;
-            if (!nova || nova.length < 6) {
-                alert('A senha precisa ter pelo menos 6 caracteres.');
-                return;
-            }
-            const user = auth.currentUser;
-            if (!user) { 
-                alert('Faça login novamente para alterar a senha.'); 
-                return; 
-            }
-            
-            user.updatePassword(nova)
-                .then(() => {
-                    alert('Senha alterada com sucesso!');
-                    document.getElementById('nova-senha').value = '';
-                })
-                .catch(err => {
-                    if (err.code === 'auth/requires-recent-login') {
-                        alert('Por segurança, faça login novamente antes de alterar a senha.');
-                        auth.signOut();
-                    } else {
-                        alert('Erro ao alterar senha: ' + err.message);
-                    }
-                });
         };
     </script>
 </body>
