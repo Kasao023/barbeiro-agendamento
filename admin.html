@@ -7,58 +7,47 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
-        /* Estilo simples e cinza para o Admin */
-        body { background-color: #f4f6f8; color: #333; padding-top: 20px; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+        body { background-color: #f4f6f8; color: #333; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
         
-        /* A CLASSE MAIS IMPORTANTE: Garante que a tela do painel fique oculta */
+        /* O PAINEL FICA ESCONDIDO POR PADRÃO */
         #tela-painel { display: none; }
 
-        .navbar-admin {
-            background-color: #ffffff;
-            border-bottom: 1px solid #dee2e6;
-            padding: 10px 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        
-        .navbar-brand {
-            font-weight: 700;
-            color: #495057 !important;
-            font-size: 1.2rem;
+        /* O LOGIN OCUPA A TELA TODA */
+        #tela-login { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh; 
+            background-color: #f4f6f8; display: flex; align-items: center; 
+            justify-content: center; z-index: 9999; 
         }
 
-        /* Cards de agendamento simples */
-        .agendamento-card {
-            background: #fff;
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
-        
+        .navbar-admin { background-color: #ffffff; border-bottom: 1px solid #dee2e6; padding: 10px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .navbar-brand { font-weight: 700; color: #495057 !important; font-size: 1.2rem; }
+
+        .agendamento-card { background: #fff; border: 1px solid #e9ecef; border-radius: 8px; padding: 15px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
         .agendamento-card.pendente { border-left: 4px solid #ffc107; }
         .agendamento-card.pago { border-left: 4px solid #0dcaf0; }
         .agendamento-card.cancelado { border-left: 4px solid #dc3545; opacity: 0.8; }
         .agendamento-card.concluido { border-left: 4px solid #198754; opacity: 0.7; }
 
-        /* Botões simples */
         .btn-pago { background-color: #0dcaf0; color: #fff; border: none; font-weight: 600; }
         .btn-pago:hover { background-color: #0bb5d6; color: #fff; }
-        
         .btn-cancelar-simples { background-color: #dc3545; color: #fff; border: none; font-weight: 600; }
         .btn-cancelar-simples:hover { background-color: #bb2d3b; color: #fff; }
 
-        /* Filtros simples */
         .nav-pills .nav-link { color: #495057; font-weight: 600; border-radius: 8px; }
         .nav-pills .nav-link.active { background-color: #6c757d; color: #fff; }
-        
         .badge-contador { background-color: #6c757d; color: #fff; margin-left: 5px; }
+        
+        /* Estilos da Lista de Espera (Admin) */
+        .espera-dia-bloco { background: #fff; border: 1px solid #dee2e6; border-radius: 8px; padding: 15px; margin-bottom: 10px; }
+        .espera-dia-titulo { border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 10px; }
+        .espera-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dashed #eee; }
+        .espera-item:last-child { border-bottom: none; }
     </style>
 </head>
 <body>
 
-    <!-- TELA DE LOGIN (Ocupa a tela toda e some quando loga) -->
-    <div id="tela-login" class="d-flex align-items-center justify-content-center" style="min-height: 90vh;">
+    <!-- TELA DE LOGIN -->
+    <div id="tela-login">
         <div class="card p-4 shadow-sm" style="width: 100%; max-width: 400px; border: 1px solid #dee2e6;">
             <div class="text-center mb-4">
                 <i class="bi bi-scissors display-5 text-secondary"></i>
@@ -67,17 +56,15 @@
             <input type="email" id="email-input" class="form-control mb-2" placeholder="Email">
             <input type="password" id="senha-input" class="form-control mb-3" placeholder="Senha"
                    onkeypress="if(event.key==='Enter') fazerLogin()">
-            <button class="btn btn-secondary btn-lg fw-bold" onclick="fazerLogin()">
+            <button class="btn btn-secondary btn-lg fw-bold w-100" onclick="fazerLogin()">
                 Entrar
             </button>
             <p id="login-erro" class="text-danger small text-center mt-2"></p>
         </div>
     </div>
 
-    <!-- PAINEL (Começa oculto e só aparece se logar) -->
+    <!-- PAINEL -->
     <div id="tela-painel">
-        
-        <!-- Barra Superior -->
         <nav class="navbar navbar-admin">
             <div class="container d-flex justify-content-between align-items-center">
                 <span class="navbar-brand"><i class="bi bi-shop"></i> Painel de Agendamentos</span>
@@ -89,7 +76,8 @@
                     <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="menuFerramentas">
                         <li><h6 class="dropdown-header">Gerenciamento</h6></li>
                         <li><button class="dropdown-item" onclick="abrirModalServicos()"><i class="bi bi-scissors text-secondary"></i> Editar Serviços</button></li>
-                        <li><button class="dropdown-item" onclick="abrirModalBloqueios()"><i class="bi bi-calendar-x text-secondary"></i> Bloquear Horários</button></li>
+                        <li><button class="dropdown-item" onclick="abrirModalFolgas()"><i class="bi bi-calendar-x text-secondary"></i> Folgas e Bloqueios</button></li>
+                        <li><button class="dropdown-item" onclick="abrirModalEspera()"><i class="bi bi-hourglass-split text-secondary"></i> Lista de Espera</button></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><button class="dropdown-item text-danger" onclick="fazerLogout()"><i class="bi bi-box-arrow-right"></i> Sair</button></li>
                     </ul>
@@ -98,7 +86,6 @@
         </nav>
 
         <div class="container py-4" style="max-width: 800px;">
-            <!-- Filtros -->
             <ul class="nav nav-pills mb-4 justify-content-center" style="background: #fff; padding: 5px; border-radius: 10px; border: 1px solid #dee2e6;">
                 <li class="nav-item">
                     <a class="nav-link active" href="#" onclick="mudarFiltro('hoje', this); return false;">
@@ -121,8 +108,6 @@
                     </a>
                 </li>
             </ul>
-
-            <!-- Lista de Agendamentos -->
             <div id="lista-agendamentos"></div>
         </div>
     </div>
@@ -143,27 +128,64 @@
         </div>
     </div>
 
-    <!-- MODAL BLOQUEIOS -->
-    <div class="modal fade" id="modalBloqueios" tabindex="-1">
-        <div class="modal-dialog">
+    <!-- MODAL FOLGAS E BLOQUEIOS -->
+    <div class="modal fade" id="modalFolgas" tabindex="-1">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-light">
-                    <h5 class="modal-title"><i class="bi bi-calendar-x"></i> Bloquear Horário</h5>
+                    <h5 class="modal-title"><i class="bi bi-calendar-x"></i> Folgas e Bloqueios</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Data</label>
-                        <input type="date" id="bloqueio-data" class="form-control">
+                    <!-- Bloquear Dia Inteiro -->
+                    <h6 class="fw-bold text-dark">1. Bloquear um Dia Inteiro</h6>
+                    <div class="input-group mb-3">
+                        <input type="date" id="folga-dia-data" class="form-control">
+                        <button class="btn btn-danger" onclick="bloquearDiaInteiro()">Bloquear Dia</button>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Horário</label>
-                        <input type="time" id="bloqueio-hora" class="form-control" step="1800">
+
+                    <!-- Bloquear Horário Específico -->
+                    <h6 class="fw-bold text-dark mt-4">2. Bloquear Horário Específico</h6>
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-5"><input type="date" id="folga-hora-data" class="form-control"></div>
+                        <div class="col-md-5"><input type="time" id="folga-hora-hora" class="form-control" step="1800"></div>
+                        <div class="col-md-2"><button class="btn btn-danger w-100" onclick="bloquearHorarioEspecifico()">Bloquear</button></div>
                     </div>
-                    <button class="btn btn-secondary w-100 fw-bold" onclick="bloquearHorario()">Bloquear</button>
+
+                    <!-- Bloquear Dia da Semana Recorrente -->
+                    <h6 class="fw-bold text-dark mt-4">3. Bloquear Dia da Semana (Ex: Todo Domingo)</h6>
+                    <div class="input-group mb-3">
+                        <select id="folga-semana-dia" class="form-select">
+                            <option value="0">Domingo</option>
+                            <option value="1">Segunda-feira</option>
+                            <option value="2">Terça-feira</option>
+                            <option value="3">Quarta-feira</option>
+                            <option value="4">Quinta-feira</option>
+                            <option value="5">Sexta-feira</option>
+                            <option value="6">Sábado</option>
+                        </select>
+                        <button class="btn btn-danger" onclick="bloquearDiaSemana()">Bloquear Semanalmente</button>
+                    </div>
+
                     <hr>
-                    <h6 class="fw-bold">Horários Bloqueados:</h6>
+                    <h6 class="fw-bold">Bloqueios Ativos:</h6>
                     <div id="lista-bloqueios" class="mt-2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL LISTA DE ESPERA -->
+    <div class="modal fade" id="modalEspera" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title"><i class="bi bi-hourglass-split"></i> Lista de Espera</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted small">Clientes que aguardam vaga em dias lotados.</p>
+                    <div id="lista-espera-admin"></div>
                 </div>
             </div>
         </div>
@@ -189,9 +211,6 @@
         const db = firebase.database();
         const auth = firebase.auth();
 
-        // Variável para checar se é o admin
-        const EMAIL_ADMIN = "seujorge@barbeiro.com";
-
         let servicos = [];
         let agendamentos = [];
         let filtroAtual = 'hoje';
@@ -202,13 +221,13 @@
         }
 
         // ============================================
-        // LÓGICA DE TELAS (LOGIN vs PAINEL)
+        // LOGIN
         // ============================================
         window.fazerLogin = function() {
             const email = document.getElementById('email-input').value.trim();
             const senha = document.getElementById('senha-input').value;
             const erroEl = document.getElementById('login-erro');
-            erroEl.textContent = '';
+            erroEl.textContent = 'Verificando...';
 
             if (!email || !senha) { erroEl.textContent = 'Preencha email e senha.'; return; }
 
@@ -216,35 +235,22 @@
                 .catch(() => { erroEl.textContent = 'Email ou senha incorretos.'; });
         };
 
-        window.fazerLogout = function() {
-            auth.signOut();
-        };
+        window.fazerLogout = function() { auth.signOut(); };
 
-        // O Firebase avisa o tempo todo se o usuário está logado ou não
         auth.onAuthStateChanged(user => {
             const telaLogin = document.getElementById('tela-login');
             const telaPainel = document.getElementById('tela-painel');
 
             if (user) {
-                // Se o email logado for diferente do admin, desloga por segurança
-                if (user.email !== EMAIL_ADMIN) {
-                    alert("Acesso negado. Apenas o administrador pode acessar.");
-                    auth.signOut();
-                    return;
-                }
-
-                // Se logou certo, esconde o login e mostra o painel
                 telaLogin.style.display = 'none';
                 telaPainel.style.display = 'block';
                 carregarTudo();
             } else {
-                // Se deslogou, mostra o login e esconde o painel
                 telaLogin.style.display = 'flex';
                 telaPainel.style.display = 'none';
-                
-                // Limpa os campos por segurança
                 document.getElementById('email-input').value = '';
                 document.getElementById('senha-input').value = '';
+                document.getElementById('login-erro').textContent = '';
             }
         });
 
@@ -252,10 +258,12 @@
         // CARREGAR DADOS
         // ============================================
         function carregarTudo() {
-            // Remove os listeners antigos para não duplicar se logar duas vezes
             db.ref('config/servicos').off();
             db.ref('agendamentos').off();
             db.ref('bloqueios').off();
+            db.ref('bloqueios-dia').off();
+            db.ref('bloqueios-semana').off();
+            db.ref('lista-espera').off();
 
             db.ref('config/servicos').on('value', snap => {
                 servicos = [];
@@ -269,9 +277,13 @@
                 atualizarPainel();
             });
 
-            db.ref('bloqueios').on('value', snap => {
-                renderizarBloqueios(snap.val() || {});
-            });
+            // Carrega todos os tipos de bloqueio
+            db.ref('bloqueios').on('value', () => renderizarTodosBloqueios());
+            db.ref('bloqueios-dia').on('value', () => renderizarTodosBloqueios());
+            db.ref('bloqueios-semana').on('value', () => renderizarTodosBloqueios());
+            
+            // Carrega a lista de espera
+            db.ref('lista-espera').on('value', snap => renderizarEsperaAdmin(snap.val() || {}));
         }
 
         // ============================================
@@ -286,7 +298,6 @@
 
         function atualizarPainel() {
             const hojeStr = obterDataHojeLocal();
-            
             document.getElementById('badge-hoje').textContent = agendamentos.filter(a => a.data === hojeStr).length;
             document.getElementById('badge-proximos').textContent = agendamentos.filter(a => a.data > hojeStr).length;
             document.getElementById('badge-faltas').textContent = agendamentos.filter(a => a.data < hojeStr && a.status === 'pendente').length;
@@ -307,23 +318,16 @@
             }
 
             let html = '';
-            lista.forEach(ag => {
-                const ehHoje = ag.data === hojeStr;
-                html += montarCard(ag, ehHoje);
-            });
+            lista.forEach(ag => { html += montarCard(ag); });
             container.innerHTML = html;
         }
 
-        function montarCard(ag, ehHoje) {
+        function montarCard(ag) {
             const dataFmt = new Date(ag.data + 'T00:00:00').toLocaleDateString('pt-BR');
             const preco = typeof ag.servicoPreco === 'number' ? ag.servicoPreco.toFixed(2).replace('.', ',') : '-';
             const status = ag.status || 'pendente';
             const tel = (ag.clienteTelefone || '').replace(/\D/g, '');
-
-            const classeBorda = status === 'pago' ? 'pago' 
-                              : status === 'cancelado' ? 'cancelado' 
-                              : status === 'concluido' ? 'concluido' 
-                              : 'pendente';
+            const classeBorda = status === 'pago' ? 'pago' : status === 'cancelado' ? 'cancelado' : status === 'concluido' ? 'concluido' : 'pendente';
 
             let botoesAcao = '';
             
@@ -331,25 +335,22 @@
                 if (status !== 'pago' && status !== 'cancelado') {
                     botoesAcao = `
                         <div class="d-flex gap-2 mt-3">
-                            <button class="btn btn-pago flex-grow-1 py-2 fw-bold" onclick="mudarStatus('${ag.id}', 'pago')">
-                                <i class="bi bi-cash"></i> Pago
-                            </button>
-                            <button class="btn btn-cancelar-simples flex-grow-1 py-2 fw-bold" onclick="mudarStatus('${ag.id}', 'cancelado')">
-                                <i class="bi bi-x-circle"></i> Cancelado (Faltou)
-                            </button>
+                            <button class="btn btn-pago flex-grow-1 py-2 fw-bold" onclick="mudarStatus('${ag.id}', 'pago')"><i class="bi bi-cash"></i> Pago</button>
+                            <button class="btn btn-cancelar-simples flex-grow-1 py-2 fw-bold" onclick="mudarStatus('${ag.id}', 'cancelado')"><i class="bi bi-x-circle"></i> Cancelado (Faltou)</button>
                         </div>
                     `;
                 } else {
                     botoesAcao = `<p class="text-muted small mt-2 mb-0">Status já atualizado.</p>`;
                 }
-            } else {
+            } else if (filtroAtual === 'faltas') {
                 botoesAcao = `
                     <div class="d-flex gap-2 mt-3">
-                        <a href="https://wa.me/55${tel}" target="_blank" class="btn btn-success flex-grow-1 py-2 fw-bold">
-                            <i class="bi bi-whatsapp"></i> Chamar no WhatsApp
-                        </a>
+                        <a href="https://wa.me/55${tel}" target="_blank" class="btn btn-success flex-grow-1 py-2 fw-bold"><i class="bi bi-whatsapp"></i> WhatsApp</a>
+                        <button class="btn btn-danger py-2 fw-bold" onclick="excluirAgendamento('${ag.id}')"><i class="bi bi-trash"></i> Excluir</button>
                     </div>
                 `;
+            } else {
+                botoesAcao = `<div class="d-flex gap-2 mt-3"><a href="https://wa.me/55${tel}" target="_blank" class="btn btn-success flex-grow-1 py-2 fw-bold"><i class="bi bi-whatsapp"></i> WhatsApp</a></div>`;
             }
 
             return `
@@ -362,9 +363,7 @@
                             <p class="mb-1 text-secondary"><i class="bi bi-phone"></i> ${ag.clienteTelefone || '-'}</p>
                         </div>
                         <div>
-                            <span class="badge ${status === 'pago' ? 'bg-info text-dark' : status === 'cancelado' ? 'bg-danger' : status === 'concluido' ? 'bg-success' : 'bg-warning text-dark'} px-3 py-2">
-                                ${status.toUpperCase()}
-                            </span>
+                            <span class="badge ${status === 'pago' ? 'bg-info text-dark' : status === 'cancelado' ? 'bg-danger' : status === 'concluido' ? 'bg-success' : 'bg-warning text-dark'} px-3 py-2">${status.toUpperCase()}</span>
                         </div>
                     </div>
                     ${botoesAcao}
@@ -377,16 +376,14 @@
             db.ref('agendamentos/' + id + '/status').set(status);
         };
 
-        // ============================================
-        // SERVIÇOS E BLOQUEIOS
-        // ============================================
-        window.abrirModalServicos = function() {
-            new bootstrap.Modal(document.getElementById('modalServicos')).show();
+        window.excluirAgendamento = function(id) {
+            if (confirm('Tem certeza que deseja apagar este registro?')) db.ref('agendamentos/' + id).remove();
         };
 
-        window.abrirModalBloqueios = function() {
-            new bootstrap.Modal(document.getElementById('modalBloqueios')).show();
-        };
+        // ============================================
+        // SERVIÇOS
+        // ============================================
+        window.abrirModalServicos = function() { new bootstrap.Modal(document.getElementById('modalServicos')).show(); };
 
         function renderizarServicosAdmin() {
             const container = document.getElementById('lista-servicos-admin');
@@ -396,10 +393,7 @@
                 const preco = typeof s.preco === 'number' ? s.preco.toFixed(2).replace('.', ',') : '-';
                 html += `
                     <div class="d-flex justify-content-between align-items-center border-bottom py-2">
-                        <div>
-                            <strong class="text-dark">${s.nome}</strong><br>
-                            <small class="text-muted">${s.duracao} min - R$ ${preco}</small>
-                        </div>
+                        <div><strong class="text-dark">${s.nome}</strong><br><small class="text-muted">${s.duracao} min - R$ ${preco}</small></div>
                         <div class="d-flex gap-1">
                             <button class="btn btn-sm btn-outline-secondary" onclick="editarServico('${s.id}')"><i class="bi bi-pencil"></i></button>
                             <button class="btn btn-sm btn-outline-danger" onclick="excluirServico('${s.id}')"><i class="bi bi-trash"></i></button>
@@ -410,66 +404,138 @@
             container.innerHTML = html;
         }
 
-        window.adicionarServico = function() {
-            const id = 's' + Date.now();
-            db.ref('config/servicos/' + id).set({ nome: 'NOVO SERVIÇO', duracao: 30, preco: 0, icone: 'bi-scissors', ativo: true });
-        };
+        window.adicionarServico = function() { const id = 's' + Date.now(); db.ref('config/servicos/' + id).set({ nome: 'NOVO SERVIÇO', duracao: 30, preco: 0, icone: 'bi-scissors', ativo: true }); };
 
         window.editarServico = function(id) {
             const s = servicos.find(sv => sv.id === id);
             if (!s) return;
-            const novoNome = prompt('Nome do Serviço:', s.nome);
-            if (novoNome === null) return;
-            const novoPreco = prompt('Preço (Ex: 35.00):', s.preco);
-            if (novoPreco === null) return;
-            const novaDuracao = prompt('Duração em minutos:', s.duracao);
-            if (novaDuracao === null) return;
+            const novoNome = prompt('Nome do Serviço:', s.nome); if (novoNome === null) return;
+            const novoPreco = prompt('Preço (Ex: 35.00):', s.preco); if (novoPreco === null) return;
+            const novaDuracao = prompt('Duração em minutos:', s.duracao); if (novaDuracao === null) return;
+            db.ref('config/servicos/' + id).update({ nome: novoNome.toUpperCase(), preco: parseFloat(novoPreco) || 0, duracao: parseInt(novaDuracao) || 30 });
+        };
 
-            db.ref('config/servicos/' + id).update({
-                nome: novoNome.toUpperCase(),
-                preco: parseFloat(novoPreco) || 0,
-                duracao: parseInt(novaDuracao) || 30
+        window.excluirServico = function(id) { if (confirm('Excluir este serviço?')) db.ref('config/servicos/' + id).remove(); };
+
+        // ============================================
+        // FOLGAS E BLOQUEIOS
+        // ============================================
+        window.abrirModalFolgas = function() { new bootstrap.Modal(document.getElementById('modalFolgas')).show(); };
+
+        window.bloquearDiaInteiro = function() {
+            const data = document.getElementById('folga-dia-data').value;
+            if (!data) { alert('Escolha uma data!'); return; }
+            db.ref('bloqueios-dia/' + data).set(true).then(() => {
+                alert('Dia bloqueado com sucesso!');
+                document.getElementById('folga-dia-data').value = '';
             });
         };
 
-        window.excluirServico = function(id) {
-            if (confirm('Excluir este serviço?')) db.ref('config/servicos/' + id).remove();
-        };
-
-        window.bloquearHorario = function() {
-            const data = document.getElementById('bloqueio-data').value;
-            const hora = document.getElementById('bloqueio-hora').value;
+        window.bloquearHorarioEspecifico = function() {
+            const data = document.getElementById('folga-hora-data').value;
+            const hora = document.getElementById('folga-hora-hora').value;
             if (!data || !hora) { alert('Preencha data e hora!'); return; }
             db.ref('bloqueios/' + data + '/' + hora).set(true).then(() => {
-                document.getElementById('bloqueio-data').value = '';
-                document.getElementById('bloqueio-hora').value = '';
+                alert('Horário bloqueado com sucesso!');
+                document.getElementById('folga-hora-data').value = '';
+                document.getElementById('folga-hora-hora').value = '';
             });
         };
 
-        function renderizarBloqueios(bloqueios) {
+        window.bloquearDiaSemana = function() {
+            const dia = document.getElementById('folga-semana-dia').value;
+            db.ref('bloqueios-semana/' + dia).set(true).then(() => {
+                alert('Dia da semana bloqueado!');
+            });
+        };
+
+        function renderizarTodosBloqueios() {
             const container = document.getElementById('lista-bloqueios');
             if (!container) return;
-            const datas = Object.keys(bloqueios).sort();
+            
+            // Junta todos os tipos em uma variável temporária para exibir
+            Promise.all([
+                db.ref('bloqueios').once('value'),
+                db.ref('bloqueios-dia').once('value'),
+                db.ref('bloqueios-semana').once('value')
+            ]).then(([snapHoras, snapDias, snapSemana]) => {
+                let html = '';
+                const nomesDias = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+
+                // Dias da semana bloqueados
+                snapSemana.forEach(c => {
+                    html += `<div class="badge bg-danger me-1 mb-1" style="cursor:pointer;" onclick="desbloquear('bloqueios-semana', '${c.key}')">Todo ${nomesDias[c.key]} ✕</div>`;
+                });
+
+                // Dias inteiros bloqueados
+                snapDias.forEach(c => {
+                    const dataFmt = new Date(c.key + 'T00:00:00').toLocaleDateString('pt-BR');
+                    html += `<div class="badge bg-danger me-1 mb-1" style="cursor:pointer;" onclick="desbloquear('bloqueios-dia', '${c.key}')">Dia ${dataFmt} (Inteiro) ✕</div>`;
+                });
+
+                // Horários específicos
+                snapHoras.forEach(dataSnap => {
+                    const dataFmt = new Date(dataSnap.key + 'T00:00:00').toLocaleDateString('pt-BR');
+                    dataSnap.forEach(horaSnap => {
+                        html += `<div class="badge bg-warning text-dark me-1 mb-1" style="cursor:pointer;" onclick="desbloquear('bloqueios/${dataSnap.key}', '${horaSnap.key}')">${dataFmt} às ${horaSnap.key} ✕</div>`;
+                    });
+                });
+
+                container.innerHTML = html || '<p class="text-muted small">Nenhum bloqueio ativo.</p>';
+            });
+        }
+
+        window.desbloquear = function(caminho, chave) {
+            if (confirm('Desbloquear este horário?')) {
+                db.ref(caminho + '/' + chave).remove();
+            }
+        };
+
+        // ============================================
+        // LISTA DE ESPERA
+        // ============================================
+        window.abrirModalEspera = function() { new bootstrap.Modal(document.getElementById('modalEspera')).show(); };
+
+        function renderizarEsperaAdmin(espera) {
+            const container = document.getElementById('lista-espera-admin');
+            if (!container) return;
+            let html = '';
+            const datas = Object.keys(espera).sort();
+
             if (datas.length === 0) {
-                container.innerHTML = '<p class="text-muted small">Nenhum horário bloqueado.</p>';
+                container.innerHTML = '<p class="text-muted small">Ninguém na lista de espera no momento.</p>';
                 return;
             }
-            let html = '';
+
             datas.forEach(data => {
-                const horas = Object.keys(bloqueios[data]);
-                if (horas.length === 0) return;
                 const dataFmt = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR');
-                html += `<div class="mb-2"><small class="fw-bold text-dark">${dataFmt}:</small><br>`;
-                horas.forEach(hora => {
-                    html += `<span class="badge bg-secondary me-1 mb-1" style="cursor:pointer;" onclick="desbloquear('${data}', '${hora}')">${hora} ✕</span>`;
+                html += `<div class="espera-dia-bloco">
+                    <div class="espera-dia-titulo"><h6 class="fw-bold m-0">📅 ${dataFmt}</h6></div>`;
+                
+                const itens = espera[data];
+                Object.keys(itens).forEach(id => {
+                    const item = itens[id];
+                    const tel = (item.telefone || '').replace(/\D/g, '');
+                    html += `
+                        <div class="espera-item">
+                            <div>
+                                <strong>${item.nome || 'Sem nome'}</strong>
+                                <small class="d-block text-muted">${item.telefone || '-'}</small>
+                            </div>
+                            <div class="d-flex gap-1">
+                                <a href="https://wa.me/55${tel}" target="_blank" class="btn btn-sm btn-success"><i class="bi bi-whatsapp"></i> Chamar</a>
+                                <button class="btn btn-sm btn-outline-danger" onclick="removerEspera('${data}', '${id}')"><i class="bi bi-trash"></i></button>
+                            </div>
+                        </div>
+                    `;
                 });
                 html += `</div>`;
             });
             container.innerHTML = html;
         }
 
-        window.desbloquear = function(data, hora) {
-            db.ref('bloqueios/' + data + '/' + hora).remove();
+        window.removerEspera = function(data, id) {
+            if (confirm('Remover da lista de espera?')) db.ref('lista-espera/' + data + '/' + id).remove();
         };
     </script>
 </body>
