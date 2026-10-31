@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel - Seu Jorge</title>
-    <!-- Bootstrap puro, sem os estilos pretos do index -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
         /* Estilo simples e cinza para o Admin */
         body { background-color: #f4f6f8; color: #333; padding-top: 20px; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
         
+        /* A CLASSE MAIS IMPORTANTE: Garante que a tela do painel fique oculta */
+        #tela-painel { display: none; }
+
         .navbar-admin {
             background-color: #ffffff;
             border-bottom: 1px solid #dee2e6;
@@ -34,7 +36,6 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
         
-        /* Destaque para o status */
         .agendamento-card.pendente { border-left: 4px solid #ffc107; }
         .agendamento-card.pago { border-left: 4px solid #0dcaf0; }
         .agendamento-card.cancelado { border-left: 4px solid #dc3545; opacity: 0.8; }
@@ -51,15 +52,12 @@
         .nav-pills .nav-link { color: #495057; font-weight: 600; border-radius: 8px; }
         .nav-pills .nav-link.active { background-color: #6c757d; color: #fff; }
         
-        /* Badge de contador */
         .badge-contador { background-color: #6c757d; color: #fff; margin-left: 5px; }
-        
-        .texto-info { color: #6c757d; font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
-    <!-- LOGIN (Simples, fundo branco) -->
+    <!-- TELA DE LOGIN (Ocupa a tela toda e some quando loga) -->
     <div id="tela-login" class="d-flex align-items-center justify-content-center" style="min-height: 90vh;">
         <div class="card p-4 shadow-sm" style="width: 100%; max-width: 400px; border: 1px solid #dee2e6;">
             <div class="text-center mb-4">
@@ -76,10 +74,10 @@
         </div>
     </div>
 
-    <!-- PAINEL -->
-    <div id="tela-painel" style="display: none;">
+    <!-- PAINEL (Começa oculto e só aparece se logar) -->
+    <div id="tela-painel">
         
-        <!-- Barra Superior: Menu de Ferramentas à Direita -->
+        <!-- Barra Superior -->
         <nav class="navbar navbar-admin">
             <div class="container d-flex justify-content-between align-items-center">
                 <span class="navbar-brand"><i class="bi bi-shop"></i> Painel de Agendamentos</span>
@@ -100,7 +98,7 @@
         </nav>
 
         <div class="container py-4" style="max-width: 800px;">
-            <!-- Filtros (Abas do topo) -->
+            <!-- Filtros -->
             <ul class="nav nav-pills mb-4 justify-content-center" style="background: #fff; padding: 5px; border-radius: 10px; border: 1px solid #dee2e6;">
                 <li class="nav-item">
                     <a class="nav-link active" href="#" onclick="mudarFiltro('hoje', this); return false;">
@@ -125,13 +123,11 @@
             </ul>
 
             <!-- Lista de Agendamentos -->
-            <div id="lista-agendamentos">
-                <!-- Cards gerados via JS -->
-            </div>
+            <div id="lista-agendamentos"></div>
         </div>
     </div>
 
-    <!-- MODAL SERVIÇOS (Simples) -->
+    <!-- MODAL SERVIÇOS -->
     <div class="modal fade" id="modalServicos" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -147,7 +143,7 @@
         </div>
     </div>
 
-    <!-- MODAL BLOQUEIOS (Simples) -->
+    <!-- MODAL BLOQUEIOS -->
     <div class="modal fade" id="modalBloqueios" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -193,9 +189,12 @@
         const db = firebase.database();
         const auth = firebase.auth();
 
+        // Variável para checar se é o admin
+        const EMAIL_ADMIN = "seujorge@barbeiro.com";
+
         let servicos = [];
         let agendamentos = [];
-        let filtroAtual = 'hoje'; // Começa no Hoje por padrão
+        let filtroAtual = 'hoje';
 
         function obterDataHojeLocal() {
             const d = new Date();
@@ -203,7 +202,7 @@
         }
 
         // ============================================
-        // AUTENTICAÇÃO
+        // LÓGICA DE TELAS (LOGIN vs PAINEL)
         // ============================================
         window.fazerLogin = function() {
             const email = document.getElementById('email-input').value.trim();
@@ -214,26 +213,50 @@
             if (!email || !senha) { erroEl.textContent = 'Preencha email e senha.'; return; }
 
             auth.signInWithEmailAndPassword(email, senha)
-                .then(() => { window.abrirPainel(); })
                 .catch(() => { erroEl.textContent = 'Email ou senha incorretos.'; });
         };
 
         window.fazerLogout = function() {
-            auth.signOut().then(() => { location.reload(); });
+            auth.signOut();
         };
 
-        window.abrirPainel = function() {
-            document.getElementById('tela-login').style.display = 'none';
-            document.getElementById('tela-painel').style.display = 'block';
-            carregarTudo();
-        };
+        // O Firebase avisa o tempo todo se o usuário está logado ou não
+        auth.onAuthStateChanged(user => {
+            const telaLogin = document.getElementById('tela-login');
+            const telaPainel = document.getElementById('tela-painel');
 
-        auth.onAuthStateChanged(user => { if (user) window.abrirPainel(); });
+            if (user) {
+                // Se o email logado for diferente do admin, desloga por segurança
+                if (user.email !== EMAIL_ADMIN) {
+                    alert("Acesso negado. Apenas o administrador pode acessar.");
+                    auth.signOut();
+                    return;
+                }
+
+                // Se logou certo, esconde o login e mostra o painel
+                telaLogin.style.display = 'none';
+                telaPainel.style.display = 'block';
+                carregarTudo();
+            } else {
+                // Se deslogou, mostra o login e esconde o painel
+                telaLogin.style.display = 'flex';
+                telaPainel.style.display = 'none';
+                
+                // Limpa os campos por segurança
+                document.getElementById('email-input').value = '';
+                document.getElementById('senha-input').value = '';
+            }
+        });
 
         // ============================================
         // CARREGAR DADOS
         // ============================================
         function carregarTudo() {
+            // Remove os listeners antigos para não duplicar se logar duas vezes
+            db.ref('config/servicos').off();
+            db.ref('agendamentos').off();
+            db.ref('bloqueios').off();
+
             db.ref('config/servicos').on('value', snap => {
                 servicos = [];
                 snap.forEach(c => servicos.push({ id: c.key, ...c.val() }));
@@ -252,7 +275,7 @@
         }
 
         // ============================================
-        // FILTROS E RENDERIZAÇÃO
+        // PAINEL E FILTROS
         // ============================================
         window.mudarFiltro = function(filtro, btn) {
             filtroAtual = filtro;
@@ -264,23 +287,19 @@
         function atualizarPainel() {
             const hojeStr = obterDataHojeLocal();
             
-            // Atualiza contadores
             document.getElementById('badge-hoje').textContent = agendamentos.filter(a => a.data === hojeStr).length;
             document.getElementById('badge-proximos').textContent = agendamentos.filter(a => a.data > hojeStr).length;
             document.getElementById('badge-faltas').textContent = agendamentos.filter(a => a.data < hojeStr && a.status === 'pendente').length;
             document.getElementById('badge-todos').textContent = agendamentos.length;
 
-            // Filtra lista
             let lista = [];
             if (filtroAtual === 'hoje') lista = agendamentos.filter(a => a.data === hojeStr);
             else if (filtroAtual === 'proximos') lista = agendamentos.filter(a => a.data > hojeStr);
             else if (filtroAtual === 'faltas') lista = agendamentos.filter(a => a.data < hojeStr && a.status === 'pendente');
             else lista = agendamentos.slice();
 
-            // Ordena
             lista.sort((a, b) => ((a.data || '') + (a.horario || '')).localeCompare((b.data || '') + (b.horario || '')));
 
-            // Renderiza
             const container = document.getElementById('lista-agendamentos');
             if (lista.length === 0) {
                 container.innerHTML = `<div class="alert alert-light text-center border">Nenhum agendamento encontrado.</div>`;
@@ -301,20 +320,14 @@
             const status = ag.status || 'pendente';
             const tel = (ag.clienteTelefone || '').replace(/\D/g, '');
 
-            // Define a classe de borda baseada no status
             const classeBorda = status === 'pago' ? 'pago' 
                               : status === 'cancelado' ? 'cancelado' 
                               : status === 'concluido' ? 'concluido' 
                               : 'pendente';
 
-            // ========================================================
-            // LÓGICA DOS BOTÕES SIMPLIFICADA
-            // ========================================================
             let botoesAcao = '';
             
-            // Se for ABA HOJE, mostra APENAS Pago e Cancelado
             if (filtroAtual === 'hoje') {
-                // Só mostra os botões se ainda não estiver pago ou cancelado
                 if (status !== 'pago' && status !== 'cancelado') {
                     botoesAcao = `
                         <div class="d-flex gap-2 mt-3">
@@ -330,7 +343,6 @@
                     botoesAcao = `<p class="text-muted small mt-2 mb-0">Status já atualizado.</p>`;
                 }
             } else {
-                // Nas outras abas, mostra apenas o WhatsApp para comunicação
                 botoesAcao = `
                     <div class="d-flex gap-2 mt-3">
                         <a href="https://wa.me/55${tel}" target="_blank" class="btn btn-success flex-grow-1 py-2 fw-bold">
@@ -360,17 +372,13 @@
             `;
         }
 
-        // ============================================
-        // AÇÕES RÁPIDAS
-        // ============================================
         window.mudarStatus = function(id, status) {
-            // Se estiver cancelando, pede confirmação simples
             if (status === 'cancelado' && !confirm('Tem certeza que o cliente faltou/cancelou?')) return;
             db.ref('agendamentos/' + id + '/status').set(status);
         };
 
         // ============================================
-        // SERVIÇOS E BLOQUEIOS (MODAIS)
+        // SERVIÇOS E BLOQUEIOS
         // ============================================
         window.abrirModalServicos = function() {
             new bootstrap.Modal(document.getElementById('modalServicos')).show();
