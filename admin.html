@@ -6,1249 +6,172 @@
     <title>Painel - Seu Jorge</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     <style>
-        :root {
-            --cor-azul-app: #34495e;
-            --cor-azul-claro: #eaf2f8;
-            --cor-amarelo-app: #f1c40f;
-            --cor-fundo: #e2e6ea;
-            --cor-texto: #2c3e50;
-            --sombra-card: 0 4px 12px rgba(0,0,0,0.08);
+        body { background: #0a0a0a !important; color: #fff; padding-top: 0 !important; }
+        .nav-pills .nav-link { color: #fff; border-radius: 10px; }
+        .nav-pills .nav-link.active { background: var(--cor-primaria); }
+        .agendamento-card {
+            background: #fff; color: #333; border-radius: 10px; padding: 15px;
+            margin-bottom: 10px; border-left: 4px solid var(--cor-primaria);
         }
-
-        body { 
-            background: var(--cor-fundo) !important; 
-            color: var(--cor-texto); 
-            padding-top: 0 !important; 
-            font-family: 'Poppins', sans-serif;
+        .agendamento-card.concluido { border-left-color: var(--cor-sucesso); opacity: 0.7; }
+        .agendamento-card.cancelado { border-left-color: #6c757d; opacity: 0.5; text-decoration: line-through; }
+        .agendamento-card.falta { border-left-color: #dc3545 !important; background: #fff5f5; }
+        .servico-admin-card {
+            background: #fff; color: #333; border-radius: 10px; padding: 15px;
+            margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;
         }
-
-        /* ============ NAVBAR SUPERIOR ============ */
-        .navbar-admin {
-            background: var(--cor-azul-app);
-            padding: 15px 20px;
-            border-bottom: 4px solid var(--cor-amarelo-app);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .navbar-admin .brand {
-            color: #fff;
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* ============ DASHBOARD HEADER ============ */
-        .dash-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-        .dash-header h2 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin: 0;
-            color: var(--cor-azul-app);
-        }
-        .dash-header .saudacao {
-            color: #555;
-            font-size: .95rem;
-            font-weight: 600;
-        }
-
-        .btn-menu-abrir {
-            background: var(--cor-azul-app);
-            color: #fff;
-            border: none;
-            padding: 12px 22px;
-            border-radius: 10px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: 0.2s;
-            font-size: 1rem;
-            box-shadow: 0 4px 10px rgba(52, 73, 94, 0.3);
-        }
-        .btn-menu-abrir:hover {
-            background: #2c3e50;
-            transform: translateY(-2px);
-        }
-
-        /* CARDS DE RESUMO */
-        .resumo-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-        .resumo-card {
-            background: #fff;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: var(--sombra-card);
-            border-left: 6px solid var(--cor-azul-app);
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-        .resumo-card.hoje { border-left-color: var(--cor-amarelo-app); }
-        .resumo-card.amanha { border-left-color: #3498db; }
-        .resumo-icon {
-            width: 55px;
-            height: 55px;
-            border-radius: 12px;
-            display: grid;
-            place-items: center;
-            font-size: 1.8rem;
-            background: var(--cor-azul-claro);
-            flex-shrink: 0;
-        }
-        .resumo-card.hoje .resumo-icon { background: #fef9e7; }
-        .resumo-card.amanha .resumo-icon { background: #eaf2f8; }
-        .resumo-info strong {
-            display: block;
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--cor-azul-app);
-            line-height: 1.2;
-        }
-        .resumo-info span {
-            color: #666;
-            font-size: .9rem;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        /* SEÇÃO DE AGENDAMENTOS */
-        .secao {
-            margin-bottom: 32px;
-        }
-        .secao-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .secao-titulo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.2rem;
-            font-weight: 800;
-            color: var(--cor-azul-app);
-            margin: 0;
-        }
-        .secao-titulo i { color: var(--cor-azul-app); }
-        .secao-badge {
-            background: var(--cor-azul-app);
-            color: #fff;
-            font-size: .85rem;
-            font-weight: 800;
-            padding: 4px 12px;
-            border-radius: 20px;
-        }
-        .secao-badge.hoje { background: var(--cor-amarelo-app); color: #333; }
-        .secao-badge.amanha { background: #3498db; color: #fff; }
-
-        /* CARDS DE AGENDAMENTO */
-        .ag-simples {
-            background: #ffffff;
-            color: #333;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-            box-shadow: var(--sombra-card);
-            border: 2px solid #d1d8e0;
-            border-left: 6px solid var(--cor-azul-app);
-            transition: 0.2s;
-        }
-        .ag-simples:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-        }
-        .ag-simples.hj { border-left-color: var(--cor-amarelo-app); }
-        .ag-simples.confirmado { border-left-color: #3498db; }
-        .ag-simples.concluido { border-left-color: #2ecc71; opacity: .85; }
-        .ag-simples.cancelado { border-left-color: #95a5a6; opacity: .7; text-decoration: line-through; }
-        
-        .ag-hora {
-            background: var(--cor-azul-app);
-            color: #fff;
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-size: 1.3rem;
-            font-weight: 800;
-            min-width: 75px;
-            text-align: center;
-        }
-        .ag-simples.hj .ag-hora { background: var(--cor-amarelo-app); color: #333; }
-        .ag-simples.confirmado .ag-hora { background: #3498db; }
-        .ag-simples.concluido .ag-hora { background: #2ecc71; }
-        .ag-simples.cancelado .ag-hora { background: #95a5a6; }
-
-        .ag-info { flex: 1; min-width: 200px; }
-        .ag-info strong {
-            display: block;
-            font-size: 1.15rem;
-            color: var(--cor-azul-app);
-            margin-bottom: 4px;
-            font-weight: 700;
-        }
-        .ag-info small {
-            color: #555;
-            font-size: .95rem;
-            display: block;
-            font-weight: 600;
-        }
-        .ag-acoes {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        /* BOTÕES */
-        .ag-acoes .btn, .agendamento-actions .btn, .servico-acoes .btn, .espera-item-actions .btn {
-            min-width: 48px;
-            min-height: 48px;
-            font-size: 1.1rem;
-            border-radius: 10px;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            transition: 0.2s;
-            padding: 10px 16px;
-        }
-        .ag-acoes .btn:active, .agendamento-actions .btn:active, .servico-acoes .btn:active {
-            transform: scale(0.95);
-        }
-
-        /* Cores Fortes nos Botões de Ação */
-        .btn-success { background-color: #27ae60; border-color: #27ae60; color: #fff; }
-        .btn-success:hover { background-color: #219150; border-color: #219150; }
-        
-        .btn-info { background-color: #2980b9; border-color: #2980b9; color: #fff; }
-        .btn-info:hover { background-color: #216a9c; border-color: #216a9c; }
-
-        .btn-primary { background-color: #34495e; border-color: #34495e; color: #fff; }
-        .btn-primary:hover { background-color: #2c3e50; border-color: #2c3e50; }
-
-        .btn-warning { background-color: #f1c40f; border-color: #f1c40f; color: #333; }
-        .btn-warning:hover { background-color: #d4ac0d; border-color: #d4ac0d; }
-
-        .btn-outline-danger { color: #e74c3c; border-color: #e74c3c; }
-        .btn-outline-danger:hover { background-color: #e74c3c; color: #fff; }
-
-        /* MENSAGEM VAZIA */
-        .msg-vazia {
-            background: #fff;
-            border-radius: 12px;
-            padding: 30px 20px;
-            text-align: center;
-            color: #7f8c8d;
-            box-shadow: var(--sombra-card);
-        }
-        .msg-vazia i {
-            font-size: 2.5rem;
-            color: #bdc3c7;
-            display: block;
-            margin-bottom: 10px;
-        }
-
-        /* ============ MENU LATERAL ============ */
-        .menu-drawer {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 320px;
-            max-width: 85vw;
-            height: 100vh;
-            background: #fff;
-            border-left: 4px solid var(--cor-azul-app);
-            transform: translateX(100%);
-            transition: transform .3s cubic-bezier(.4,0,.2,1);
-            z-index: 2000;
-            display: flex;
-            flex-direction: column;
-            box-shadow: -5px 0 25px rgba(0,0,0,.15);
-        }
-        .menu-drawer.open { transform: translateX(0); }
-
-        .menu-header {
-            padding: 20px;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--cor-azul-app);
-            color: #fff;
-        }
-        .menu-header h3 { margin: 0; font-size: 1.2rem; font-weight: 700; }
-
-        .menu-fechar {
-            width: 36px; height: 36px; border-radius: 8px;
-            background: rgba(255,255,255,0.2); color: #fff;
-            border: none; display: grid; place-items: center; transition: 0.2s;
-        }
-        .menu-fechar:hover { background: rgba(255,255,255,0.4); }
-
-        .menu-lista {
-            flex: 1; overflow-y: auto; padding: 16px;
-            display: flex; flex-direction: column; gap: 10px;
-        }
-        .menu-item {
-            background: #f8f9fa; border-radius: 10px; padding: 16px;
-            color: var(--cor-azul-app); border: 1px solid #ddd;
-            text-align: left; display: flex; align-items: center; gap: 14px;
-            font-size: 1rem; font-weight: 700; transition: 0.2s;
-            cursor: pointer; width: 100%;
-        }
-        .menu-item:hover { background: var(--cor-azul-claro); border-color: #bdc3c7; }
-        .menu-item-icon {
-            width: 40px; height: 40px; border-radius: 8px;
-            background: #fff; display: grid; place-items: center;
-            font-size: 1.2rem; flex-shrink: 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-        .menu-item-info { flex: 1; }
-        .menu-item-info strong { display: block; font-size: 1rem; }
-        .menu-item-info small { color: #7f8c8d; font-size: .85rem; font-weight: 500; }
-
-        .overlay-menu {
-            position: fixed; inset: 0; background: rgba(0,0,0,.5);
-            opacity: 0; visibility: hidden; transition: 0.3s; z-index: 1999;
-        }
-        .overlay-menu.active { opacity: 1; visibility: visible; }
-
-        /* ============ VIEWS INTERNAS ============ */
-        .view { display: none; }
-        .view.active { display: block; }
-
-        .view-header {
-            display: flex; align-items: center; gap: 14px;
-            margin-bottom: 24px; padding-bottom: 16px;
-            border-bottom: 2px solid #ced4da; flex-wrap: wrap;
-        }
-        .btn-voltar {
-            background: #fff; color: var(--cor-azul-app);
-            border: 2px solid #ced4da; padding: 10px 16px;
-            border-radius: 8px; font-weight: 700;
-            display: flex; align-items: center; gap: 6px;
-            transition: 0.2s; font-size: .95rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-        .btn-voltar:hover { background: var(--cor-azul-claro); }
-        .view-header h2 {
-            margin: 0; font-size: 1.4rem; font-weight: 800; color: var(--cor-azul-app);
-        }
+        .card { color: #333; }
 
         /* FILTROS */
-        .filtros-agendamentos { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+        .filtros-agendamento {
+            display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;
+        }
         .filtro-btn {
-            background: #fff; color: var(--cor-azul-app); border: 2px solid #ced4da;
-            border-radius: 8px; padding: 10px 16px; font-weight: 700;
-            font-size: 0.9rem; cursor: pointer; transition: all 0.2s;
-            display: flex; align-items: center; gap: 6px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            background: #1a1a1a; color: #fff; border: 2px solid #333;
+            padding: 10px 20px; border-radius: 50px; font-weight: 600;
+            font-size: 0.85rem; cursor: pointer; transition: all 0.3s;
+            font-family: inherit; display: flex; align-items: center; gap: 6px;
         }
-        .filtro-btn:hover { border-color: var(--cor-azul-app); }
-        .filtro-btn.ativo {
-            background: var(--cor-azul-app); border-color: var(--cor-azul-app); color: #fff;
-        }
-        .filtro-btn .contador {
-            background: #e2e6ea; padding: 2px 8px;
-            border-radius: 10px; font-size: 0.8rem; color: var(--cor-azul-app); font-weight: 800;
-        }
-        .filtro-btn.ativo .contador { background: rgba(255,255,255,.3); color: #fff; }
-
-        /* AGENDAMENTOS COMPLETOS */
-        .agendamento-item {
-            background: #fff; color: #333; border-radius: 12px; padding: 16px;
-            margin-bottom: 12px; box-shadow: var(--sombra-card);
-            border: 2px solid #d1d8e0;
-            border-left: 6px solid var(--cor-azul-app);
-            display: flex; justify-content: space-between; align-items: center;
-            gap: 15px; flex-wrap: wrap; transition: all 0.2s;
-        }
-        .agendamento-item:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
-        .agendamento-item.status-confirmado { border-left-color: #3498db; }
-        .agendamento-item.status-concluido { border-left-color: #2ecc71; }
-        .agendamento-item.status-cancelado { border-left-color: #95a5a6; opacity: 0.7; }
-        .agendamento-item.status-hoje { border-left-color: var(--cor-amarelo-app); }
-
-        .agendamento-info { flex: 1; min-width: 250px; }
-        .agendamento-data-hora {
-            display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
-            font-size: 1.05rem; font-weight: 700; flex-wrap: wrap;
-        }
-        .agendamento-data-hora .data { color: #555; font-weight: 600; font-size: 0.95rem; }
-        .agendamento-data-hora .hora {
-            background: var(--cor-azul-app); color: #fff; padding: 4px 10px;
-            border-radius: 6px; font-size: 1.1rem; font-weight: 800;
-        }
-        .agendamento-item.status-hoje .hora { background: var(--cor-amarelo-app); color: #333; }
-        .agendamento-item.status-confirmado .hora { background: #3498db; }
-        .agendamento-item.status-concluido .hora { background: #2ecc71; }
-        .agendamento-item.status-cancelado .hora { background: #95a5a6; }
-
-        .agendamento-detalhes {
-            display: flex; flex-wrap: wrap; gap: 15px;
-            font-size: 0.95rem; color: #555; font-weight: 600;
-        }
-        .agendamento-detalhes span { display: inline-flex; align-items: center; gap: 4px; }
-        .agendamento-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-
-        .badge-status {
-            display: inline-block; padding: 4px 10px; border-radius: 6px;
-            font-size: 0.75rem; font-weight: 800; text-transform: uppercase;
-        }
-        .badge-pendente { background: #fef9e7; color: #b7950b; }
-        .badge-confirmado { background: #eaf2f8; color: #2980b9; }
-        .badge-concluido { background: #e8f8f5; color: #1e8449; }
-        .badge-cancelado { background: #f2f3f4; color: #7b7d7d; }
-
-        .agendamento-vazio {
-            text-align: center; padding: 40px 20px; color: #7f8c8d;
-            background: #fff; border-radius: 12px; box-shadow: var(--sombra-card);
-        }
-        .agendamento-vazio i { font-size: 3rem; color: #bdc3c7; display: block; margin-bottom: 10px; }
-
-        /* SERVIÇOS */
-        .servico-item {
-            background: #fff; color: #333; border-radius: 12px; padding: 16px;
-            margin-bottom: 12px; box-shadow: var(--sombra-card);
-            border: 2px solid #d1d8e0;
-            border-left: 6px solid var(--cor-azul-app);
-            display: flex; justify-content: space-between; align-items: center;
-            gap: 15px; flex-wrap: wrap; transition: all 0.2s;
-        }
-        .servico-item:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
-        .servico-item.servico-vazio { border-left-color: var(--cor-amarelo-app); }
-        .servico-item.servico-inativo { border-left-color: #95a5a6; opacity: 0.7; }
-        .servico-info { flex: 1; min-width: 250px; display: flex; align-items: center; gap: 15px; }
-        .servico-icone-lista {
-            width: 50px; height: 50px; border-radius: 10px;
-            background: var(--cor-azul-claro); color: var(--cor-azul-app);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.5rem; flex-shrink: 0;
-        }
-        .servico-texto { flex: 1; }
-        .servico-nome-lista {
-            font-size: 1.1rem; font-weight: 800; margin-bottom: 4px;
-            color: var(--cor-azul-app); text-transform: uppercase;
-        }
-        .servico-detalhes-lista {
-            display: flex; flex-wrap: wrap; gap: 15px; font-size: 0.95rem; color: #555; font-weight: 600;
-        }
-        .servico-preco-lista { font-weight: 800; color: #27ae60; font-size: 1.1rem; }
-        .servico-acoes { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-
-        /* BLOQUEIOS */
-        .bloqueio-section {
-            background: #fff; border-radius: 12px; padding: 20px;
-            margin-bottom: 20px; box-shadow: var(--sombra-card);
-            border: 2px solid #d1d8e0;
-            border-left: 6px solid var(--cor-azul-app);
-        }
-        .bloqueio-section h6 { color: var(--cor-azul-app); font-weight: 800; margin-bottom: 15px; }
-        .bloqueio-item {
-            background: #f8f9fa; color: #333; border-radius: 8px; padding: 12px 15px;
-            margin-bottom: 8px; display: flex; justify-content: space-between;
-            align-items: center; border: 1px solid #ddd; border-left: 4px solid var(--cor-azul-app);
-        }
-        .bloqueio-item.dia-inteiro { border-left-color: #e74c3c; }
-        .bloqueio-item.recorrente { border-left-color: var(--cor-amarelo-app); }
-        
-        .horario-check {
-            display: inline-flex; align-items: center; gap: 6px;
-            padding: 8px 14px; background: #fff; color: #333;
-            border-radius: 8px; margin: 4px; cursor: pointer;
-            border: 1px solid #ccc; user-select: none;
-            font-weight: 700; font-size: 0.9rem;
-        }
-        .horario-check:hover { border-color: var(--cor-azul-app); }
-        .horario-check input { cursor: pointer; width: 16px; height: 16px; }
-        .horario-check.marcado { background: var(--cor-azul-app); color: #fff; border-color: var(--cor-azul-app); }
-        
-        .dias-semana-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-top: 10px; }
-        .dia-semana-btn {
-            background: #fff; color: #333; border: 1px solid #ccc;
-            padding: 12px 5px; border-radius: 8px; text-align: center;
-            font-weight: 700; cursor: pointer; transition: 0.2s; font-size: 0.85rem;
-        }
-        .dia-semana-btn:hover { border-color: var(--cor-azul-app); }
-        .dia-semana-btn.ativo { background: var(--cor-azul-app); color: #fff; border-color: var(--cor-azul-app); }
-
-        /* LISTA DE ESPERA */
-        .espera-dia-bloco {
-            background: #fff; border-radius: 12px; padding: 20px;
-            margin-bottom: 20px; box-shadow: var(--sombra-card);
-            border: 2px solid #d1d8e0;
-            border-left: 6px solid var(--cor-amarelo-app);
-        }
-        .espera-dia-titulo {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 15px; padding-bottom: 10px;
-            border-bottom: 1px solid #eee; flex-wrap: wrap; gap: 8px;
-        }
-        .espera-dia-titulo h6 { margin: 0; color: var(--cor-azul-app); font-weight: 800; font-size: 1.1rem; }
-        .espera-item {
-            background: #f8f9fa; color: #333; border-radius: 8px; padding: 12px 15px;
-            margin-bottom: 8px; display: flex; justify-content: space-between;
-            align-items: center; flex-wrap: wrap; gap: 10px;
-            border: 1px solid #ddd; border-left: 4px solid var(--cor-amarelo-app);
-        }
-        .espera-item-info { flex: 1; min-width: 200px; }
-        .espera-item-info strong { display: block; font-size: 1rem; color: var(--cor-azul-app); font-weight: 700; }
-        .espera-item-info small { color: #555; font-size: 0.9rem; font-weight: 600; }
-        .espera-item-actions { display: flex; gap: 6px; flex-wrap: wrap; }
-
-        /* FATURAMENTO */
-        .faturamento-card {
-            background: #fff; border-radius: 12px; padding: 20px;
-            box-shadow: var(--sombra-card);
-            border: 2px solid #d1d8e0;
-            border-left: 6px solid var(--cor-azul-app);
-            transition: all 0.3s;
-        }
-        .faturamento-card.hoje { border-left-color: var(--cor-amarelo-app); }
-        .faturamento-card.semana { border-left-color: #3498db; }
-        .faturamento-card.mes { border-left-color: #2ecc71; }
-        .faturamento-card.total { border-left-color: #9b59b6; }
-        .faturamento-label {
-            font-size: 0.85rem; font-weight: 700; color: #7f8c8d;
-            text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
-        }
-        .faturamento-card.hoje .faturamento-label i { color: var(--cor-amarelo-app); }
-        .faturamento-card.semana .faturamento-label i { color: #3498db; }
-        .faturamento-card.mes .faturamento-label i { color: #2ecc71; }
-        .faturamento-card.total .faturamento-label i { color: #9b59b6; }
-        .faturamento-valor {
-            font-size: 1.8rem; font-weight: 800; color: var(--cor-azul-app);
-            line-height: 1; margin-bottom: 6px;
-        }
-        .faturamento-card.hoje .faturamento-valor { color: #d4ac0d; }
-        .faturamento-card.semana .faturamento-valor { color: #2980b9; }
-        .faturamento-card.mes .faturamento-valor { color: #1e8449; }
-        .faturamento-card.total .faturamento-valor { color: #8e44ad; }
-        .faturamento-qtd { font-size: 0.85rem; color: #95a5a6; font-weight: 700; }
-
-        .fat-item {
-            background: #fff; color: #333; border-radius: 10px; padding: 14px 18px;
-            margin-bottom: 8px; display: flex; justify-content: space-between;
-            align-items: center; gap: 15px; flex-wrap: wrap;
-            border: 2px solid #d1d8e0; border-left: 6px solid #2ecc71;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-        .fat-item-info { flex: 1; min-width: 220px; }
-        .fat-item-info strong { display: block; font-size: 1rem; color: var(--cor-azul-app); font-weight: 700; }
-        .fat-item-info small { color: #555; font-size: 0.9rem; font-weight: 600; }
-        .fat-item-valor { font-size: 1.2rem; font-weight: 800; color: #27ae60; }
-        
-        .fat-dia-titulo {
-            background: #fff; border-radius: 10px; padding: 14px 18px;
-            margin-top: 20px; margin-bottom: 10px;
-            display: flex; justify-content: space-between; align-items: center;
-            flex-wrap: wrap; gap: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            border: 2px solid #d1d8e0; border-left: 6px solid #2ecc71;
-        }
-        .fat-dia-titulo h6 { margin: 0; color: var(--cor-azul-app); font-weight: 800; font-size: 1.05rem; }
-        .fat-dia-titulo .total { color: #27ae60; font-weight: 800; font-size: 1.1rem; }
-
-        /* LOGIN */
-        .login-container {
-            min-height: 100vh; display: flex; align-items: center; justify-content: center;
-            background: var(--cor-fundo); padding: 20px;
-        }
-        .login-box {
-            background: #fff; border-radius: 12px; padding: 40px 30px;
-            width: 100%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,.1);
-            border-top: 6px solid var(--cor-azul-app);
-        }
-        .login-box h3 { color: var(--cor-azul-app); font-weight: 800; }
-        .login-box .form-label { color: var(--cor-azul-app) !important; font-weight: 700; }
-        .login-box .form-control { 
-            color: #333 !important; background: #f8f9fa !important; 
-            border: 2px solid #ced4da; padding: 12px; font-size: 1rem;
-        }
-        .login-box .form-control:focus { border-color: var(--cor-azul-app); box-shadow: none; }
-        .login-box .btn-danger { background: var(--cor-azul-app); border: none; padding: 12px; font-size: 1.1rem; }
-        .login-box .btn-danger:hover { background: #2c3e50; }
-
-        /* CORREÇÕES DE CONTRASTE E INPUTS */
-        .form-control { 
-            color: #333 !important; background: #fff !important; 
-            border: 2px solid #ced4da; padding: 10px;
-        }
-        .form-control:focus { border-color: var(--cor-azul-app); box-shadow: 0 0 0 3px rgba(52, 73, 94, 0.2); }
-        .form-label { color: var(--cor-azul-app) !important; font-weight: 700; }
-        .modal-content { color: #333; border-radius: 12px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-        .modal-content .modal-title { color: var(--cor-azul-app) !important; font-weight: 800; }
-        .modal-content .form-label { color: var(--cor-azul-app) !important; }
-        .modal-header { border-bottom: 1px solid #eee; }
-        .modal-footer { border-top: 1px solid #eee; }
-
-        .filtro-btn { padding: 12px 18px; font-size: 0.95rem; border-radius: 8px; }
-
-        @media (max-width: 600px) {
-            .dash-header h2 { font-size: 1.3rem; }
-            .btn-menu-abrir { padding: 10px 16px; font-size: .9rem; }
-            .resumo-card { padding: 16px; gap: 12px; }
-            .resumo-icon { width: 45px; height: 45px; font-size: 1.4rem; }
-            .resumo-info strong { font-size: 1.5rem; }
-            .ag-simples { padding: 12px; }
-            .ag-info strong { font-size: 1rem; }
-            .ag-hora { font-size: 1.1rem; padding: 6px 10px; min-width: 60px; }
-        }
-
-        /* ============================================
-           BOTÕES MAIORES PARA TOQUE (MOBILE-FRIENDLY)
-           ============================================ */
-        .agendamento-actions .btn,
-        .ag-acoes .btn,
-        .servico-acoes .btn,
-        .espera-item-actions .btn {
-            min-width: 46px;
-            min-height: 46px;
-            padding: 10px 14px;
-            font-size: 1.05rem;
-            border-radius: 11px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-        }
-
-        .agendamento-actions .btn i,
-        .ag-acoes .btn i,
-        .servico-acoes .btn i,
-        .espera-item-actions .btn i {
-            font-size: 1.15rem;
-            line-height: 1;
-        }
-
-        .servico-acoes .btn:has(.bi-pencil) {
-            gap: 6px;
-            padding: 10px 16px;
-        }
-
-        .filtro-btn {
-            padding: 12px 18px;
-            font-size: 0.92rem;
-            min-height: 46px;
-            border-radius: 11px;
-        }
-
-        .filtro-btn i {
-            font-size: 1.05rem;
-        }
-
-        .bloqueio-item .btn {
-            min-width: 46px;
-            min-height: 46px;
-            padding: 10px;
-            font-size: 1.1rem;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .bloqueio-item .btn-outline-danger {
-            padding: 8px 14px;
-            font-size: 0.95rem;
-            min-height: 42px;
-        }
-
-        .dia-semana-btn {
-            min-height: 52px;
-            font-size: 0.95rem;
-            padding: 14px 6px;
-        }
-
-        .horario-check {
-            padding: 10px 16px;
-            font-size: 0.95rem;
-            min-height: 44px;
-        }
-
-        .btn-sm {
-            padding: 10px 16px;
-            font-size: 0.92rem;
-            min-height: 44px;
-            border-radius: 10px;
-        }
-
-        .menu-fechar {
-            width: 44px;
-            height: 44px;
-        }
-
-        .ag-simples .ag-acoes .btn {
-            min-width: 44px;
-            min-height: 44px;
-            padding: 8px;
-            font-size: 1.1rem;
-        }
-
-        @media (max-width: 600px) {
-            .agendamento-actions .btn,
-            .ag-acoes .btn,
-            .servico-acoes .btn,
-            .espera-item-actions .btn {
-                min-width: 48px;
-                min-height: 48px;
-                padding: 11px 14px;
-                font-size: 1.15rem;
-            }
-
-            .agendamento-actions .btn i,
-            .ag-acoes .btn i,
-            .servico-acoes .btn i,
-            .espera-item-actions .btn i {
-                font-size: 1.25rem;
-            }
-
-            .agendamento-actions {
-                width: 100%;
-                justify-content: flex-end;
-            }
-
-            .filtro-btn {
-                padding: 12px 16px;
-                font-size: 0.88rem;
-            }
+        .filtro-btn:hover { border-color: var(--cor-primaria); background: #2a2a2a; }
+        .filtro-btn.ativo { background: var(--cor-primaria); border-color: var(--cor-primaria); color: #fff; }
+        .filtro-btn .badge-filtro {
+            background: rgba(255,255,255,0.3); padding: 2px 8px;
+            border-radius: 50px; font-size: 0.75rem; margin-left: 4px;
         }
     </style>
 </head>
 <body>
 
-    <!-- ============ TELA DE LOGIN ============ -->
-    <div id="tela-login" class="login-container">
-        <div class="login-box">
+    <!-- LOGIN -->
+    <div id="tela-login" class="d-flex align-items-center justify-content-center" style="min-height: 100vh;">
+        <div class="card p-4 shadow-lg" style="width: 100%; max-width: 400px;">
             <div class="text-center mb-4">
-                <i class="bi bi-scissors display-4" style="color: var(--cor-azul-app);"></i>
+                <i class="bi bi-scissors display-4 text-danger"></i>
                 <h3 class="mt-3 fw-bold">PAINEL DO JORGE</h3>
-                <p class="text-muted small mb-0">Área restrita</p>
+                <p class="text-muted small">Área restrita</p>
             </div>
-
-            <div class="mb-3">
-                <label class="form-label">
-                    <i class="bi bi-envelope-fill"></i> Email
-                </label>
-                <input type="email" id="email-input" class="form-control" 
-                       placeholder="seu@email.com" autocomplete="email">
-            </div>
-
-            <div class="mb-4">
-                <label class="form-label">
-                    <i class="bi bi-lock-fill"></i> Senha
-                </label>
-                <input type="password" id="senha-input" class="form-control" 
-                       placeholder="Sua senha" autocomplete="current-password"
-                       onkeypress="if(event.key==='Enter') fazerLogin()">
-            </div>
-
-            <button class="btn btn-danger w-100 mb-3" id="btn-entrar" onclick="fazerLogin()">
+            <input type="email" id="email-input" class="form-control mb-2" placeholder="Email">
+            <input type="password" id="senha-input" class="form-control mb-3" placeholder="Senha"
+                   onkeypress="if(event.key==='Enter') fazerLogin()">
+            <button class="btn btn-danger btn-lg fw-bold" onclick="fazerLogin()">
                 <i class="bi bi-box-arrow-in-right"></i> ENTRAR
             </button>
-
-            <button class="btn btn-link text-secondary w-100 small" onclick="esqueceuSenha()" type="button">
-                Esqueci minha senha
-            </button>
-
-            <p id="login-erro" class="text-danger small text-center mt-3 mb-0 fw-bold"></p>
+            <p id="login-erro" class="text-danger small text-center mt-2"></p>
         </div>
     </div>
 
-    <!-- ============ PAINEL ============ -->
+    <!-- PAINEL -->
     <div id="tela-painel" style="display: none;">
-        <nav class="navbar-admin">
-            <div class="container-fluid p-0">
-                <span class="brand"><i class="bi bi-scissors"></i> PAINEL</span>
-                <button class="btn btn-sm btn-light fw-bold" onclick="fazerLogout()">
+        <nav class="navbar navbar-dark bg-black border-bottom border-danger">
+            <div class="container">
+                <span class="navbar-brand fw-bold"><i class="bi bi-scissors"></i> PAINEL</span>
+                <button class="btn btn-outline-light btn-sm" onclick="fazerLogout()">
                     <i class="bi bi-box-arrow-right"></i> Sair
                 </button>
             </div>
         </nav>
 
         <div class="container py-4">
+            <ul class="nav nav-pills mb-4">
+                <li class="nav-item"><a class="nav-link active" data-bs-toggle="pill" href="#aba-agendamentos">📅 Agendamentos</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#aba-servicos">✂️ Serviços</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#aba-bloqueios">🚫 Bloqueios</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="pill" href="#aba-config">⚙️ Config</a></li>
+            </ul>
 
-            <!-- ============ VIEW: DASHBOARD ============ -->
-            <div class="view active" id="view-dashboard">
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="aba-agendamentos">
+                    <h4 class="text-white mb-3">📅 Agendamentos</h4>
 
-                <div class="dash-header">
-                    <div>
-                        <h2>Olá, Seu Jorge! 👋</h2>
-                        <p class="saudacao mb-0" id="saudacao-data">Carregando...</p>
+                    <!-- FILTROS -->
+                    <div class="filtros-agendamento mb-4">
+                        <button class="filtro-btn ativo" data-filtro="todos" onclick="filtrarAgendamentos('todos', this)">
+                            <i class="bi bi-list-ul"></i> TODOS
+                        </button>
+                        <button class="filtro-btn" data-filtro="hoje" onclick="filtrarAgendamentos('hoje', this)">
+                            <i class="bi bi-calendar-day"></i> HOJE
+                        </button>
+                        <button class="filtro-btn" data-filtro="proximos" onclick="filtrarAgendamentos('proximos', this)">
+                            <i class="bi bi-calendar-week"></i> PRÓXIMOS
+                        </button>
+                        <button class="filtro-btn" data-filtro="faltas" onclick="filtrarAgendamentos('faltas', this)">
+                            <i class="bi bi-exclamation-triangle"></i> FALTAS
+                        </button>
                     </div>
-                    <button class="btn-menu-abrir" onclick="abrirMenu()">
-                        <i class="bi bi-grid-3x3-gap-fill"></i>
-                        Menu
+
+                    <div id="lista-agendamentos"></div>
+                </div>
+
+                <div class="tab-pane fade" id="aba-servicos">
+                    <h4 class="text-white mb-3">✂️ Serviços</h4>
+                    <div id="lista-servicos"></div>
+                    <button class="btn btn-danger mt-3" onclick="adicionarServico()">
+                        <i class="bi bi-plus-circle"></i> Adicionar Serviço
                     </button>
                 </div>
 
-                <div class="resumo-grid">
-                    <div class="resumo-card hoje">
-                        <div class="resumo-icon">📅</div>
-                        <div class="resumo-info">
-                            <strong id="res-hoje">0</strong>
-                            <span>Hoje</span>
+                <div class="tab-pane fade" id="aba-bloqueios">
+                    <h4 class="text-white mb-3">🚫 Bloquear Horários</h4>
+                    <p class="text-muted small">Bloqueie horários que você não vai atender.</p>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label text-white">Data</label>
+                            <input type="date" id="bloqueio-data" class="form-control">
                         </div>
-                    </div>
-                    <div class="resumo-card amanha">
-                        <div class="resumo-icon">⏭️</div>
-                        <div class="resumo-info">
-                            <strong id="res-amanha">0</strong>
-                            <span>Amanhã</span>
+                        <div class="col-md-4">
+                            <label class="form-label text-white">Horário</label>
+                            <input type="time" id="bloqueio-hora" class="form-control" step="1800">
                         </div>
-                    </div>
-                </div>
-
-                <div class="secao">
-                    <div class="secao-header">
-                        <h3 class="secao-titulo">
-                            <i class="bi bi-calendar-check"></i>
-                            Agendamentos de Hoje
-                            <span class="secao-badge hoje" id="badge-hoje">0</span>
-                        </h3>
-                        <button class="btn btn-sm btn-outline-dark fw-bold" onclick="abrirFerramenta('agendamentos')">
-                            Ver todos <i class="bi bi-arrow-right"></i>
-                        </button>
-                    </div>
-                    <div id="lista-hoje"></div>
-                </div>
-
-                <div class="secao">
-                    <div class="secao-header">
-                        <h3 class="secao-titulo">
-                            <i class="bi bi-calendar-event"></i>
-                            Amanhã
-                            <span class="secao-badge amanha" id="badge-amanha">0</span>
-                        </h3>
-                    </div>
-                    <div id="lista-amanha"></div>
-                </div>
-
-            </div>
-
-            <!-- ============ VIEW: AGENDAMENTOS ============ -->
-            <div class="view" id="view-agendamentos">
-                <div class="view-header">
-                    <button class="btn-voltar" onclick="voltarDashboard()">
-                        <i class="bi bi-arrow-left"></i> Voltar
-                    </button>
-                    <h2>📅 Todos os Agendamentos</h2>
-                </div>
-
-                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                    <p class="text-muted small mb-0 fw-semibold">Todos os agendamentos ficam salvos aqui.</p>
-                    <div class="d-flex gap-2 flex-wrap">
-                        <button class="btn btn-danger btn-sm fw-bold" onclick="abrirAvisarAmanha()">
-                            <i class="bi bi-megaphone-fill"></i> Avisar amanhã
-                        </button>
-                        <button class="btn btn-outline-secondary btn-sm fw-bold" onclick="recarregarAgendamentos()">
-                            <i class="bi bi-arrow-clockwise"></i> Atualizar
-                        </button>
-                        <button class="btn btn-outline-warning btn-sm fw-bold text-dark" onclick="limparAgendamentosAntigos()">
-                            <i class="bi bi-eraser"></i> Limpar antigos
-                        </button>
-                    </div>
-                </div>
-
-                <div class="filtros-agendamentos">
-                    <button class="filtro-btn ativo" data-filtro="todos">
-                        <i class="bi bi-list-ul"></i> Todos <span class="contador" id="cnt-todos">0</span>
-                    </button>
-                    <button class="filtro-btn" data-filtro="hoje">
-                        <i class="bi bi-calendar-day"></i> Hoje <span class="contador" id="cnt-hoje">0</span>
-                    </button>
-                    <button class="filtro-btn" data-filtro="proximos">
-                        <i class="bi bi-calendar-week"></i> Próximos <span class="contador" id="cnt-proximos">0</span>
-                    </button>
-                    <button class="filtro-btn" data-filtro="passados">
-                        <i class="bi bi-calendar-x"></i> Passados <span class="contador" id="cnt-passados">0</span>
-                    </button>
-                    <button class="filtro-btn" data-filtro="pendentes">
-                        <i class="bi bi-hourglass"></i> Pendentes <span class="contador" id="cnt-pendentes">0</span>
-                    </button>
-                    <button class="filtro-btn" data-filtro="confirmados">
-                        <i class="bi bi-hand-thumbs-up"></i> Confirmados <span class="contador" id="cnt-confirmados">0</span>
-                    </button>
-                    <button class="filtro-btn" data-filtro="concluidos">
-                        <i class="bi bi-check-circle"></i> Concluídos <span class="contador" id="cnt-concluidos">0</span>
-                    </button>
-                    <button class="filtro-btn" data-filtro="cancelados">
-                        <i class="bi bi-x-circle"></i> Cancelados <span class="contador" id="cnt-cancelados">0</span>
-                    </button>
-                </div>
-
-                <div id="lista-agendamentos"></div>
-            </div>
-
-            <!-- ============ VIEW: SERVIÇOS ============ -->
-            <div class="view" id="view-servicos">
-                <div class="view-header">
-                    <button class="btn-voltar" onclick="voltarDashboard()">
-                        <i class="bi bi-arrow-left"></i> Voltar
-                    </button>
-                    <h2>✂️ Serviços</h2>
-                </div>
-
-                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                    <p class="text-muted small mb-0 fw-semibold">Serviços que aparecem no site do cliente.</p>
-                    <div class="d-flex gap-2">
-                        <button class="btn btn-outline-secondary btn-sm fw-bold" onclick="recarregarServicos()">
-                            <i class="bi bi-arrow-clockwise"></i> Atualizar
-                        </button>
-                        <button class="btn btn-outline-warning btn-sm fw-bold text-dark" onclick="limparServicosVazios()">
-                            <i class="bi bi-eraser"></i> Limpar vazios
-                        </button>
-                        <button class="btn btn-danger fw-bold" onclick="adicionarServico()">
-                            <i class="bi bi-plus-circle"></i> Adicionar
-                        </button>
-                    </div>
-                </div>
-
-                <div class="filtros-agendamentos">
-                    <button class="filtro-btn ativo" data-filtro-serv="todos">
-                        <i class="bi bi-list-ul"></i> Todos <span class="contador" id="cnt-serv-todos">0</span>
-                    </button>
-                    <button class="filtro-btn" data-filtro-serv="ok">
-                        <i class="bi bi-check-circle"></i> Configurados <span class="contador" id="cnt-serv-ok">0</span>
-                    </button>
-                    <button class="filtro-btn" data-filtro-serv="vazios">
-                        <i class="bi bi-exclamation-triangle"></i> Vazios <span class="contador" id="cnt-serv-vazios">0</span>
-                    </button>
-                </div>
-
-                <div id="lista-servicos"></div>
-            </div>
-
-            <!-- ============ VIEW: FOLGAS ============ -->
-            <div class="view" id="view-bloqueios">
-                <div class="view-header">
-                    <button class="btn-voltar" onclick="voltarDashboard()">
-                        <i class="bi bi-arrow-left"></i> Voltar
-                    </button>
-                    <h2>🚫 Folgas & Bloqueios</h2>
-                </div>
-
-                <div class="bloqueio-section">
-                    <h6><i class="bi bi-calendar-x text-danger"></i> 1. Bloquear dia inteiro</h6>
-                    <p class="text-muted small mb-3 fw-semibold">Ex: feriado, folga, viagem...</p>
-                    <div class="row g-2">
-                        <div class="col-md-5">
-                            <input type="date" id="bloqueio-dia-data" class="form-control">
-                        </div>
-                        <div class="col-md-5">
-                            <input type="text" id="bloqueio-dia-motivo" class="form-control" placeholder="Motivo (opcional)">
-                        </div>
-                        <div class="col-md-2">
-                            <button class="btn btn-danger w-100 fw-bold" onclick="bloquearDiaInteiro()">
-                                <i class="bi bi-lock-fill"></i> Bloquear
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button class="btn btn-danger w-100" onclick="bloquearHorario()">
+                                <i class="bi bi-lock"></i> Bloquear
                             </button>
                         </div>
                     </div>
+                    <div id="lista-bloqueios" class="mt-4"></div>
                 </div>
 
-                <div class="bloqueio-section">
-                    <h6><i class="bi bi-clock-history text-warning"></i> 2. Bloquear horários específicos</h6>
-                    <div class="row g-2 mb-3">
-                        <div class="col-md-6">
-                            <label class="form-label small mb-1">Data</label>
-                            <input type="date" id="bloqueio-hora-data" class="form-control" onchange="carregarHorariosParaBloquear()">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label small mb-1">Motivo (opcional)</label>
-                            <input type="text" id="bloqueio-hora-motivo" class="form-control" placeholder="Ex: Almoço">
-                        </div>
+                <div class="tab-pane fade" id="aba-config">
+                    <h4 class="text-white mb-3">⚙️ Configurações</h4>
+                    <div class="card p-3 mb-3">
+                        <label class="form-label">Alterar Senha</label>
+                        <input type="password" id="nova-senha" class="form-control mb-2" placeholder="Nova senha">
+                        <button class="btn btn-danger" onclick="alterarSenha()">Salvar Nova Senha</button>
                     </div>
-                    <div id="horarios-para-bloquear" class="mb-3">
-                        <p class="text-muted small fw-semibold">Selecione uma data para ver os horários.</p>
-                    </div>
-                    <button class="btn btn-warning w-100 fw-bold text-dark" onclick="bloquearHorariosSelecionados()">
-                        <i class="bi bi-lock-fill"></i> Bloquear horários selecionados
-                    </button>
-                </div>
-
-                <div class="bloqueio-section">
-                    <h6><i class="bi bi-arrow-repeat text-info"></i> 3. Bloquear dia da semana</h6>
-                    <p class="text-muted small mb-3 fw-semibold">Ex: toda segunda-feira você não trabalha.</p>
-                    <div class="dias-semana-grid">
-                        <div class="dia-semana-btn" data-dia="0" onclick="toggleDiaSemana(this, 0)">Dom</div>
-                        <div class="dia-semana-btn" data-dia="1" onclick="toggleDiaSemana(this, 1)">Seg</div>
-                        <div class="dia-semana-btn" data-dia="2" onclick="toggleDiaSemana(this, 2)">Ter</div>
-                        <div class="dia-semana-btn" data-dia="3" onclick="toggleDiaSemana(this, 3)">Qua</div>
-                        <div class="dia-semana-btn" data-dia="4" onclick="toggleDiaSemana(this, 4)">Qui</div>
-                        <div class="dia-semana-btn" data-dia="5" onclick="toggleDiaSemana(this, 5)">Sex</div>
-                        <div class="dia-semana-btn" data-dia="6" onclick="toggleDiaSemana(this, 6)">Sáb</div>
-                    </div>
-                    <button class="btn btn-primary w-100 mt-3 fw-bold" onclick="salvarDiasSemana()">
-                        <i class="bi bi-save"></i> Salvar dias da semana
-                    </button>
-                </div>
-
-                <div class="bloqueio-section">
-                    <h6><i class="bi bi-list-check text-success"></i> 4. Bloqueios ativos</h6>
-                    <div id="lista-bloqueios"></div>
                 </div>
             </div>
-
-            <!-- ============ VIEW: LISTA DE ESPERA ============ -->
-            <div class="view" id="view-espera">
-                <div class="view-header">
-                    <button class="btn-voltar" onclick="voltarDashboard()">
-                        <i class="bi bi-arrow-left"></i> Voltar
-                    </button>
-                    <h2>⏳ Lista de Espera</h2>
-                </div>
-                <p class="text-muted small mb-4 fw-semibold">
-                    Clientes que entraram na fila quando o dia estava lotado.
-                </p>
-                <div id="lista-espera-admin"></div>
-            </div>
-
-            <!-- ============ VIEW: FATURAMENTO ============ -->
-            <div class="view" id="view-faturamento">
-                <div class="view-header">
-                    <button class="btn-voltar" onclick="voltarDashboard()">
-                        <i class="bi bi-arrow-left"></i> Voltar
-                    </button>
-                    <h2>💰 Faturamento</h2>
-                </div>
-
-                <div class="row g-3 mb-4">
-                    <div class="col-md-6 col-lg-3">
-                        <div class="faturamento-card hoje">
-                            <div class="faturamento-label"><i class="bi bi-sun-fill"></i> Hoje</div>
-                            <div class="faturamento-valor" id="fat-hoje">R$ 0,00</div>
-                            <div class="faturamento-qtd" id="fat-hoje-qtd">0 atendimentos</div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <div class="faturamento-card semana">
-                            <div class="faturamento-label"><i class="bi bi-calendar-week"></i> Esta semana</div>
-                            <div class="faturamento-valor" id="fat-semana">R$ 0,00</div>
-                            <div class="faturamento-qtd" id="fat-semana-qtd">0 atendimentos</div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <div class="faturamento-card mes">
-                            <div class="faturamento-label"><i class="bi bi-calendar-month"></i> Este mês</div>
-                            <div class="faturamento-valor" id="fat-mes">R$ 0,00</div>
-                            <div class="faturamento-qtd" id="fat-mes-qtd">0 atendimentos</div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <div class="faturamento-card total">
-                            <div class="faturamento-label"><i class="bi bi-trophy-fill"></i> Total geral</div>
-                            <div class="faturamento-valor" id="fat-total">R$ 0,00</div>
-                            <div class="faturamento-qtd" id="fat-total-qtd">0 atendimentos</div>
-                        </div>
-                    </div>
-                </div>
-
-                <h6 class="text-dark fw-bold mb-2"><i class="bi bi-funnel"></i> Detalhes por período</h6>
-                <div class="filtros-agendamentos">
-                    <button class="filtro-btn ativo" data-filtro-fat="hoje"><i class="bi bi-sun"></i> Hoje</button>
-                    <button class="filtro-btn" data-filtro-fat="semana"><i class="bi bi-calendar-week"></i> Esta semana</button>
-                    <button class="filtro-btn" data-filtro-fat="mes"><i class="bi bi-calendar-month"></i> Este mês</button>
-                    <button class="filtro-btn" data-filtro-fat="ano"><i class="bi bi-calendar"></i> Este ano</button>
-                    <button class="filtro-btn" data-filtro-fat="todos"><i class="bi bi-list-ul"></i> Todos</button>
-                </div>
-
-                <div class="alert alert-success d-flex justify-content-between align-items-center flex-wrap gap-2 border-0 shadow-sm" style="border-left: 5px solid #2ecc71 !important;">
-                    <div class="text-success fw-bold">
-                        <i class="bi bi-cash-coin fs-4"></i>
-                        <strong class="ms-2">Total no período:</strong>
-                    </div>
-                    <div class="fs-4 fw-bold text-success" id="fat-filtro-total">R$ 0,00</div>
-                </div>
-
-                <div id="lista-faturamento"></div>
-            </div>
-
-            <!-- ============ VIEW: CONFIG ============ -->
-            <div class="view" id="view-config">
-                <div class="view-header">
-                    <button class="btn-voltar" onclick="voltarDashboard()">
-                        <i class="bi bi-arrow-left"></i> Voltar
-                    </button>
-                    <h2>⚙️ Configurações</h2>
-                </div>
-
-                <div class="card p-4 mb-3 border-0 shadow-sm">
-                    <h6 class="fw-bold text-dark"><i class="bi bi-shield-lock-fill text-primary"></i> Conta</h6>
-                    <p class="small text-muted mb-3 fw-semibold">
-                        Logado como: <strong id="config-email" class="text-dark">-</strong>
-                    </p>
-                    <button class="btn btn-outline-danger fw-bold" onclick="fazerLogout()">
-                        <i class="bi bi-box-arrow-right"></i> Sair da conta
-                    </button>
-                </div>
-
-                <div class="card p-4 mb-3 border-0 shadow-sm">
-                    <h6 class="fw-bold text-dark"><i class="bi bi-key-fill text-primary"></i> Alterar senha</h6>
-                    <p class="small text-muted mb-3 fw-semibold">
-                        Enviaremos um link para o seu email.
-                    </p>
-                    <button class="btn btn-primary fw-bold" onclick="esqueceuSenha()">
-                        <i class="bi bi-envelope"></i> Enviar link
-                    </button>
-                </div>
-
-                <div class="card p-4 mb-3 border-0 shadow-sm">
-                    <label class="form-label fw-bold fs-6">Notificações do Navegador</label>
-                    <p class="small text-muted mb-3 fw-semibold">
-                        Ative para receber avisos de novos agendamentos e cancelamentos.
-                    </p>
-
-                    <div id="notif-status" class="alert alert-secondary py-2 px-3 small mb-3 fw-bold border-0">
-                        <i class="bi bi-hourglass-split"></i> Verificando status...
-                    </div>
-
-                    <button class="btn btn-primary fw-bold mb-2" id="btn-ativar-notif" onclick="ativarNotificacoesNavegador()">
-                        <i class="bi bi-bell"></i> Ativar Notificações
-                    </button>
-
-                    <button class="btn btn-outline-primary fw-bold mb-2" onclick="testarNotificacaoNavegador()">
-                        <i class="bi bi-send"></i> Testar notificação
-                    </button>
-
-                    <button class="btn btn-outline-secondary fw-bold" onclick="verificarTokenAdmin()">
-                        <i class="bi bi-key"></i> Ver meu token FCM
-                    </button>
-                </div>
-            </div>
-
         </div>
     </div>
 
-    <!-- ============ MENU LATERAL ============ -->
-    <div class="overlay-menu" id="overlay-menu" onclick="fecharMenu()"></div>
-    <aside class="menu-drawer" id="menuDrawer">
-        <div class="menu-header">
-            <h3><i class="bi bi-tools"></i> Ferramentas</h3>
-            <button class="menu-fechar" onclick="fecharMenu()">
-                <i class="bi bi-x-lg"></i>
-            </button>
-        </div>
-        <div class="menu-lista">
-            <button class="menu-item" onclick="abrirFerramenta('agendamentos')">
-                <div class="menu-item-icon">📅</div>
-                <div class="menu-item-info">
-                    <strong>Agendamentos</strong>
-                    <small>Ver todos, filtros e histórico</small>
-                </div>
-            </button>
-
-            <button class="menu-item" onclick="abrirFerramenta('servicos')">
-                <div class="menu-item-icon">✂️</div>
-                <div class="menu-item-info">
-                    <strong>Serviços</strong>
-                    <small>Editar preços e nomes</small>
-                </div>
-            </button>
-
-            <button class="menu-item" onclick="abrirFerramenta('bloqueios')">
-                <div class="menu-item-icon">🚫</div>
-                <div class="menu-item-info">
-                    <strong>Folgas & Bloqueios</strong>
-                    <small>Bloquear dias e horários</small>
-                </div>
-            </button>
-
-            <button class="menu-item" onclick="abrirFerramenta('espera')">
-                <div class="menu-item-icon">⏳</div>
-                <div class="menu-item-info">
-                    <strong>Lista de Espera</strong>
-                    <small>Clientes na fila</small>
-                </div>
-                <span class="badge bg-warning text-dark fw-bold" id="menu-badge-espera" style="display:none; font-size: 0.9rem;">0</span>
-            </button>
-
-            <button class="menu-item" onclick="abrirFerramenta('faturamento')">
-                <div class="menu-item-icon">💰</div>
-                <div class="menu-item-info">
-                    <strong>Faturamento</strong>
-                    <small>Relatório de ganhos</small>
-                </div>
-            </button>
-
-            <button class="menu-item" onclick="abrirFerramenta('config')">
-                <div class="menu-item-icon">⚙️</div>
-                <div class="menu-item-info">
-                    <strong>Configurações</strong>
-                    <small>Conta e notificações</small>
-                </div>
-            </button>
-        </div>
-    </aside>
-
-    <!-- ============ MODAL SERVIÇO ============ -->
+    <!-- MODAL SERVIÇO -->
     <div class="modal fade" id="modalServico" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title fw-bold">Editar Serviço</h5>
+                    <h5 class="modal-title">Editar Serviço</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" id="edit-servico-id">
                     <div class="mb-3">
-                        <label class="form-label fw-bold">Nome</label>
+                        <label class="form-label">Nome</label>
                         <input type="text" id="edit-servico-nome" class="form-control">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label fw-bold">Duração (minutos)</label>
+                        <label class="form-label">Duração (minutos)</label>
                         <input type="number" id="edit-servico-duracao" class="form-control">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label fw-bold">Preço (R$)</label>
+                        <label class="form-label">Preço (R$)</label>
                         <input type="number" id="edit-servico-preco" class="form-control" step="0.01">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Cancelar</button>
-                    <button class="btn btn-primary fw-bold" onclick="salvarServico()">Salvar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ============ MODAL AVISAR AMANHÃ ============ -->
-    <div class="modal fade" id="modalAvisarAmanha" tabindex="-1">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title fw-bold"><i class="bi bi-megaphone-fill"></i> Avisar clientes de amanhã</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div id="lista-avisar-amanha"></div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Fechar</button>
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-danger" onclick="salvarServico()">Salvar</button>
                 </div>
             </div>
         </div>
@@ -1256,14 +179,13 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-messaging-compat.js"></script>
-
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    
+    <!-- ============================================ -->
+    <!-- JAVASCRIPT DO PAINEL (CORRIGIDO)             -->
+    <!-- ============================================ -->
     <script>
-    (function() {
-        'use strict';
-
         const firebaseConfig = {
             apiKey: "AIzaSyBg2LvzNxheXfb_78I9BIqn60DqNAoTLgw",
             authDomain: "seu-jorge-barbearia.firebaseapp.com",
@@ -1274,185 +196,33 @@
             appId: "1:941746252187:web:4a3a79dd1d6a8d5967993e"
         };
 
-        const FIREBASE_URL = 'https://seu-jorge-barbearia-default-rtdb.firebaseio.com';
-        const VAPID_KEY = 'BMNlqPRApT_o_nLxDy5H2oWEe0lgD8ttq5i8KYfPEaCm0dAAD6v82GjrKl86t_HbulbLGUNF_23jS4npdEiNuik';
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        const auth = firebase.auth();
 
-        let db = null;
-        let auth = null;
         let servicos = [];
         let agendamentos = [];
-        let listaEspera = {};
-        let filtroAtivo = 'todos';
-        let filtroServicos = 'todos';
-        let filtroFaturamento = 'hoje';
-        let intervaloAgendamentos = null;
-        let intervaloServicos = null;
-        let usuarioLogado = null;
+        let filtroAtual = 'todos';
 
-        try {
-            firebase.initializeApp(firebaseConfig);
-            db = firebase.database();
-            auth = firebase.auth();
-        } catch (e) {
-            console.error('❌ Firebase:', e);
-        }
-
-        function getHojeStr() {
-            const agora = new Date();
-            return `${agora.getFullYear()}-${String(agora.getMonth()+1).padStart(2,'0')}-${String(agora.getDate()).padStart(2,'0')}`;
-        }
-
-        function getAmanhaStr() {
-            const amanha = new Date();
-            amanha.setDate(amanha.getDate() + 1);
-            return `${amanha.getFullYear()}-${String(amanha.getMonth()+1).padStart(2,'0')}-${String(amanha.getDate()).padStart(2,'0')}`;
-        }
-
-        function formatBRL(v) {
-            if (typeof v !== 'number' || isNaN(v)) v = 0;
-            return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-        }
-
-        function getInicioSemana() {
+        // ============================================
+        // UTILITÁRIO: DATA LOCAL (Evita bug de fuso horário UTC)
+        // ============================================
+        function obterDataHojeLocal() {
             const d = new Date();
-            const dia = d.getDay();
-            const diff = dia === 0 ? 6 : dia - 1;
-            d.setDate(d.getDate() - diff);
-            return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-        }
-
-        function getInicioMes() {
-            const d = new Date();
-            return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-01`;
-        }
-
-        function getInicioAno() {
-            const d = new Date();
-            return `${d.getFullYear()}-01-01`;
+            const ano = d.getFullYear();
+            const mes = String(d.getMonth() + 1).padStart(2, '0');
+            const dia = String(d.getDate()).padStart(2, '0');
+            return `${ano}-${mes}-${dia}`;
         }
 
         // ============================================
-        // NAVEGAÇÃO
+        // LOGIN COM FIREBASE AUTH
         // ============================================
-        window.abrirMenu = function() {
-            document.getElementById('menuDrawer').classList.add('open');
-            document.getElementById('overlay-menu').classList.add('active');
-        };
-
-        window.fecharMenu = function() {
-            document.getElementById('menuDrawer').classList.remove('open');
-            document.getElementById('overlay-menu').classList.remove('active');
-        };
-
-        window.abrirFerramenta = function(nome) {
-            fecharMenu();
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            const view = document.getElementById('view-' + nome);
-            if (view) view.classList.add('active');
-            window.scrollTo(0, 0);
-
-            if (nome === 'agendamentos') renderizarAgendamentos();
-            if (nome === 'servicos') renderizarServicos();
-            if (nome === 'espera') renderizarListaEspera();
-            if (nome === 'faturamento') renderizarFaturamento();
-            if (nome === 'bloqueios') renderizarListaCompleta();
-            if (nome === 'config') atualizarStatusNotif();
-        };
-
-        window.voltarDashboard = function() {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.getElementById('view-dashboard').classList.add('active');
-            window.scrollTo(0, 0);
-            renderizarDashboard();
-        };
-
-        // ============================================
-        // DASHBOARD
-        // ============================================
-        function renderizarDashboard() {
-            const hojeStr = getHojeStr();
-            const amanhaStr = getAmanhaStr();
-
-            const agora = new Date();
-            const dataFmt = agora.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
-            const el = document.getElementById('saudacao-data');
-            if (el) el.textContent = dataFmt.charAt(0).toUpperCase() + dataFmt.slice(1);
-
-            const hoje = agendamentos.filter(a => a.data === hojeStr)
-                .sort((a, b) => (a.horario || '').localeCompare(b.horario || ''));
-            const amanha = agendamentos.filter(a => a.data === amanhaStr)
-                .sort((a, b) => (a.horario || '').localeCompare(b.horario || ''));
-
-            const set = (id, val) => { const e = document.getElementById(id); if (e) e.textContent = val; };
-            set('res-hoje', hoje.filter(a => a.status !== 'cancelado').length);
-            set('res-amanha', amanha.filter(a => a.status !== 'cancelado').length);
-            set('badge-hoje', hoje.filter(a => a.status !== 'cancelado').length);
-            set('badge-amanha', amanha.filter(a => a.status !== 'cancelado').length);
-
-            renderizarListaSimples('lista-hoje', hoje, true);
-            renderizarListaSimples('lista-amanha', amanha, false);
-        }
-
-        // LISTA SIMPLES (HOJE E AMANHÃ) - APENAS BOTÕES PAGO E CANCELAR
-        function renderizarListaSimples(containerId, lista, ehHoje) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-
-            if (lista.length === 0) {
-                container.innerHTML = `
-                    <div class="msg-vazia">
-                        <i class="bi bi-calendar-x"></i>
-                        <p class="mb-0 fw-semibold">Nenhum agendamento ${ehHoje ? 'para hoje' : 'para amanhã'}.</p>
-                    </div>`;
-                return;
-            }
-
-            container.innerHTML = lista.map(ag => {
-                const status = ag.status || 'pendente';
-                let classe = 'ag-simples';
-                if (ehHoje) classe += ' hj';
-                if (status === 'concluido') classe += ' concluido';
-                if (status === 'cancelado') classe += ' cancelado';
-                if (status === 'confirmado') classe += ' confirmado';
-
-                let botoesAcao = '';
-                if (status !== 'concluido' && status !== 'cancelado') {
-                    botoesAcao = `
-                        <button class="btn btn-sm btn-success fw-bold px-3" onclick="mudarStatus('${ag.id}', 'concluido')" title="Concluir e cobrar">
-                            <i class="bi bi-check-circle-fill"></i> PAGO
-                        </button>
-                        <button class="btn btn-sm btn-outline-danger fw-bold px-3" onclick="mudarStatus('${ag.id}', 'cancelado')" title="Cancelar">
-                            <i class="bi bi-x-circle-fill"></i> CANCELAR
-                        </button>
-                    `;
-                }
-
-                return `
-                    <div class="${classe}">
-                        <div class="ag-hora">${ag.horario || '--:--'}</div>
-                        <div class="ag-info">
-                            <strong>${ag.clienteNome || 'Sem nome'}</strong>
-                            <small><i class="bi bi-scissors"></i> ${ag.servicoNome || '-'} • <i class="bi bi-telephone"></i> ${ag.clienteTelefone || '-'}</small>
-                        </div>
-                        <div class="ag-acoes">
-                            ${botoesAcao}
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // ============================================
-        // LOGIN
-        // ============================================
-        window.fazerLogin = async function() {
-            const emailInput = document.getElementById('email-input');
-            const senhaInput = document.getElementById('senha-input');
+        window.fazerLogin = function() {
+            const email = document.getElementById('email-input').value.trim();
+            const senha = document.getElementById('senha-input').value;
             const erroEl = document.getElementById('login-erro');
-            const btn = document.getElementById('btn-entrar');
 
-            const email = (emailInput.value || '').trim();
-            const senha = senhaInput.value || '';
             erroEl.textContent = '';
 
             if (!email || !senha) {
@@ -1460,530 +230,219 @@
                 return;
             }
 
-            btn.disabled = true;
-            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Entrando...';
-
-            try {
-                await auth.signInWithEmailAndPassword(email, senha);
-            } catch (err) {
-                console.error('Erro login:', err);
-                btn.disabled = false;
-                btn.innerHTML = '<i class="bi bi-box-arrow-in-right"></i> ENTRAR';
-
-                const mensagens = {
-                    'auth/user-not-found': '❌ Email não encontrado.',
-                    'auth/wrong-password': '❌ Senha incorreta.',
-                    'auth/invalid-email': '❌ Email inválido.',
-                    'auth/too-many-requests': '⚠️ Muitas tentativas. Aguarde 1 minuto.',
-                    'auth/invalid-credential': '❌ Email ou senha incorretos.',
-                    'auth/network-request-failed': '🌐 Sem conexão. Verifique sua internet.'
-                };
-                erroEl.textContent = mensagens[err.code] || '❌ Erro: ' + err.message;
-            }
+            auth.signInWithEmailAndPassword(email, senha)
+                .then(() => {
+                    sessionStorage.setItem('logado', 'true');
+                    window.abrirPainel();
+                })
+                .catch(err => {
+                    console.error('❌ Erro login:', err);
+                    erroEl.textContent = 'Email ou senha incorretos.';
+                });
         };
 
-        window.fazerLogout = async function() {
-            if (!confirm('Deseja sair do painel?')) return;
-            try { await auth.signOut(); location.reload(); }
-            catch (err) { console.error('Erro logout:', err); }
+        window.fazerLogout = function() {
+            auth.signOut().then(() => {
+                sessionStorage.removeItem('logado');
+                location.reload();
+            });
         };
 
-        window.esqueceuSenha = async function() {
-            const emailInput = document.getElementById('email-input');
-            let email = (emailInput.value || '').trim();
-            if (!email && usuarioLogado) email = usuarioLogado.email;
-            if (!email) {
-                email = prompt('Digite o email da conta admin:');
-                if (!email) return;
-            }
-            if (!confirm(`Enviar link de redefinição para:\n\n${email}\n\nConfirma?`)) return;
-            try {
-                await auth.sendPasswordResetEmail(email);
-                alert('✅ Link enviado! Verifique sua caixa de entrada e o spam.');
-            } catch (err) {
-                alert('❌ Erro: ' + err.message);
-            }
-        };
-
-        auth.onAuthStateChanged((user) => {
+        window.abrirPainel = function() {
             const elLogin = document.getElementById('tela-login');
             const elPainel = document.getElementById('tela-painel');
 
+            if (!elLogin || !elPainel) return;
+
+            elLogin.style.setProperty('display', 'none', 'important');
+            elPainel.style.display = 'block';
+
+            carregarTudo();
+        };
+
+        // Verificar se já está logado
+        auth.onAuthStateChanged(user => {
             if (user) {
-                usuarioLogado = user;
-                elLogin.style.setProperty('display', 'none', 'important');
-                elPainel.style.display = 'block';
-                const configEmail = document.getElementById('config-email');
-                if (configEmail) configEmail.textContent = user.email;
-                carregarTudo();
-                setTimeout(atualizarStatusNotif, 800);
-            } else {
-                usuarioLogado = null;
-                elLogin.style.display = 'flex';
-                elPainel.style.display = 'none';
-                if (intervaloAgendamentos) clearInterval(intervaloAgendamentos);
-                if (intervaloServicos) clearInterval(intervaloServicos);
+                sessionStorage.setItem('logado', 'true');
+                window.abrirPainel();
             }
         });
 
         // ============================================
-        // NOTIFICAÇÕES — STATUS + TOKEN + TESTE
+        // CARREGAR TUDO
         // ============================================
-        function atualizarStatusNotif() {
-            const el = document.getElementById('notif-status');
-            if (!el) return;
-
-            if (!('Notification' in window)) {
-                el.className = 'alert alert-danger py-2 px-3 small mb-3 fw-bold border-0';
-                el.innerHTML = '<i class="bi bi-x-circle"></i> Este navegador não suporta notificações.';
-                return;
-            }
-
-            const p = Notification.permission;
-            const btn = document.getElementById('btn-ativar-notif');
-
-            if (p === 'granted') {
-                el.className = 'alert alert-success py-2 px-3 small mb-3 fw-bold border-0';
-                el.innerHTML = '<i class="bi bi-check-circle"></i> Notificações ativadas e funcionando!';
-                if (btn) btn.style.display = 'none';
-            } else if (p === 'denied') {
-                el.className = 'alert alert-danger py-2 px-3 small mb-3 fw-bold border-0';
-                el.innerHTML = '<i class="bi bi-x-circle"></i> Permissão negada. Ative manualmente nas configurações do navegador.';
-                if (btn) btn.style.display = 'inline-block';
-            } else {
-                el.className = 'alert alert-warning py-2 px-3 small mb-3 fw-bold border-0 text-dark';
-                el.innerHTML = '<i class="bi bi-exclamation-triangle"></i> Permissão pendente. Clique em "Ativar Notificações".';
-                if (btn) btn.style.display = 'inline-block';
-            }
-        }
-
-        window.verificarTokenAdmin = async function() {
-            try {
-                const reg = await navigator.serviceWorker.register('firebase-messaging-sw.js', {
-                    scope: './'
-                });
-                await navigator.serviceWorker.ready;
-
-                const messaging = firebase.messaging();
-                const token = await messaging.getToken({
-                    vapidKey: VAPID_KEY,
-                    serviceWorkerRegistration: reg
-                });
-
-                if (token) {
-                    await firebase.database().ref('tokens/admin/' + token).set({
-                        token,
-                        criadoEm: Date.now(),
-                        userAgent: navigator.userAgent,
-                        email: usuarioLogado ? usuarioLogado.email : null
-                    });
-                    alert('✅ Token do admin salvo!\n\nComeça com:\n' + token.substring(0, 40) + '...');
-                } else {
-                    alert('⚠️ Nenhum token. Ative as notificações primeiro.');
-                }
-            } catch (err) {
-                console.error(err);
-                alert('❌ Erro ao obter token:\n\n' + err.message);
-            }
-        };
-
-        window.ativarNotificacoesNavegador = async function() {
-            if (!('Notification' in window)) {
-                alert('❌ Navegador não suporta.');
-                return;
-            }
-            try {
-                const permission = await Notification.requestPermission();
-                if (permission === 'granted') {
-                    mostrarAlertaAdmin('✅ Notificações ativadas!', 'success');
-
-                    const reg = await navigator.serviceWorker.register('firebase-messaging-sw.js', {
-                        scope: './'
-                    });
-                    await navigator.serviceWorker.ready;
-
-                    try {
-                        await reg.showNotification('🔔 Notificações ativadas!', {
-                            body: 'Você vai receber avisos dos agendamentos.',
-                            icon: 'seujorge.png',
-                            badge: 'seujorge.png'
-                        });
-                    } catch (e) {
-                        console.warn('Erro ao mostrar boas-vindas:', e);
-                    }
-
-                    try {
-                        const messaging = firebase.messaging();
-                        const token = await messaging.getToken({
-                            vapidKey: VAPID_KEY,
-                            serviceWorkerRegistration: reg
-                        });
-                        if (token) {
-                            await firebase.database().ref('tokens/admin/' + token).set({
-                                token,
-                                criadoEm: Date.now(),
-                                userAgent: navigator.userAgent,
-                                email: usuarioLogado ? usuarioLogado.email : null
-                            });
-                            console.log('✅ Token admin salvo:', token.substring(0, 30) + '...');
-                        }
-                    } catch (e) {
-                        console.warn('Token FCM falhou (não crítico):', e);
-                    }
-
-                    atualizarStatusNotif();
-                } else {
-                    alert('❌ Permissão negada.');
-                    atualizarStatusNotif();
-                }
-            } catch (err) {
-                console.error('Erro ao ativar notificações:', err);
-                alert('❌ Erro ao ativar:\n\n' + err.message);
-            }
-        };
-
-        window.testarNotificacaoNavegador = async function() {
-            if (Notification.permission !== 'granted') {
-                alert('⚠️ Ative as notificações primeiro.');
-                return;
-            }
-            try {
-                const reg = await navigator.serviceWorker.ready;
-                await reg.showNotification('🔔 Teste', {
-                    body: 'Tudo funcionando! Você vai receber avisos por aqui.',
-                    icon: 'seujorge.png',
-                    badge: 'seujorge.png',
-                    tag: 'teste-' + Date.now()
-                });
-            } catch (err) {
-                console.error('Erro ao testar:', err);
-                new Notification('🔔 Teste', {
-                    body: 'Tudo funcionando!',
-                    icon: 'seujorge.png'
-                });
-            }
-        };
-
-        // ============================================
-        // CARREGAR DADOS
-        // ============================================
-        async function carregarServicosREST() {
-            try {
-                const r = await fetch(FIREBASE_URL + '/config/servicos.json');
-                if (!r.ok) return;
-                const dados = await r.json();
-                servicos = [];
-                if (dados) Object.keys(dados).forEach(id => servicos.push({ id, ...dados[id] }));
-                atualizarContadoresServicos();
-                renderizarServicos();
-            } catch (err) { console.error('Erro serviços:', err); }
-        }
-
-        async function carregarAgendamentosREST() {
-            try {
-                const r = await fetch(FIREBASE_URL + '/agendamentos.json');
-                if (!r.ok) return;
-                const dados = await r.json();
-                agendamentos = [];
-                if (dados) Object.keys(dados).forEach(id => agendamentos.push({ id, ...dados[id] }));
-                atualizarContadores();
-                renderizarAgendamentos();
-                renderizarFaturamento();
-                renderizarDashboard();
-            } catch (err) { console.error('Erro agendamentos:', err); }
-        }
-
         function carregarTudo() {
-            if (!db || !usuarioLogado) return;
-
-            carregarServicosREST();
-            if (intervaloServicos) clearInterval(intervaloServicos);
-            intervaloServicos = setInterval(carregarServicosREST, 15000);
-
-            carregarAgendamentosREST();
-            if (intervaloAgendamentos) clearInterval(intervaloAgendamentos);
-            intervaloAgendamentos = setInterval(carregarAgendamentosREST, 10000);
-
-            db.ref('bloqueios').on('value', () => renderizarListaCompleta());
-            db.ref('bloqueios-dia').on('value', () => renderizarListaCompleta());
-            db.ref('bloqueios-semana').on('value', snap => carregarDiasSemana(snap.val() || {}));
-
-            db.ref('lista-espera').on('value', snap => {
-                listaEspera = snap.val() || {};
-                renderizarListaEspera();
-                renderizarDashboard();
-                atualizarBadgeEsperaMenu();
+            db.ref('config/servicos').on('value', snap => {
+                servicos = [];
+                snap.forEach(c => servicos.push({ id: c.key, ...c.val() }));
+                renderizarServicos();
             });
 
-            document.querySelectorAll('[data-filtro]').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('[data-filtro]').forEach(b => b.classList.remove('ativo'));
-                    btn.classList.add('ativo');
-                    filtroAtivo = btn.dataset.filtro;
-                    renderizarAgendamentos();
+            db.ref('agendamentos').on('value', snap => {
+                agendamentos = [];
+                snap.forEach(c => {
+                    agendamentos.push({ id: c.key, ...c.val() });
                 });
+                renderizarAgendamentos();
             });
 
-            document.querySelectorAll('[data-filtro-serv]').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('[data-filtro-serv]').forEach(b => b.classList.remove('ativo'));
-                    btn.classList.add('ativo');
-                    filtroServicos = btn.dataset.filtroServ;
-                    renderizarServicos();
-                });
-            });
-
-            document.querySelectorAll('[data-filtro-fat]').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('[data-filtro-fat]').forEach(b => b.classList.remove('ativo'));
-                    btn.classList.add('ativo');
-                    filtroFaturamento = btn.dataset.filtroFat;
-                    renderizarFaturamento();
-                });
+            db.ref('bloqueios').on('value', snap => {
+                renderizarBloqueios(snap.val() || {});
             });
         }
 
-        function atualizarBadgeEsperaMenu() {
-            const badge = document.getElementById('menu-badge-espera');
-            let total = 0;
-            Object.keys(listaEspera).forEach(data => {
-                const itens = listaEspera[data];
-                if (!itens) return;
-                Object.keys(itens).forEach(id => {
-                    if (itens[id].status !== 'convertido') total++;
-                });
-            });
-            if (badge) {
-                badge.textContent = total;
-                badge.style.display = total > 0 ? 'inline-block' : 'none';
-            }
-        }
-
-        window.recarregarAgendamentos = function() {
-            carregarAgendamentosREST().then(() => mostrarAlertaAdmin(`🔄 ${agendamentos.length} agendamento(s)`, 'info'));
-        };
-        window.recarregarServicos = function() {
-            carregarServicosREST().then(() => mostrarAlertaAdmin(`🔄 ${servicos.length} serviço(s)`, 'info'));
+        // ============================================
+        // FILTROS
+        // ============================================
+        window.filtrarAgendamentos = function(filtro, btn) {
+            filtroAtual = filtro;
+            document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('ativo'));
+            if (btn) btn.classList.add('ativo');
+            renderizarAgendamentos();
         };
 
         // ============================================
-        // CONTADORES
-        // ============================================
-        function atualizarContadores() {
-            const hojeStr = getHojeStr();
-            const set = (id, val) => { const e = document.getElementById(id); if (e) e.textContent = val; };
-            set('cnt-todos', agendamentos.length);
-            set('cnt-hoje', agendamentos.filter(a => a.data === hojeStr).length);
-            set('cnt-proximos', agendamentos.filter(a => a.data > hojeStr).length);
-            set('cnt-passados', agendamentos.filter(a => a.data < hojeStr).length);
-            set('cnt-pendentes', agendamentos.filter(a => (a.status || 'pendente') === 'pendente').length);
-            set('cnt-confirmados', agendamentos.filter(a => a.status === 'confirmado').length);
-            set('cnt-concluidos', agendamentos.filter(a => a.status === 'concluido').length);
-            set('cnt-cancelados', agendamentos.filter(a => a.status === 'cancelado').length);
-        }
-
-        function atualizarContadoresServicos() {
-            const total = servicos.length;
-            const vazios = servicos.filter(s => s.preco === 0 || !s.nome || s.nome === 'NOVO SERVIÇO').length;
-            const set = (id, val) => { const e = document.getElementById(id); if (e) e.textContent = val; };
-            set('cnt-serv-todos', total);
-            set('cnt-serv-ok', total - vazios);
-            set('cnt-serv-vazios', vazios);
-        }
-
-        // ============================================
-        // AGENDAMENTOS (view completa)
+        // AGENDAMENTOS
         // ============================================
         function renderizarAgendamentos() {
             const container = document.getElementById('lista-agendamentos');
             if (!container) return;
 
-            const hojeStr = getHojeStr();
-            let lista = [...agendamentos];
+            const hojeStr = obterDataHojeLocal(); // Corrigido para fuso local
 
-            if (filtroAtivo === 'hoje') lista = lista.filter(a => a.data === hojeStr);
-            else if (filtroAtivo === 'proximos') lista = lista.filter(a => a.data > hojeStr);
-            else if (filtroAtivo === 'passados') lista = lista.filter(a => a.data < hojeStr);
-            else if (filtroAtivo === 'pendentes') lista = lista.filter(a => (a.status || 'pendente') === 'pendente');
-            else if (filtroAtivo === 'confirmados') lista = lista.filter(a => a.status === 'confirmado');
-            else if (filtroAtivo === 'concluidos') lista = lista.filter(a => a.status === 'concluido');
-            else if (filtroAtivo === 'cancelados') lista = lista.filter(a => a.status === 'cancelado');
+            let listaFiltrada = [];
+            let titulo = '';
 
-            lista.sort((a, b) => {
-                const dA = (a.data || '') + (a.horario || '');
-                const dB = (b.data || '') + (b.horario || '');
-                if (filtroAtivo === 'passados') return dB.localeCompare(dA);
-                return dA.localeCompare(dB);
-            });
+            switch (filtroAtual) {
+                case 'hoje':
+                    listaFiltrada = agendamentos.filter(a => a.data === hojeStr);
+                    titulo = '📅 HOJE';
+                    break;
+                case 'proximos':
+                    listaFiltrada = agendamentos.filter(a => a.data > hojeStr);
+                    titulo = '⏳ PRÓXIMOS';
+                    break;
+                case 'faltas':
+                    listaFiltrada = agendamentos.filter(a => 
+                        a.data < hojeStr && a.status === 'pendente'
+                    );
+                    titulo = '⚠️ FALTAS (não atendidos)';
+                    break;
+                case 'todos':
+                default:
+                    listaFiltrada = agendamentos.slice();
+                    titulo = '📋 TODOS';
+                    break;
+            }
 
-            container.innerHTML = '';
-            if (lista.length === 0) {
-                container.innerHTML = `<div class="agendamento-vazio"><i class="bi bi-calendar-x"></i><p class="mb-0 fw-semibold">Nenhum agendamento.</p></div>`;
+            listaFiltrada.sort((a, b) => 
+                ((a.data || '') + (a.horario || '')).localeCompare((b.data || '') + (b.horario || ''))
+            );
+
+            atualizarContadores(hojeStr);
+
+            if (listaFiltrada.length === 0) {
+                container.innerHTML = `<p class="text-muted">Nenhum agendamento em "${titulo}".</p>`;
                 return;
             }
 
-            const cont = document.createElement('div');
-            cont.className = 'mb-3';
-            cont.innerHTML = `<span class="badge bg-secondary" style="font-size: 0.9rem;">${lista.length} agendamento${lista.length > 1 ? 's' : ''}</span>`;
-            container.appendChild(cont);
+            let html = `<h5 class="text-white mb-3">${titulo} (${listaFiltrada.length})</h5>`;
 
-            lista.forEach(ag => {
-                const wrapper = document.createElement('div');
-                wrapper.innerHTML = montarItemAgendamento(ag, hojeStr);
-                while (wrapper.firstChild) container.appendChild(wrapper.firstChild);
+            listaFiltrada.forEach(ag => {
+                const ehHoje = ag.data === hojeStr;
+                const ehFalta = ag.data < hojeStr && ag.status === 'pendente';
+                html += montarCard(ag, ehHoje, ehFalta);
             });
+
+            container.innerHTML = html;
         }
 
-        function montarItemAgendamento(ag, hojeStr) {
+        function atualizarContadores(hojeStr) {
+            const totalHoje = agendamentos.filter(a => a.data === hojeStr).length;
+            const totalProximos = agendamentos.filter(a => a.data > hojeStr).length;
+            const totalFaltas = agendamentos.filter(a => a.data < hojeStr && a.status === 'pendente').length;
+            const totalTodos = agendamentos.length;
+
+            const btnHoje = document.querySelector('.filtro-btn[data-filtro="hoje"]');
+            const btnProximos = document.querySelector('.filtro-btn[data-filtro="proximos"]');
+            const btnFaltas = document.querySelector('.filtro-btn[data-filtro="faltas"]');
+            const btnTodos = document.querySelector('.filtro-btn[data-filtro="todos"]');
+
+            if (btnHoje) btnHoje.innerHTML = `<i class="bi bi-calendar-day"></i> HOJE <span class="badge-filtro">${totalHoje}</span>`;
+            if (btnProximos) btnProximos.innerHTML = `<i class="bi bi-calendar-week"></i> PRÓXIMOS <span class="badge-filtro">${totalProximos}</span>`;
+            if (btnFaltas) btnFaltas.innerHTML = `<i class="bi bi-exclamation-triangle"></i> FALTAS <span class="badge-filtro">${totalFaltas}</span>`;
+            if (btnTodos) btnTodos.innerHTML = `<i class="bi bi-list-ul"></i> TODOS <span class="badge-filtro">${totalTodos}</span>`;
+        }
+
+        function montarCard(ag, ehHoje, ehFalta) {
             const dataFmt = new Date(ag.data + 'T00:00:00').toLocaleDateString('pt-BR');
-            const status = ag.status || 'pendente';
-            const ehHoje = ag.data === hojeStr;
-            const ehPassado = ag.data < hojeStr;
-
-            let classe = 'agendamento-item';
-            if (status === 'concluido') classe += ' status-concluido';
-            else if (status === 'cancelado') classe += ' status-cancelado';
-            else if (status === 'confirmado') classe += ' status-confirmado';
-            else if (ehHoje) classe += ' status-hoje';
-            else if (ehPassado) classe += ' status-passado';
-
+            const classe = ag.status === 'concluido' ? 'concluido' 
+                         : (ag.status === 'cancelado' ? 'cancelado' 
+                         : (ehFalta ? 'falta' : ''));
             const tel = (ag.clienteTelefone || '').replace(/\D/g, '');
             const preco = typeof ag.servicoPreco === 'number' ? ag.servicoPreco.toFixed(2).replace('.', ',') : '-';
-            const badgeClass = status === 'concluido' ? 'badge-concluido'
-                             : status === 'cancelado' ? 'badge-cancelado'
-                             : status === 'confirmado' ? 'badge-confirmado'
-                             : 'badge-pendente';
-
-            let botoes = '';
-            if (status === 'pendente') {
-                botoes = `
-                    <button class="btn btn-sm btn-success fw-bold" onclick="mudarStatus('${ag.id}', 'concluido')" title="Concluir e cobrar">
-                        <i class="bi bi-check-circle-fill"></i> PAGO
-                    </button>
-                    <button class="btn btn-sm btn-outline-danger fw-bold" onclick="mudarStatus('${ag.id}', 'cancelado')" title="Cancelar">
-                        <i class="bi bi-x-circle-fill"></i> CANCELAR
-                    </button>
-                `;
-            } else if (status === 'confirmado') {
-                botoes = `
-                    <button class="btn btn-sm btn-success fw-bold" onclick="mudarStatus('${ag.id}', 'concluido')" title="Concluir e cobrar">
-                        <i class="bi bi-check-circle-fill"></i> PAGO
-                    </button>
-                    <button class="btn btn-sm btn-outline-danger fw-bold" onclick="mudarStatus('${ag.id}', 'cancelado')" title="Cancelar">
-                        <i class="bi bi-x-circle-fill"></i> CANCELAR
-                    </button>
-                `;
-            }
+            const badge = ag.status === 'concluido' ? 'success' 
+                        : ag.status === 'cancelado' ? 'secondary' 
+                        : ag.status === 'pago' ? 'info'
+                        : ehFalta ? 'danger' 
+                        : 'warning';
 
             return `
-                <div class="${classe}">
-                    <div class="agendamento-info">
-                        <div class="agendamento-data-hora">
-                            <span class="hora">${ag.horario || '--:--'}</span>
-                            <span class="data"><i class="bi bi-calendar"></i> ${dataFmt}${ehHoje ? ' <span class="badge bg-warning text-dark ms-1">HOJE</span>' : ''}</span>
+                <div class="agendamento-card ${classe}" ${ehHoje ? 'style="border-left-color:#ffc107;"' : ''}>
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="mb-1"><strong>${ag.horario || '--:--'}</strong> — ${ag.clienteNome || 'Sem nome'}</h6>
+                            <p class="mb-1 small">📅 ${dataFmt}</p>
+                            <p class="mb-1 small">💈 ${ag.servicoNome || '-'} — R$ ${preco}</p>
+                            <p class="mb-1 small">📞 ${ag.clienteTelefone || '-'}</p>
+                            ${ag.observacoes ? `<p class="mb-0 small text-muted">📝 ${ag.observacoes}</p>` : ''}
+                            <span class="badge bg-${badge} mt-1">${ag.status || 'pendente'}</span>
+                            ${ehFalta ? '<span class="badge bg-danger ms-1">⚠️ NÃO ATENDIDO</span>' : ''}
                         </div>
-                        <div class="agendamento-detalhes">
-                            <span><i class="bi bi-person"></i> <strong>${ag.clienteNome || 'Sem nome'}</strong></span>
-                            <span><i class="bi bi-scissors"></i> ${ag.servicoNome || '-'}</span>
-                            <span><i class="bi bi-cash"></i> R$ ${preco}</span>
-                            <span><i class="bi bi-telephone"></i> ${ag.clienteTelefone || '-'}</span>
-                            ${ag.observacoes ? `<span><i class="bi bi-card-text"></i> ${ag.observacoes}</span>` : ''}
+                        <div class="d-flex gap-1 flex-wrap justify-content-end">
+                            <button class="btn btn-sm btn-warning" onclick="lembrarCliente('${ag.id}')" title="Lembrar">
+                                <i class="bi bi-bell"></i>
+                            </button>
+                            <a href="https://wa.me/55${tel}" target="_blank" class="btn btn-sm btn-success" title="WhatsApp">
+                                <i class="bi bi-whatsapp"></i>
+                            </a>
+                            <button class="btn btn-sm btn-primary" onclick="mudarStatus('${ag.id}', 'concluido')" title="Concluir">
+                                <i class="bi bi-check"></i>
+                            </button>
+                            <button class="btn btn-sm btn-info" onclick="mudarStatus('${ag.id}', 'pago')" title="Pago">
+                                <i class="bi bi-cash"></i>
+                            </button>
+                            <button class="btn btn-sm btn-secondary" onclick="mudarStatus('${ag.id}', 'cancelado')" title="Cancelar">
+                                <i class="bi bi-x"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="excluirAgendamento('${ag.id}')" title="Excluir">
+                                <i class="bi bi-trash"></i>
+                            </button>
                         </div>
-                        <div class="mt-2"><span class="badge-status ${badgeClass}">${status}</span></div>
                     </div>
-                    <div class="agendamento-actions">
-                        <a href="https://wa.me/55${tel}" target="_blank" class="btn btn-sm btn-outline-success" title="WhatsApp">
-                            <i class="bi bi-whatsapp"></i>
-                        </a>
-                        ${botoes}
-                        <button class="btn btn-sm btn-outline-danger" onclick="excluirAgendamento('${ag.id}')" title="Excluir">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </div>
-                </div>`;
+                </div>
+            `;
         }
 
-        window.lembrarCliente = async function(id) {
-            const ag = agendamentos.find(a => a.id === id);
-            if (!ag) return;
-            const primeiro = (ag.clienteNome || '').split(' ')[0] || 'Cliente';
-            const dataFmt = new Date(ag.data + 'T00:00:00').toLocaleDateString('pt-BR');
-
-            if ('Notification' in window && Notification.permission === 'granted') {
-                try {
-                    const reg = await navigator.serviceWorker.ready;
-                    await reg.showNotification('🔔 Lembrete', {
-                        body: `${primeiro} — ${dataFmt} às ${ag.horario}`,
-                        icon: 'seujorge.png',
-                        badge: 'seujorge.png',
-                        tag: 'lembrete-' + id
-                    });
-                    mostrarAlertaAdmin(`🔔 ${primeiro} às ${ag.horario}`, 'info');
-                } catch (err) {
-                    console.error('Erro notificação:', err);
-                    alert(`🔔 ${primeiro} — ${dataFmt} às ${ag.horario}`);
-                }
-            } else {
-                alert(`🔔 ${primeiro} — ${dataFmt} às ${ag.horario}`);
-            }
-        };
-
         window.mudarStatus = function(id, status) {
-            const mensagens = {
-                'confirmado': { txt: '📌 Confirmado!', tipo: 'info' },
-                'concluido':  { txt: '✅ Concluído!', tipo: 'success' },
-                'cancelado':  { txt: '🚫 Cancelado!', tipo: 'warning' }
-            };
-            const m = mensagens[status] || { txt: 'Atualizado!', tipo: 'info' };
-
-            db.ref('agendamentos/' + id + '/status').set(status)
-                .then(() => {
-                    mostrarAlertaAdmin(m.txt, m.tipo);
-                    setTimeout(carregarAgendamentosREST, 500);
-                })
-                .catch(err => {
-                    console.error('Erro ao mudar status:', err);
-                    if (err.code === 'PERMISSION_DENIED' || (err.message && err.message.includes('permission'))) {
-                        alert('❌ Sem permissão!\n\nEste agendamento pode ser antigo, ou as regras do Firebase não estão publicadas corretamente.');
-                    } else {
-                        alert('❌ Erro: ' + (err.message || err.code));
-                    }
-                });
+            db.ref('agendamentos/' + id + '/status').set(status);
         };
 
         window.excluirAgendamento = function(id) {
-            if (!confirm('Excluir permanentemente?')) return;
-            db.ref('agendamentos/' + id).remove()
-                .then(() => {
-                    mostrarAlertaAdmin('🗑️ Agendamento excluído!', 'warning');
-                    setTimeout(carregarAgendamentosREST, 500);
-                })
-                .catch(err => {
-                    console.error('Erro ao excluir:', err);
-                    if (err.code === 'PERMISSION_DENIED' || (err.message && err.message.includes('permission'))) {
-                        alert('❌ Sem permissão para excluir!\n\nEste agendamento pode ser antigo. Confirme se as regras do Firebase foram publicadas.');
-                    } else {
-                        alert('❌ Erro ao excluir: ' + (err.message || err.code));
-                    }
-                });
+            if (confirm('Excluir este agendamento?')) {
+                db.ref('agendamentos/' + id).remove();
+            }
         };
 
-        window.limparAgendamentosAntigos = function() {
-            const hojeStr = getHojeStr();
-            const paraRemover = agendamentos.filter(a => a.data < hojeStr && (a.status === 'concluido' || a.status === 'cancelado'));
-            if (paraRemover.length === 0) { mostrarAlertaAdmin('✅ Nada para limpar.', 'success'); return; }
-            if (!confirm(`🧹 Remover ${paraRemover.length} agendamento(s)?`)) return;
-            const updates = {};
-            paraRemover.forEach(a => { updates['agendamentos/' + a.id] = null; });
-            db.ref().update(updates)
-                .then(() => {
-                    mostrarAlertaAdmin(`🧹 ${paraRemover.length} removido(s)!`, 'success');
-                    setTimeout(carregarAgendamentosREST, 500);
-                })
-                .catch(err => {
-                    console.error('Erro ao limpar:', err);
-                    alert('❌ Erro ao limpar: ' + (err.message || err.code));
-                });
+        window.lembrarCliente = function(id) {
+            const ag = agendamentos.find(a => a.id === id);
+            if (!ag) return;
+            const tel = (ag.clienteTelefone || '').replace(/\D/g, '');
+            if (!tel) { alert('Sem telefone cadastrado.'); return; }
+            const primeiro = (ag.clienteNome || '').split(' ')[0] || 'tudo bem';
+            const dataFmt = new Date(ag.data + 'T00:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
+            const msg = `Fala ${primeiro}! Passando pra confirmar seu horário: ${dataFmt} às ${ag.horario}, serviço ${ag.servicoNome}. Tá confirmado? 💈`;
+            window.open(`https://wa.me/55${tel}?text=${encodeURIComponent(msg)}`, '_blank');
         };
 
         // ============================================
@@ -1992,49 +451,27 @@
         function renderizarServicos() {
             const container = document.getElementById('lista-servicos');
             if (!container) return;
-
-            let lista = [...servicos];
-            if (filtroServicos === 'ok') lista = lista.filter(s => !(s.preco === 0 || !s.nome || s.nome === 'NOVO SERVIÇO'));
-            else if (filtroServicos === 'vazios') lista = lista.filter(s => s.preco === 0 || !s.nome || s.nome === 'NOVO SERVIÇO');
-
-            lista.sort((a, b) => (a.nome || '').localeCompare(b.nome || ''));
-            container.innerHTML = '';
-
-            if (lista.length === 0) {
-                container.innerHTML = `<div class="agendamento-vazio"><i class="bi bi-inbox"></i><p class="mb-0 fw-semibold">Nenhum serviço.</p></div>`;
-                return;
-            }
-
-            lista.forEach(s => {
-                const preco = typeof s.preco === 'number' ? s.preco.toFixed(2).replace('.', ',') : '0,00';
-                const vazio = (s.preco === 0 || !s.nome || s.nome === 'NOVO SERVIÇO');
-                const inativo = s.ativo === false;
-                let classe = 'servico-item';
-                if (vazio) classe += ' servico-vazio';
-                if (inativo) classe += ' servico-inativo';
-                const badgeHtml = vazio ? '<span class="badge bg-warning text-dark ms-2">não configurado</span>'
-                    : (inativo ? '<span class="badge bg-secondary ms-2">inativo</span>' : '<span class="badge bg-success ms-2">ativo</span>');
-
-                const wrapper = document.createElement('div');
-                wrapper.innerHTML = `
-                    <div class="${classe}">
-                        <div class="servico-info">
-                            <div class="servico-icone-lista"><i class="bi ${s.icone || 'bi-scissors'}"></i></div>
-                            <div class="servico-texto">
-                                <div class="servico-nome-lista">${s.nome || 'SEM NOME'}${badgeHtml}</div>
-                                <div class="servico-detalhes-lista">
-                                    <span><i class="bi bi-clock"></i> ${s.duracao || 30} min</span>
-                                    <span class="servico-preco-lista">R$ ${preco}</span>
-                                </div>
-                            </div>
+            let html = '';
+            servicos.forEach(s => {
+                const preco = typeof s.preco === 'number' ? s.preco.toFixed(2).replace('.', ',') : '-';
+                html += `
+                    <div class="servico-admin-card">
+                        <div>
+                            <h6 class="mb-0">${s.nome || '-'}</h6>
+                            <small>${s.duracao || '-'} min - R$ ${preco}</small>
                         </div>
-                        <div class="servico-acoes">
-                            <button class="btn btn-sm btn-primary" onclick="editarServico('${s.id}')"><i class="bi bi-pencil"></i> Editar</button>
-                            <button class="btn btn-sm btn-outline-danger" onclick="excluirServico('${s.id}')"><i class="bi bi-trash"></i></button>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-sm btn-primary" onclick="editarServico('${s.id}')">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="excluirServico('${s.id}')">
+                                <i class="bi bi-trash"></i>
+                            </button>
                         </div>
-                    </div>`;
-                while (wrapper.firstChild) container.appendChild(wrapper.firstChild);
+                    </div>
+                `;
             });
+            container.innerHTML = html;
         }
 
         window.editarServico = function(id) {
@@ -2044,392 +481,103 @@
             document.getElementById('edit-servico-nome').value = s.nome || '';
             document.getElementById('edit-servico-duracao').value = s.duracao || 30;
             document.getElementById('edit-servico-preco').value = s.preco || 0;
-            document.querySelector('#modalServico .modal-title').textContent = 'Editar Serviço';
             new bootstrap.Modal(document.getElementById('modalServico')).show();
         };
 
         window.salvarServico = function() {
             const id = document.getElementById('edit-servico-id').value;
-            const nome = document.getElementById('edit-servico-nome').value.trim().toUpperCase();
-            const duracao = parseInt(document.getElementById('edit-servico-duracao').value) || 30;
-            const preco = parseFloat(document.getElementById('edit-servico-preco').value) || 0;
-            if (!nome) { alert('⚠️ Digite um nome!'); return; }
-            if (preco <= 0 && !confirm('⚠️ Preço zerado. Salvar?')) return;
-
-            const dados = { nome, duracao, preco, icone: 'bi-scissors', ativo: true };
-            if (id) {
-                db.ref('config/servicos/' + id).update(dados).then(() => {
-                    bootstrap.Modal.getInstance(document.getElementById('modalServico')).hide();
-                    mostrarAlertaAdmin('✅ Serviço atualizado!', 'success');
-                    setTimeout(carregarServicosREST, 500);
-                }).catch(err => {
-                    console.error('Erro ao salvar serviço:', err);
-                    alert('❌ Erro ao salvar: ' + (err.message || err.code));
-                });
-            } else {
-                const novoId = 's' + Date.now();
-                db.ref('config/servicos/' + novoId).set(dados).then(() => {
-                    bootstrap.Modal.getInstance(document.getElementById('modalServico')).hide();
-                    mostrarAlertaAdmin('✅ Serviço criado!', 'success');
-                    setTimeout(carregarServicosREST, 500);
-                }).catch(err => {
-                    console.error('Erro ao criar serviço:', err);
-                    alert('❌ Erro ao criar: ' + (err.message || err.code));
-                });
-            }
+            const dados = {
+                nome: document.getElementById('edit-servico-nome').value.toUpperCase(),
+                duracao: parseInt(document.getElementById('edit-servico-duracao').value) || 30,
+                preco: parseFloat(document.getElementById('edit-servico-preco').value) || 0,
+                icone: 'bi-scissors',
+                ativo: true
+            };
+            db.ref('config/servicos/' + id).update(dados);
+            bootstrap.Modal.getInstance(document.getElementById('modalServico')).hide();
         };
 
         window.adicionarServico = function() {
-            document.getElementById('edit-servico-id').value = '';
-            document.getElementById('edit-servico-nome').value = '';
-            document.getElementById('edit-servico-duracao').value = 30;
-            document.getElementById('edit-servico-preco').value = '';
-            document.querySelector('#modalServico .modal-title').textContent = 'Novo Serviço';
-            new bootstrap.Modal(document.getElementById('modalServico')).show();
+            const id = 's' + Date.now();
+            db.ref('config/servicos/' + id).set({
+                nome: 'NOVO SERVIÇO', duracao: 30, preco: 0,
+                icone: 'bi-scissors', ativo: true
+            });
         };
 
         window.excluirServico = function(id) {
-            const s = servicos.find(sv => sv.id === id);
-            if (!s) return;
-            if (confirm(`🗑️ Excluir "${s.nome}"?`)) {
-                db.ref('config/servicos/' + id).remove().then(() => {
-                    mostrarAlertaAdmin('🗑️ Removido.', 'warning');
-                    setTimeout(carregarServicosREST, 500);
-                }).catch(err => {
-                    console.error('Erro ao excluir serviço:', err);
-                    alert('❌ Erro ao excluir: ' + (err.message || err.code));
-                });
-            }
-        };
-
-        window.limparServicosVazios = function() {
-            const vazios = servicos.filter(s => s.preco === 0 || !s.nome || s.nome === 'NOVO SERVIÇO');
-            if (vazios.length === 0) { mostrarAlertaAdmin('✅ Nada para limpar.', 'success'); return; }
-            if (!confirm(`🧹 Remover ${vazios.length} serviço(s) vazio(s)?`)) return;
-            const updates = {};
-            vazios.forEach(v => { updates['config/servicos/' + v.id] = null; });
-            db.ref().update(updates).then(() => {
-                mostrarAlertaAdmin(`🧹 ${vazios.length} removido(s)!`, 'success');
-                setTimeout(carregarServicosREST, 500);
-            }).catch(err => {
-                console.error('Erro ao limpar:', err);
-                alert('❌ Erro: ' + (err.message || err.code));
-            });
+            if (confirm('Excluir este serviço?')) db.ref('config/servicos/' + id).remove();
         };
 
         // ============================================
         // BLOQUEIOS
         // ============================================
-        window.bloquearDiaInteiro = function() {
-            const data = document.getElementById('bloqueio-dia-data').value;
-            const motivo = document.getElementById('bloqueio-dia-motivo').value.trim() || 'Folga';
-            if (!data) { alert('Selecione uma data!'); return; }
-            db.ref('bloqueios-dia/' + data).set({ motivo, criadoEm: Date.now() }).then(() => {
-                alert('✅ Dia bloqueado!');
-                document.getElementById('bloqueio-dia-data').value = '';
-                document.getElementById('bloqueio-dia-motivo').value = '';
-            }).catch(err => {
-                console.error('Erro:', err);
-                alert('❌ Erro: ' + (err.message || err.code));
+        window.bloquearHorario = function() {
+            const data = document.getElementById('bloqueio-data').value;
+            const hora = document.getElementById('bloqueio-hora').value;
+            if (!data || !hora) { alert('Preencha data e hora!'); return; }
+            db.ref('bloqueios/' + data + '/' + hora).set(true).then(() => {
+                alert('Horário bloqueado!');
+                document.getElementById('bloqueio-data').value = '';
+                document.getElementById('bloqueio-hora').value = '';
             });
         };
 
-        window.carregarHorariosParaBloquear = function() {
-            const data = document.getElementById('bloqueio-hora-data').value;
-            const container = document.getElementById('horarios-para-bloquear');
-            if (!container) return;
-            if (!data) { container.innerHTML = '<p class="text-muted small fw-semibold">Selecione uma data.</p>'; return; }
-
-            const horarios = [];
-            for (let h = 9; h < 20; h++) for (let m = 0; m < 60; m += 30) {
-                horarios.push(`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`);
-            }
-
-            Promise.all([
-                db.ref('bloqueios/' + data).once('value'),
-                db.ref('bloqueios-dia/' + data).once('value')
-            ]).then(([snapH, snapD]) => {
-                const jb = snapH.val() || {};
-                if (snapD.exists()) { container.innerHTML = '<p class="text-danger small fw-bold">⚠️ Dia já bloqueado.</p>'; return; }
-                let html = '<p class="text-dark small mb-2 fw-bold">Marque os horários:</p><div>';
-                horarios.forEach(h => {
-                    html += `<label class="horario-check ${jb[h] ? 'marcado' : ''}"><input type="checkbox" value="${h}" ${jb[h] ? 'checked' : ''} onchange="toggleHorarioCheck(this)"> ${h}</label>`;
-                });
-                html += '</div>';
-                container.innerHTML = html;
-            });
-        };
-
-        window.toggleHorarioCheck = function(input) {
-            const label = input.closest('.horario-check');
-            if (input.checked) label.classList.add('marcado'); else label.classList.remove('marcado');
-        };
-
-        window.bloquearHorariosSelecionados = function() {
-            const data = document.getElementById('bloqueio-hora-data').value;
-            const motivo = document.getElementById('bloqueio-hora-motivo').value.trim() || 'Bloqueado';
-            if (!data) { alert('Selecione uma data!'); return; }
-            const cbs = document.querySelectorAll('#horarios-para-bloquear input[type="checkbox"]');
-            let sel = [];
-            cbs.forEach(cb => { if (cb.checked) sel.push(cb.value); });
-            if (sel.length === 0) { alert('Selecione horários!'); return; }
-            const updates = {};
-            sel.forEach(h => { updates['bloqueios/' + data + '/' + h] = motivo; });
-            db.ref().update(updates).then(() => {
-                alert(`✅ ${sel.length} bloqueado(s)!`);
-                document.getElementById('bloqueio-hora-motivo').value = '';
-                carregarHorariosParaBloquear();
-            }).catch(err => {
-                console.error('Erro:', err);
-                alert('❌ Erro: ' + (err.message || err.code));
-            });
-        };
-
-        window.toggleDiaSemana = function(el) { el.classList.toggle('ativo'); };
-
-        window.salvarDiasSemana = function() {
-            const botoes = document.querySelectorAll('.dia-semana-btn');
-            const ativos = [];
-            botoes.forEach(b => { if (b.classList.contains('ativo')) ativos.push(parseInt(b.dataset.dia)); });
-            const updates = {};
-            for (let i = 0; i <= 6; i++) updates['bloqueios-semana/' + i] = null;
-            ativos.forEach(d => { updates['bloqueios-semana/' + d] = true; });
-            db.ref().update(updates).then(() => {
-                if (ativos.length === 0) alert('✅ Nenhum dia bloqueado.');
-                else {
-                    const nomes = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
-                    alert('✅ ' + ativos.map(d => nomes[d]).join(', '));
-                }
-            }).catch(err => {
-                console.error('Erro:', err);
-                alert('❌ Erro: ' + (err.message || err.code));
-            });
-        };
-
-        function carregarDiasSemana(b) {
-            document.querySelectorAll('.dia-semana-btn').forEach(btn => {
-                const dia = parseInt(btn.dataset.dia);
-                if (b[dia]) btn.classList.add('ativo'); else btn.classList.remove('ativo');
-            });
-        }
-
-        function renderizarListaCompleta() {
+        function renderizarBloqueios(bloqueios) {
             const container = document.getElementById('lista-bloqueios');
             if (!container) return;
-
-            Promise.all([
-                db.ref('bloqueios').once('value'),
-                db.ref('bloqueios-dia').once('value'),
-                db.ref('bloqueios-semana').once('value')
-            ]).then(([snapH, snapD, snapS]) => {
-                const horas = snapH.val() || {};
-                const dias = snapD.val() || {};
-                const semana = snapS.val() || {};
-                let html = ''; let tem = false;
-
-                if (Object.keys(dias).length > 0) {
-                    tem = true;
-                    html += '<h6 class="text-dark mt-3 mb-2 fw-bold"><i class="bi bi-calendar-x text-danger"></i> Dias bloqueados:</h6>';
-                    Object.keys(dias).sort().forEach(data => {
-                        const df = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR');
-                        html += `<div class="bloqueio-item dia-inteiro"><div><strong>${df}</strong><small class="d-block text-muted fw-semibold">${dias[data].motivo || 'Folga'}</small></div><button class="btn btn-sm btn-outline-danger" onclick="desbloquearDiaInteiro('${data}')"><i class="bi bi-trash"></i></button></div>`;
-                    });
-                }
-                if (Object.keys(horas).length > 0) {
-                    tem = true;
-                    html += '<h6 class="text-dark mt-4 mb-2 fw-bold"><i class="bi bi-clock-history text-warning"></i> Horários bloqueados:</h6>';
-                    Object.keys(horas).sort().forEach(data => {
-                        const hd = horas[data];
-                        if (!hd || typeof hd !== 'object') return;
-                        const df = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR');
-                        const lh = Object.keys(hd).sort();
-                        if (lh.length === 0) return;
-                        html += `<div class="bloqueio-item"><div><strong>${df}</strong><div class="d-flex gap-1 flex-wrap mt-2">`;
-                        lh.forEach(h => { html += `<button class="btn btn-sm btn-outline-danger fw-bold" onclick="desbloquearHorario('${data}', '${h}')">${h} ✕</button>`; });
-                        html += `</div></div></div>`;
-                    });
-                }
-                const ds = Object.keys(semana).filter(d => semana[d]);
-                if (ds.length > 0) {
-                    tem = true;
-                    const nomes = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
-                    html += '<h6 class="text-dark mt-4 mb-2 fw-bold"><i class="bi bi-arrow-repeat text-info"></i> Dias recorrentes:</h6>';
-                    ds.forEach(d => {
-                        html += `<div class="bloqueio-item recorrente"><div><strong>${nomes[d]}s</strong></div><button class="btn btn-sm btn-outline-danger" onclick="desbloquearDiaSemana(${d})"><i class="bi bi-trash"></i></button></div>`;
-                    });
-                }
-                if (!tem) html = '<p class="text-muted small fw-semibold">Nenhum bloqueio ativo.</p>';
-                container.innerHTML = html;
-            });
-        }
-
-        window.desbloquearDiaInteiro = function(data) { if (confirm('Remover?')) db.ref('bloqueios-dia/' + data).remove().catch(err => alert('❌ ' + (err.message || err.code))); };
-        window.desbloquearHorario = function(data, h) { db.ref('bloqueios/' + data + '/' + h).remove().catch(err => alert('❌ ' + (err.message || err.code))); };
-        window.desbloquearDiaSemana = function(d) { if (confirm('Remover?')) db.ref('bloqueios-semana/' + d).remove().catch(err => alert('❌ ' + (err.message || err.code))); };
-
-        // ============================================
-        // LISTA DE ESPERA
-        // ============================================
-        function renderizarListaEspera() {
-            const container = document.getElementById('lista-espera-admin');
-            if (!container) return;
-
-            const datas = Object.keys(listaEspera).sort();
+            let html = '<h6 class="text-white">Horários bloqueados:</h6>';
+            const datas = Object.keys(bloqueios).sort();
             if (datas.length === 0) {
-                container.innerHTML = '<p class="text-muted text-center py-4 fw-semibold">📭 Nenhum cliente.</p>';
-                return;
-            }
-
-            let html = '';
-            datas.forEach(data => {
-                const itens = listaEspera[data];
-                if (!itens) return;
-                const lista = Object.entries(itens).map(([id, item]) => ({ id, ...item }))
-                    .filter(i => i.status !== 'convertido')
-                    .sort((a, b) => (a.criadoEm || 0) - (b.criadoEm || 0));
-                if (lista.length === 0) return;
-
-                const df = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
-                html += `<div class="espera-dia-bloco"><div class="espera-dia-titulo"><h6><i class="bi bi-calendar-event text-warning"></i> ${df}</h6><span class="badge bg-warning text-dark fw-bold" style="font-size:0.9rem;">${lista.length}</span></div>`;
-                lista.forEach((item, i) => {
-                    const he = item.criadoEm ? new Date(item.criadoEm).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '';
-                    html += `<div class="espera-item"><div class="espera-item-info"><strong>${i+1}º — ${item.nome || 'Sem nome'}</strong><small><i class="bi bi-telephone"></i> ${item.telefone || '-'} • <i class="bi bi-scissors"></i> ${item.servicoNome || '-'}${he ? ` • <i class="bi bi-clock"></i> ${he}` : ''}</small></div><div class="espera-item-actions"><button class="btn btn-sm btn-success" onclick="chamarEspera('${data}', '${item.id}')" title="Chamar no WhatsApp"><i class="bi bi-whatsapp"></i></button><button class="btn btn-sm btn-primary" onclick="marcarConvertido('${data}', '${item.id}')" title="Marcar como atendido"><i class="bi bi-check-circle"></i></button><button class="btn btn-sm btn-outline-danger" onclick="removerEspera('${data}', '${item.id}')" title="Remover"><i class="bi bi-trash"></i></button></div></div>`;
+                html += '<p class="text-muted small">Nenhum horário bloqueado.</p>';
+            } else {
+                datas.forEach(data => {
+                    const horas = Object.keys(bloqueios[data]);
+                    if (horas.length === 0) return;
+                    const dataFmt = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR');
+                    html += `<div class="agendamento-card"><strong>${dataFmt}</strong><div class="d-flex gap-1 flex-wrap mt-2">`;
+                    horas.forEach(hora => {
+                        html += `<button class="btn btn-sm btn-outline-danger" onclick="desbloquear('${data}', '${hora}')">${hora} ✕</button>`;
+                    });
+                    html += `</div></div>`;
                 });
-                html += `</div>`;
-            });
-            container.innerHTML = html || '<p class="text-muted text-center py-4 fw-semibold">📭 Nenhum cliente.</p>';
-        }
-
-        window.chamarEspera = function(data, id) {
-            const item = listaEspera[data] && listaEspera[data][id];
-            if (!item) return;
-            const tel = (item.telefone || '').replace(/\D/g, '');
-            if (!tel) { alert('Sem telefone.'); return; }
-            const primeiro = (item.nome || '').split(' ')[0] || 'tudo bem';
-            const df = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
-            const msg = `Olá ${primeiro}! Aqui é o Seu Jorge. Vagou um horário no dia ${df}. Ainda tem interesse? 💈`;
-            window.open(`https://wa.me/55${tel}?text=${encodeURIComponent(msg)}`, '_blank');
-        };
-
-        window.marcarConvertido = function(data, id) { if (confirm('Marcar como atendido?')) db.ref('lista-espera/' + data + '/' + id + '/status').set('convertido').catch(err => alert('❌ ' + (err.message || err.code))); };
-        window.removerEspera = function(data, id) { if (confirm('Remover?')) db.ref('lista-espera/' + data + '/' + id).remove().catch(err => alert('❌ ' + (err.message || err.code))); };
-
-        // ============================================
-        // FATURAMENTO
-        // ============================================
-        function renderizarFaturamento() {
-            const concluidos = agendamentos.filter(a => a.status === 'concluido');
-            const hojeStr = getHojeStr();
-            const iSem = getInicioSemana();
-            const iMes = getInicioMes();
-            const iAno = getInicioAno();
-
-            const hoje = concluidos.filter(a => a.data === hojeStr);
-            const semana = concluidos.filter(a => a.data >= iSem && a.data <= hojeStr);
-            const mes = concluidos.filter(a => a.data >= iMes && a.data <= hojeStr);
-            const soma = arr => arr.reduce((s, a) => s + (typeof a.servicoPreco === 'number' ? a.servicoPreco : 0), 0);
-            const set = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
-
-            set('fat-hoje', formatBRL(soma(hoje)));
-            set('fat-hoje-qtd', `${hoje.length} atendimento${hoje.length !== 1 ? 's' : ''}`);
-            set('fat-semana', formatBRL(soma(semana)));
-            set('fat-semana-qtd', `${semana.length} atendimento${semana.length !== 1 ? 's' : ''}`);
-            set('fat-mes', formatBRL(soma(mes)));
-            set('fat-mes-qtd', `${mes.length} atendimento${mes.length !== 1 ? 's' : ''}`);
-            set('fat-total', formatBRL(soma(concluidos)));
-            set('fat-total-qtd', `${concluidos.length} atendimento${concluidos.length !== 1 ? 's' : ''}`);
-
-            let lf = concluidos;
-            if (filtroFaturamento === 'hoje') lf = hoje;
-            else if (filtroFaturamento === 'semana') lf = semana;
-            else if (filtroFaturamento === 'mes') lf = mes;
-            else if (filtroFaturamento === 'ano') lf = concluidos.filter(a => a.data >= iAno && a.data <= hojeStr);
-
-            set('fat-filtro-total', formatBRL(soma(lf)));
-
-            lf.sort((a, b) => ((b.data || '') + (b.horario || '')).localeCompare((a.data || '') + (a.horario || '')));
-
-            const container = document.getElementById('lista-faturamento');
-            if (!container) return;
-            container.innerHTML = '';
-
-            if (lf.length === 0) {
-                container.innerHTML = `<div class="agendamento-vazio"><i class="bi bi-cash-stack"></i><p class="mb-0 fw-semibold">Nenhum atendimento concluído.</p></div>`;
-                return;
             }
-
-            const porDia = {};
-            lf.forEach(a => { if (!porDia[a.data]) porDia[a.data] = []; porDia[a.data].push(a); });
-
-            Object.keys(porDia).sort().reverse().forEach(data => {
-                const itens = porDia[data].sort((a, b) => (b.horario || '').localeCompare(a.horario || ''));
-                const df = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
-                const titulo = document.createElement('div');
-                titulo.className = 'fat-dia-titulo';
-                titulo.innerHTML = `<h6><i class="bi bi-calendar-check text-success"></i> ${df}</h6><span class="total">${formatBRL(soma(itens))} <small class="text-muted fw-semibold">(${itens.length})</small></span>`;
-                container.appendChild(titulo);
-
-                itens.forEach(a => {
-                    const w = document.createElement('div');
-                    w.innerHTML = `<div class="fat-item"><div class="fat-item-info"><strong>${a.horario} — ${a.clienteNome || 'Sem nome'}</strong><small><i class="bi bi-scissors"></i> ${a.servicoNome || '-'}</small></div><div class="fat-item-valor">${formatBRL(a.servicoPreco || 0)}</div></div>`;
-                    while (w.firstChild) container.appendChild(w.firstChild);
-                });
-            });
-        }
-
-        // ============================================
-        // AVISAR AMANHÃ
-        // ============================================
-        window.abrirAvisarAmanha = function() {
-            const amanhaStr = getAmanhaStr();
-            const lista = agendamentos.filter(a => a.data === amanhaStr && a.status !== 'cancelado')
-                .sort((a, b) => (a.horario || '').localeCompare(b.horario || ''));
-
-            const container = document.getElementById('lista-avisar-amanha');
-            const df = new Date(amanhaStr + 'T00:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
-
-            if (lista.length === 0) {
-                container.innerHTML = `<div class="alert alert-warning text-center border-0 shadow-sm"><i class="bi bi-calendar-x fs-1 d-block mb-2"></i><strong class="fw-bold">Nenhum agendamento para amanhã.</strong></div>`;
-                new bootstrap.Modal(document.getElementById('modalAvisarAmanha')).show();
-                return;
-            }
-
-            let html = `<h6 class="mb-3 text-dark fw-bold"><i class="bi bi-calendar-event"></i> ${lista.length} agendamento(s) — ${df}</h6>`;
-            lista.forEach(ag => {
-                const tel = (ag.clienteTelefone || '').replace(/\D/g, '');
-                const primeiro = (ag.clienteNome || '').split(' ')[0] || 'Cliente';
-                const msg = `Olá ${primeiro}! Aqui é o Seu Jorge. Passando pra lembrar do seu horário amanhã (${df}) às ${ag.horario}, serviço ${ag.servicoNome}. Tá confirmado? 💈`;
-                html += `<div class="agendamento-item" style="margin-bottom:8px;"><div class="agendamento-info"><strong>${ag.horario} — ${ag.clienteNome}</strong><small class="d-block text-muted fw-semibold"><i class="bi bi-scissors"></i> ${ag.servicoNome} • <i class="bi bi-telephone"></i> ${ag.clienteTelefone}</small></div><a href="https://wa.me/55${tel}?text=${encodeURIComponent(msg)}" target="_blank" class="btn btn-sm btn-success fw-bold" style="padding: 10px 16px; font-size: 1rem;"><i class="bi bi-whatsapp"></i> Avisar</a></div>`;
-            });
             container.innerHTML = html;
-            new bootstrap.Modal(document.getElementById('modalAvisarAmanha')).show();
+        }
+
+        window.desbloquear = function(data, hora) {
+            db.ref('bloqueios/' + data + '/' + hora).remove();
         };
 
         // ============================================
-        // ALERTA ADMIN
+        // SENHA (CORRIGIDO PARA USAR FIREBASE AUTH)
         // ============================================
-        function mostrarAlertaAdmin(m, tipo = 'success') {
-            const ant = document.getElementById('alerta-admin');
-            if (ant) ant.remove();
-            const cores = { success: 'alert-success', info: 'alert-info', warning: 'alert-warning', danger: 'alert-danger' };
-            const a = document.createElement('div');
-            a.id = 'alerta-admin';
-            a.className = `alert ${cores[tipo]} alert-dismissible fade show border-0 shadow`;
-            a.style.cssText = 'position:fixed;top:80px;right:20px;z-index:9999;min-width:280px;font-weight:700;';
-            a.innerHTML = `${m}<button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>`;
-            document.body.appendChild(a);
-            setTimeout(() => { if (a.parentElement) a.remove(); }, 4000);
-        }
-
-        // ============================================
-        // INICIALIZAÇÃO — STATUS NOTIFICAÇÃO
-        // ============================================
-        document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(atualizarStatusNotif, 500);
-            setInterval(atualizarStatusNotif, 3000);
-        });
-
-    })();
+        window.alterarSenha = function() {
+            const nova = document.getElementById('nova-senha').value;
+            if (!nova || nova.length < 6) {
+                alert('A senha precisa ter pelo menos 6 caracteres.');
+                return;
+            }
+            const user = auth.currentUser;
+            if (!user) { 
+                alert('Faça login novamente para alterar a senha.'); 
+                return; 
+            }
+            
+            user.updatePassword(nova)
+                .then(() => {
+                    alert('Senha alterada com sucesso!');
+                    document.getElementById('nova-senha').value = '';
+                })
+                .catch(err => {
+                    if (err.code === 'auth/requires-recent-login') {
+                        alert('Por segurança, faça login novamente antes de alterar a senha.');
+                        auth.signOut();
+                    } else {
+                        alert('Erro ao alterar senha: ' + err.message);
+                    }
+                });
+        };
     </script>
 </body>
 </html>

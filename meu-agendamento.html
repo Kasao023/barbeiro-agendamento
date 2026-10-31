@@ -12,16 +12,32 @@
         body { background: #0a0a0a !important; color: #fff; padding-top: 0 !important; }
         .topo { background: #0a0a0a; border-bottom: 3px solid var(--cor-primaria); padding: 15px 0; }
         .topo .navbar-brand { font-family: 'Bebas Neue', sans-serif; letter-spacing: 2px; font-size: 1.6rem; }
-        .card-ver { background: #fff; color: #333; border-radius: 15px; padding: 25px; border-top: 5px solid var(--cor-primaria); margin-bottom: 16px; }
+        
+        .card-ver { 
+            background: #fff; color: #333; border-radius: 15px; padding: 25px; 
+            border-top: 5px solid var(--cor-primaria); margin-bottom: 16px; 
+            transition: all 0.3s;
+        }
+        
+        /* Destaque para agendamento recém criado */
+        .card-ver.novo { 
+            border: 3px solid var(--cor-sucesso); 
+            border-top: 5px solid var(--cor-sucesso);
+            box-shadow: 0 0 20px rgba(39, 174, 96, 0.3);
+        }
+
         .linha { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed #ddd; }
         .linha:last-of-type { border-bottom: none; }
         .label { color: #888; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
         .valor { font-weight: 600; text-align: right; }
+        
         .status { display: inline-block; padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; }
         .status-pendente { background: #fff3cd; color: #856404; }
         .status-confirmado { background: #cfe2ff; color: #084298; }
         .status-concluido { background: #d4edda; color: #155724; }
         .status-cancelado { background: #f8d7da; color: #721c24; }
+        .status-pago { background: #cff4fc; color: #055160; }
+        
         .btn-cancelar { background: #dc3545; border: none; color: #fff; font-weight: 700; letter-spacing: 1px; padding: 12px; border-radius: 10px; text-transform: uppercase; }
         .btn-cancelar:hover { background: #a71d2a; color: #fff; }
         .btn-voltar { border: 2px solid var(--cor-dourada); color: var(--cor-dourada); font-weight: 700; letter-spacing: 1px; padding: 12px; border-radius: 10px; text-transform: uppercase; }
@@ -94,6 +110,10 @@
         const auth = firebase.auth();
 
         const conteudo = document.getElementById('conteudo');
+        
+        // Pega o ID da URL (se o cliente acabou de agendar)
+        const urlParams = new URLSearchParams(window.location.search);
+        const agendamentoIdNovo = urlParams.get('id');
 
         window.fazerLogout = async function() {
             if (!confirm('Deseja sair?')) return;
@@ -128,8 +148,10 @@
             const statusLabel = status === 'concluido' ? 'Concluído'
                               : status === 'cancelado' ? 'Cancelado'
                               : status === 'confirmado' ? 'Confirmado'
+                              : status === 'pago' ? 'Pago'
                               : 'Pendente';
             const statusClass = 'status-' + status;
+            const ehNovo = (ag.id === agendamentoIdNovo);
 
             const dataFmt = new Date(ag.data + 'T00:00:00').toLocaleDateString('pt-BR', {
                 weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
@@ -144,10 +166,8 @@
                 botoes = `<p class="text-center text-muted small mb-0 mt-3">Este agendamento foi cancelado.</p>`;
             } else if (status === 'concluido') {
                 botoes = `<p class="text-center text-success small mb-0 mt-3"><i class="bi bi-check-circle"></i> Atendimento concluído. Obrigado!</p>`;
-            } else if (status === 'confirmado') {
-                botoes = `<button class="btn btn-cancelar w-100 mt-3" data-cancelar="${esc(ag.id)}">
-                    <i class="bi bi-x-circle"></i> Cancelar agendamento
-                </button>`;
+            } else if (status === 'pago') {
+                botoes = `<p class="text-center text-info small mb-0 mt-3"><i class="bi bi-cash"></i> Pagamento recebido. Obrigado!</p>`;
             } else {
                 botoes = `<button class="btn btn-cancelar w-100 mt-3" data-cancelar="${esc(ag.id)}">
                     <i class="bi bi-x-circle"></i> Cancelar agendamento
@@ -155,7 +175,8 @@
             }
 
             return `
-                <div class="card-ver">
+                <div class="card-ver ${ehNovo ? 'novo' : ''}">
+                    ${ehNovo ? '<p class="text-success fw-bold text-center mb-2"><i class="bi bi-check-circle-fill"></i> Agendamento Realizado!</p>' : ''}
                     <div class="text-center mb-4">
                         <span class="status ${statusClass}">${statusLabel}</span>
                     </div>
@@ -192,12 +213,14 @@
 
                 conteudo.innerHTML = ags.map(renderCard).join('');
 
+                // Evento de cancelar
                 document.querySelectorAll('[data-cancelar]').forEach(btn => {
                     btn.addEventListener('click', async () => {
                         const id = btn.dataset.cancelar;
                         if (!confirm('Tem certeza que deseja cancelar este agendamento?')) return;
                         try {
-                            await db.ref('agendamentos/' + id).remove();
+                            // Alterado para mudar o status, em vez de apagar o registro
+                            await db.ref('agendamentos/' + id + '/status').set('cancelado');
                             alert('Agendamento cancelado. O horário foi liberado.');
                             location.reload();
                         } catch (err) {

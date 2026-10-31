@@ -3,11 +3,11 @@
     "config": {
       "admin": {
         ".read": "auth != null",
-        ".write": "auth != null"
+        ".write": "auth != null && auth.token.email === 'jorgebarbearia@gmail.com'"
       },
       "servicos": {
         ".read": true,
-        ".write": "auth != null"
+        ".write": "auth != null && auth.token.email === 'jorgebarbearia@gmail.com'"
       }
     },
 
@@ -16,21 +16,21 @@
       ".indexOn": ["data", "status", "uid"],
       "$id": {
         ".write": "auth != null && (auth.token.email === 'jorgebarbearia@gmail.com' || (!data.exists() && newData.child('uid').val() === auth.uid) || (data.exists() && data.child('uid').val() === auth.uid) || (data.exists() && !data.child('uid').exists() && auth.token.email === 'jorgebarbearia@gmail.com'))",
-        ".validate": "!newData.exists() || (newData.hasChildren(['clienteNome','clienteTelefone','data','horario','servicoNome','servicoPreco','status']) && newData.child('clienteNome').isString() && newData.child('clienteNome').val().length >= 2 && newData.child('clienteNome').val().length <= 80 && newData.child('clienteTelefone').isString() && newData.child('clienteTelefone').val().length >= 10 && newData.child('clienteTelefone').val().length <= 20 && newData.child('data').val().matches(/^\\d{4}-\\d{2}-\\d{2}$/) && newData.child('horario').val().matches(/^\\d{2}:\\d{2}$/) && newData.child('status').val().matches(/^(pendente|confirmado|concluido|cancelado)$/) && newData.child('servicoPreco').isNumber() && newData.child('servicoPreco').val() >= 0 && newData.child('servicoPreco').val() <= 10000 && (data.exists() || (newData.child('uid').isString() && newData.child('uid').val().length >= 10)))"
+        ".validate": "!newData.exists() || (newData.hasChildren(['clienteNome','clienteTelefone','data','horario','servicoNome','servicoPreco','status']) && newData.child('clienteNome').isString() && newData.child('clienteNome').val().length >= 2 && newData.child('clienteNome').val().length <= 80 && newData.child('clienteTelefone').isString() && newData.child('clienteTelefone').val().length >= 10 && newData.child('clienteTelefone').val().length <= 20 && newData.child('data').val().matches(/^\\d{4}-\\d{2}-\\d{2}$/) && newData.child('horario').val().matches(/^\\d{2}:\\d{2}$/) && newData.child('status').val().matches(/^(pendente|confirmado|concluido|cancelado|pago)$/) && newData.child('servicoPreco').isNumber() && newData.child('servicoPreco').val() >= 0 && newData.child('servicoPreco').val() <= 10000 && (data.exists() || (newData.child('uid').isString() && newData.child('uid').val().length >= 10)))"
       }
     },
 
     "bloqueios": {
       ".read": true,
-      ".write": "auth != null"
+      ".write": "auth != null && auth.token.email === 'jorgebarbearia@gmail.com'"
     },
     "bloqueios-dia": {
       ".read": true,
-      ".write": "auth != null"
+      ".write": "auth != null && auth.token.email === 'jorgebarbearia@gmail.com'"
     },
     "bloqueios-semana": {
       ".read": true,
-      ".write": "auth != null"
+      ".write": "auth != null && auth.token.email === 'jorgebarbearia@gmail.com'"
     },
 
     "lista-espera": {
